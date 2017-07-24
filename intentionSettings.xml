@@ -1,0 +1,8 @@
+<application>
+  <component name="IntentionManagerSettings">
+    <ignoreAction name="Android/Override Resource in Other Configuration..." />
+    <ignoreAction name="Language Injection/Inject language or reference" />
+    <ignoreAction name="Java/Control Flow/Create switch statement" />
+    <ignoreAction name="Java/Control Flow/Remove Braces" />
+  </component>
+</application>
