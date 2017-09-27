@@ -17,7 +17,11 @@ class App: Application() {
     @Inject
     lateinit var persistentDatabase: PersistentDatabase
 
-    val component: AppComponent by lazy {
+    companion object{
+        lateinit var appComponent: AppComponent
+    }
+
+    private val component: AppComponent by lazy {
         DaggerAppComponent
                 .builder()
                 .appModule(AppModule(this))
@@ -39,4 +43,8 @@ class App: Application() {
         localeUtils.updateConfiguration(this, newConfig!!)
     }
 
+    fun getAppComponent(): AppComponent{
+        appComponent = component
+        return appComponent
+    }
 }

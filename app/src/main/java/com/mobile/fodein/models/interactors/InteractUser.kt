@@ -1,6 +1,5 @@
 package com.mobile.fodein.models.interactors
 
-import android.content.Context
 import com.mobile.fodein.App
 import com.mobile.fodein.dagger.ModelsModule
 import com.mobile.fodein.models.data.User
@@ -12,12 +11,15 @@ import io.reactivex.subjects.Subject
 import javax.inject.Inject
 
 
-class InteractUser @Inject constructor(private val user: User,
-                                       private val context: Context) :
+class InteractUser @Inject constructor(private val user: User) :
         DatabaseRepository() {
     private var disposable: CompositeDisposable = CompositeDisposable()
-    private val component by lazy { (context as App)
-            .component.plus(ModelsModule()) }
+
+    private val context = App.appComponent.context()
+
+    private val component by lazy {(context as App)
+            .getAppComponent().plus(ModelsModule())}
+
     @Inject
     lateinit var interactDatabaseListener: InteractDatabaseListener
 

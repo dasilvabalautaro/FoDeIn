@@ -1,16 +1,17 @@
 package com.mobile.fodein.models.interactors
 
-import android.content.Context
+import com.mobile.fodein.App
 import com.mobile.fodein.R
 import com.mobile.fodein.models.interfaces.OnDatabaseCompleteListener
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import javax.inject.Inject
 
 
-class InteractDatabaseListener @Inject constructor(
-        private val context: Context):
+class InteractDatabaseListener:
         OnDatabaseCompleteListener {
+
+    private val context = App.appComponent.context()
+
     private var message: String = ""
     var observableMessage: Subject<String> = PublishSubject.create()
 
@@ -25,12 +26,12 @@ class InteractDatabaseListener @Inject constructor(
     }
 
     override fun onSaveSucceeded() {
-        this.message = context!!.getString(R.string.save_data)
+        this.message = context.getString(R.string.save_data)
         this.observableMessage.onNext(this.message)
     }
 
     override fun onDeleteCompleted() {
-        this.message = context!!.getString(R.string.delete_data)
+        this.message = context.getString(R.string.delete_data)
         this.observableMessage.onNext(this.message)
     }
 
@@ -40,7 +41,7 @@ class InteractDatabaseListener @Inject constructor(
     }
 
     override fun onUpdateCompleted() {
-        this.message = context!!.getString(R.string.update_data)
+        this.message = context.getString(R.string.update_data)
         this.observableMessage.onNext(this.message)
     }
 
