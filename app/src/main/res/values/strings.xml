@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">FoDeIn</string>
+    <string name="user_not_register">User not register.</string>
+    <string name="user_registered">User registered.</string>
+    <string name="process">Process!</string>
+    <string name="profile_update">User profile updated.</string>
+    <string name="profile_update_fail">User profile updated fail.</string>
+    <string name="access_granted">Access granted.</string>
+    <string name="access_not_allowed">Access not allowed.</string>
+    <string name="database">fodein.realm</string>
+    <string name="save_data">Data was successfully saved</string>
+    <string name="delete_data">Data was successfully deleted</string>
+    <string name="update_data">Data was updated correctly</string>
 </resources>

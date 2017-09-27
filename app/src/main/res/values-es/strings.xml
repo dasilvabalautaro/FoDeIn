@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FoDeIn</string>
+    <string name="user_not_register">Usuario no registrado.</string>
+    <string name="user_registered">Usuario registrado.</string>
+    <string name="process">Procesando!</string>
+    <string name="profile_update">Datos de usuario actualizados.</string>
+    <string name="profile_update_fail">Error en actualización de datos de usuario.</string>
+    <string name="access_granted">Acceso permitido.</string>
+    <string name="access_not_allowed">Acceso no permitido.</string>
+    <string name="database">fodein.realm</string>
+</resources>
