@@ -5,5 +5,6 @@ import io.reactivex.Observable
 
 interface IUserRepository {
     fun userList(): Observable<List<User>>
-    fun user(id: String): Observable<User>
+    fun userSave(user: User): Observable<User>
+    fun userGetById(id: String): Observable<User>
 }

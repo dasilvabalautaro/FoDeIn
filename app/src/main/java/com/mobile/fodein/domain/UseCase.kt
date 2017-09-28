@@ -8,7 +8,7 @@ import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 
 
-abstract class UseCase<T> protected constructor(private val threadExecutor:
+abstract class UseCase<T> constructor(private val threadExecutor:
                                                 IThreadExecutor,
                                                 private val postExecutionThread:
                                                 IPostExecutionThread) {

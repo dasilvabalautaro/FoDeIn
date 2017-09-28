@@ -2,18 +2,22 @@ package com.mobile.fodein.models.executor
 
 import com.mobile.fodein.App
 import com.mobile.fodein.dagger.ModelsModule
+import com.mobile.fodein.domain.repository.IUserRepository
 import com.mobile.fodein.models.data.User
 import com.mobile.fodein.models.exception.DatabaseOperationException
 import com.mobile.fodein.models.persistent.repository.DatabaseRepository
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
+class UserExecutor @Inject constructor():
+        DatabaseRepository(), IUserRepository {
 
-class UserExecutor @Inject constructor(private val user: User) :
-        DatabaseRepository() {
     private var disposable: CompositeDisposable = CompositeDisposable()
 
     private val context = App.appComponent.context()
@@ -52,10 +56,42 @@ class UserExecutor @Inject constructor(private val user: User) :
                 .subscribe { this.error }
     }
 
-    fun saveUser(){
-        val clazz: Class<User> = User::class.java
-        clazz.cast(user)
-        this.save(clazz, interactDatabaseListener)
+    override fun userList(): Observable<List<User>> {
+        return Observable.create { subscriber ->
+            val clazz: Class<User> = User::class.java
+            val listUsers: List<User>? = this.getAllData(clazz)
+            if (listUsers != null){
+                subscriber.onNext(listUsers)
+                subscriber.onComplete()
+            }else{
+                subscriber.onError(Throwable())
+            }
+        }
+    }
+
+    override fun userSave(user: User): Observable<User>{
+        return Observable.create { subscriber ->
+            val clazz: Class<User> = User::class.java
+            clazz.cast(user)
+            this.save(clazz, interactDatabaseListener)
+            subscriber.onNext(user)
+            subscriber.onComplete()
+        }
+
+    }
+
+    override fun userGetById(id: String): Observable<User> {
+        return Observable.create { subscriber ->
+            val clazz: Class<User> = User::class.java
+            val newUser = this.getDataById(clazz, id)
+            if (newUser != null){
+                subscriber.onNext(newUser)
+                subscriber.onComplete()
+            }else{
+                subscriber.onError(Throwable())
+            }
+
+        }
     }
 
     fun dispose(){

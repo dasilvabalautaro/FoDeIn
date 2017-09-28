@@ -4,7 +4,9 @@ import android.app.Application
 import android.content.Context
 import com.mobile.fodein.domain.interfaces.IPostExecutionThread
 import com.mobile.fodein.domain.interfaces.IThreadExecutor
+import com.mobile.fodein.domain.repository.IUserRepository
 import com.mobile.fodein.models.executor.JobExecutor
+import com.mobile.fodein.models.executor.UserExecutor
 import com.mobile.fodein.models.persistent.PersistentDatabase
 import com.mobile.fodein.presentation.UIThread
 import com.mobile.fodein.tools.LocaleUtils
@@ -43,4 +45,9 @@ class AppModule(private val app: Application) {
         return uiThread
     }
 
+    @Provides
+    @Singleton
+    fun provideUserRepository(userExecutor: UserExecutor): IUserRepository {
+        return userExecutor
+    }
 }
