@@ -1,8 +1,8 @@
 package com.mobile.fodein.dagger
 
 import com.mobile.fodein.models.data.User
-import com.mobile.fodein.models.interactors.InteractDatabaseListener
-import com.mobile.fodein.models.interactors.InteractUser
+import com.mobile.fodein.models.executor.DatabaseListenerExecutor
+import com.mobile.fodein.models.executor.UserExecutor
 import dagger.Module
 import dagger.Provides
 
@@ -14,12 +14,12 @@ class ModelsModule {
     }
 
     @Provides
-    fun provideInteractUser(user: User): InteractUser {
-        return InteractUser(user)
+    fun provideInteractUser(user: User): UserExecutor {
+        return UserExecutor(user)
     }
 
     @Provides
-    fun provideInteractDatabaseListener(): InteractDatabaseListener {
-        return InteractDatabaseListener()
+    fun provideInteractDatabaseListener(): DatabaseListenerExecutor {
+        return DatabaseListenerExecutor()
     }
 }

@@ -1,28 +1,34 @@
-package com.mobile.fodein.models.interactors
+package com.mobile.fodein.models.executor
 
 import com.mobile.fodein.App
 import com.mobile.fodein.R
+import com.mobile.fodein.models.exception.DatabaseOperationException
 import com.mobile.fodein.models.interfaces.OnDatabaseCompleteListener
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 
 
-class InteractDatabaseListener:
+class DatabaseListenerExecutor :
         OnDatabaseCompleteListener {
 
     private val context = App.appComponent.context()
 
     private var message: String = ""
     var observableMessage: Subject<String> = PublishSubject.create()
+    private var error: DatabaseOperationException? = null
+    var observableException:
+            Subject<DatabaseOperationException> = PublishSubject.create()
 
     init {
         this.observableMessage
                 .subscribe { this.message }
+        this.observableException
+                .subscribe { this.error }
     }
 
     override fun onSaveFailed(error: String) {
-        this.message = error
-        this.observableMessage.onNext(this.message)
+        this.error = DatabaseOperationException(error)
+        this.observableException.onNext(this.error!!)
     }
 
     override fun onSaveSucceeded() {
@@ -36,8 +42,8 @@ class InteractDatabaseListener:
     }
 
     override fun onDeleteFailed(error: String) {
-        this.message = error
-        this.observableMessage.onNext(this.message)
+        this.error = DatabaseOperationException(error)
+        this.observableException.onNext(this.error!!)
     }
 
     override fun onUpdateCompleted() {
@@ -46,8 +52,8 @@ class InteractDatabaseListener:
     }
 
     override fun onUpdateFailed(error: String) {
-        this.message = error
-        this.observableMessage.onNext(this.message)
+        this.error = DatabaseOperationException(error)
+        this.observableException.onNext(this.error!!)
     }
 
 }

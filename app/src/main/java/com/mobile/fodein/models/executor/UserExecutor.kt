@@ -1,4 +1,4 @@
-package com.mobile.fodein.models.interactors
+package com.mobile.fodein.models.executor
 
 import com.mobile.fodein.App
 import com.mobile.fodein.dagger.ModelsModule
@@ -11,7 +11,7 @@ import io.reactivex.subjects.Subject
 import javax.inject.Inject
 
 
-class InteractUser @Inject constructor(private val user: User) :
+class UserExecutor @Inject constructor(private val user: User) :
         DatabaseRepository() {
     private var disposable: CompositeDisposable = CompositeDisposable()
 
@@ -21,7 +21,7 @@ class InteractUser @Inject constructor(private val user: User) :
             .getAppComponent().plus(ModelsModule())}
 
     @Inject
-    lateinit var interactDatabaseListener: InteractDatabaseListener
+    lateinit var interactDatabaseListener: DatabaseListenerExecutor
 
     private var message: String = ""
     var observableMessage: Subject<String> = PublishSubject.create()
@@ -46,5 +46,7 @@ class InteractUser @Inject constructor(private val user: User) :
         this.save(clazz, interactDatabaseListener)
     }
 
-
+    fun dispose(){
+        if(!disposable.isDisposed) disposable.dispose()
+    }
 }
