@@ -3,6 +3,7 @@ package com.mobile.fodein.models.executor
 import com.mobile.fodein.App
 import com.mobile.fodein.dagger.ModelsModule
 import com.mobile.fodein.models.data.User
+import com.mobile.fodein.models.exception.DatabaseOperationException
 import com.mobile.fodein.models.persistent.repository.DatabaseRepository
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -25,6 +26,9 @@ class UserExecutor @Inject constructor(private val user: User) :
 
     private var message: String = ""
     var observableMessage: Subject<String> = PublishSubject.create()
+    private var error: DatabaseOperationException? = null
+    var observableException:
+            Subject<DatabaseOperationException> = PublishSubject.create()
 
     init {
         component.inject(this)
@@ -35,9 +39,17 @@ class UserExecutor @Inject constructor(private val user: User) :
                     this.message = s
                     this.observableMessage.onNext(this.message)
                 })
-
+        val hearError = this.interactDatabaseListener
+                .observableException.map { e -> e }
+        disposable.add(hearError.observeOn(Schedulers.newThread())
+                .subscribe { e ->
+                    this.error = e
+                    this.observableException.onNext(this.error!!)
+                })
         this.observableMessage
                 .subscribe { this.message }
+        this.observableException
+                .subscribe { this.error }
     }
 
     fun saveUser(){
