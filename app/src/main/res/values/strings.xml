@@ -11,4 +11,14 @@
     <string name="save_data">Data was successfully saved</string>
     <string name="delete_data">Data was successfully deleted</string>
     <string name="update_data">Data was updated correctly</string>
+    <string name="hint_text_email">Email</string>
+    <string name="hint_text_name">Name</string>
+    <string name="hint_text_description">Description</string>
+    <string name="hint_text_user">User</string>
+    <string name="hint_text_id_card">ID Card</string>
+    <string name="hint_text_password">Password</string>
+    <string name="hint_text_phone">Phone</string>
+    <string name="hint_text_address">Address</string>
+    <string name="lbl_logo_description">Logo</string>
+    <string name="lbl_save">Save</string>
 </resources>

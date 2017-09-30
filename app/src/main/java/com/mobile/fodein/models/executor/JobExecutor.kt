@@ -3,9 +3,7 @@ package com.mobile.fodein.models.executor
 import com.mobile.fodein.domain.interfaces.IThreadExecutor
 import java.util.concurrent.*
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class JobExecutor @Inject constructor() : IThreadExecutor {
     private var workQueue: BlockingQueue<Runnable>? = null
 

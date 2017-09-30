@@ -7,17 +7,17 @@ import io.realm.annotations.PrimaryKey
 import java.util.*
 
 
-class User(private var name: String = "",
-           private var user: String = "",
-           private var idCard: String = "",
-           private var email: String = "",
-           private var password: String = "",
-           private var phone: String = "",
-           private var address: String = "",
-           private var description: String = "",
-           private var roll: String = "",
-           private var unit: String = "",
-           @PrimaryKey private var id: String =
+class User(var name: String = "",
+           var user: String = "",
+           var idCard: String = "",
+           var email: String = "",
+           var password: String = "",
+           var phone: String = "",
+           var address: String = "",
+           var description: String = "",
+           var roll: String = "",
+           var unit: String = "",
+           @PrimaryKey var id: String =
                 UUID.randomUUID().toString()): RealmObject(), Parcelable {
 
     constructor(parcel: Parcel) : this(

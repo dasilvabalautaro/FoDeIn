@@ -10,8 +10,7 @@ import javax.inject.Singleton
 interface AppComponent {
     fun inject(app: App)
     fun context(): Context
-//    fun threadExecutor(): IThreadExecutor
-//    fun postExecutionThread(): IPostExecutionThread
-//    fun userRepository(): IUserRepository
     fun plus(modelsModule: ModelsModule): ModelsComponent
+    fun plus(presentationModule: PresentationModule): PresentationComponent
+    fun plus(activityModule: ActivityModule): ActivityComponent
 }

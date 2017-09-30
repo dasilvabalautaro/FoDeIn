@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:gravity="bottom"
+    android:background="@android:color/darker_gray"
+    android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/bt_save"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/left_margin"
+        android:layout_marginStart="@dimen/right_margin"
+        android:layout_weight="1"
+        android:background="@drawable/all_rounded"
+        android:text="@string/lbl_save" />
+</LinearLayout>

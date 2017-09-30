@@ -1,16 +1,15 @@
 package com.mobile.fodein.presentation
 
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import com.mobile.fodein.R
+import com.mobile.fodein.presentation.view.fragment.UserFragment
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
+    override fun onStart() {
+        super.onStart()
+        navigator.addFragment(R.id.fragmentContainer, UserFragment())
     }
+
 }
 
 

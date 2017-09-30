@@ -9,9 +9,9 @@ import io.reactivex.Observable
 import javax.inject.Inject
 
 
-class SaveUser @Inject constructor(threadExecutor: IThreadExecutor,
-                                   postExecutionThread: IPostExecutionThread,
-                                   private var userRepository: IUserRepository):
+class GetUserNewUseCase @Inject constructor(threadExecutor: IThreadExecutor,
+                                            postExecutionThread: IPostExecutionThread,
+                                            private var userRepository: IUserRepository):
         UseCase<User>(threadExecutor, postExecutionThread) {
 
     var user: User? = null
