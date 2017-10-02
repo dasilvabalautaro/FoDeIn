@@ -6,5 +6,6 @@ import dagger.Subcomponent
 @Subcomponent(modules = arrayOf(ModelsModule::class))
 interface ModelsComponent {
     fun inject(userExecutor: UserExecutor)
+    //fun inject(basePresenter: BasePresenter)
 }
 

@@ -1,9 +1,10 @@
 package com.mobile.fodein.presentation.presenter
 
+import com.mobile.fodein.domain.data.MapperUser
 import com.mobile.fodein.domain.interactor.GetUserNewUseCase
-import com.mobile.fodein.models.data.User
 import com.mobile.fodein.presentation.view.IUserDetailsView
-import com.mobile.fodein.tools.Constants
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import javax.inject.Inject
 
@@ -11,25 +12,38 @@ class UserPresenter @Inject constructor(private val getUserNewUseCase:
                                         GetUserNewUseCase):
         IPresenter {
 
+    private var disposable: CompositeDisposable = CompositeDisposable()
+
+
     var view: IUserDetailsView? = null
-    private var user: User? = null
 
     fun create(){
-        getUserNewUseCase.user = this.user
         getUserNewUseCase.execute(UserObserver())
     }
 
-    fun setDataUser(data: MutableMap<String, Any>){
-        this.user = User(data[Constants.USER_NAME].toString(),
-                data[Constants.USER_USER].toString(),
-                data[Constants.USER_IDCARD].toString(),
-                data[Constants.USER_EMAIL].toString(),
-                data[Constants.USER_PASSWORD].toString(),
-                data[Constants.USER_PHONE].toString(),
-                data[Constants.USER_ADDRESS].toString(),
-                data[Constants.USER_DESCRIPTION].toString(),
-                data[Constants.USER_ROLL].toString(),
-                data[Constants.USER_UNIT].toString())
+    fun setUser(data: MutableMap<String, Any>){
+        getUserNewUseCase.setUser(data)
+    }
+
+    fun hearMessage(){
+        val hear = getUserNewUseCase.hearMessage()
+        disposable.add(hear.observeOn(AndroidSchedulers.mainThread())
+                .subscribe { s ->
+                    showUserMessage(s)
+                })
+    }
+
+    fun hearError(){
+        val hear = getUserNewUseCase.hearError()
+        disposable.add(hear.observeOn(AndroidSchedulers.mainThread())
+                .subscribe { e ->
+                    showErrorDetailsInView(e.message)
+                })
+
+    }
+
+    private fun showUserMessage(message: String){
+        this.view!!.showMessage(message)
     }
 
     override fun resume() {
@@ -38,17 +52,22 @@ class UserPresenter @Inject constructor(private val getUserNewUseCase:
     override fun pause() {
     }
 
-    fun showUserDetailsInView(user: User){
+    fun showUserDetailsInView(user: MapperUser){
         this.view!!.renderUser(user)
+    }
+
+    fun showErrorDetailsInView(message: String){
+        this.view!!.showError(message)
     }
 
     override fun destroy() {
         this.getUserNewUseCase.dispose()
         view = null
+        if (!this.disposable.isDisposed ) this.disposable.dispose()
     }
 
-    inner class UserObserver : DisposableObserver<User>() {
-        override fun onNext(t: User) {
+    inner class UserObserver : DisposableObserver<MapperUser>() {
+        override fun onNext(t: MapperUser) {
             showUserDetailsInView(t)
         }
 
@@ -57,7 +76,9 @@ class UserPresenter @Inject constructor(private val getUserNewUseCase:
         }
 
         override fun onError(e: Throwable) {
-            println(e.message)
+            if (e.message != null) {
+                showErrorDetailsInView(e.message!!)
+            }
         }
 
     }

@@ -33,6 +33,7 @@ class App: Application() {
         super.onCreate()
         component.inject(this)
         persistentDatabase.create()
+//        persistentDatabase.buildContent()
         localeUtils.setLocale(Locale("es"))
         localeUtils.updateConfiguration(this,
                 baseContext.resources.configuration)

@@ -5,6 +5,7 @@ import android.content.Context
 
 interface ILoadDataView {
     fun showLoading()
+    fun showMessage(message: String)
     fun hideLoading()
     fun showRetry()
     fun hideRetry()

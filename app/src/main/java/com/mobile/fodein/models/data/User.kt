@@ -2,37 +2,11 @@ package com.mobile.fodein.models.data
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.mobile.fodein.models.interfaces.IDataParcelable
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import java.util.*
 
-
-class User(var name: String = "",
-           var user: String = "",
-           var idCard: String = "",
-           var email: String = "",
-           var password: String = "",
-           var phone: String = "",
-           var address: String = "",
-           var description: String = "",
-           var roll: String = "",
-           var unit: String = "",
-           @PrimaryKey var id: String =
-                UUID.randomUUID().toString()): RealmObject(), Parcelable {
-
-    constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString())
-
+open class User() : RealmObject(), IDataParcelable{
 
     override fun writeToParcel(p0: Parcel?, p1: Int) {
         if (p0 != null){
@@ -50,8 +24,46 @@ class User(var name: String = "",
         }
     }
 
+    override fun readFromParcel(parcel: Parcel){
+        name = parcel.readString()
+        user = parcel.readString()
+        idCard = parcel.readString()
+        email = parcel.readString()
+        password = parcel.readString()
+        phone = parcel.readString()
+        address = parcel.readString()
+        description = parcel.readString()
+        roll = parcel.readString()
+        unit = parcel.readString()
+    }
     override fun describeContents(): Int {
         return 0
+    }
+
+    var name: String = ""
+    var user: String = ""
+    var idCard: String = ""
+    var email: String = ""
+    var password: String = ""
+    var phone: String = ""
+    var address: String = ""
+    var description: String = ""
+    var roll: String = ""
+    var unit: String = ""
+    @PrimaryKey var id: String = ""
+
+    constructor(parcel: Parcel) : this() {
+        name = parcel.readString()
+        user = parcel.readString()
+        idCard = parcel.readString()
+        email = parcel.readString()
+        password = parcel.readString()
+        phone = parcel.readString()
+        address = parcel.readString()
+        description = parcel.readString()
+        roll = parcel.readString()
+        unit = parcel.readString()
+        id = parcel.readString()
     }
 
     companion object CREATOR : Parcelable.Creator<User> {

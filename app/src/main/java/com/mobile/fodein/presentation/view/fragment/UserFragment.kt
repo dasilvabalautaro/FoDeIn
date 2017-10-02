@@ -14,14 +14,14 @@ import butterknife.OnClick
 import com.mobile.fodein.App
 import com.mobile.fodein.R
 import com.mobile.fodein.dagger.PresentationModule
-import com.mobile.fodein.models.data.User
+import com.mobile.fodein.domain.data.MapperUser
 import com.mobile.fodein.presentation.presenter.UserPresenter
 import com.mobile.fodein.presentation.view.IUserDetailsView
 import com.mobile.fodein.tools.Constants
 import javax.inject.Inject
 
 
-class UserFragment: Fragment(), IUserDetailsView {
+class UserFragment: BaseFragment(), IUserDetailsView {
     val Fragment.app: App
         get() = activity.application as App
 
@@ -45,7 +45,7 @@ class UserFragment: Fragment(), IUserDetailsView {
     @JvmField var etAddress: TextInputEditText? = null
     @OnClick(R.id.bt_save)
     fun save(){
-        this.userPresenter.setDataUser(loadPack())
+        this.userPresenter.setUser(loadPack())
         this.userPresenter.create()
     }
 
@@ -65,6 +65,8 @@ class UserFragment: Fragment(), IUserDetailsView {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.userPresenter.view = this
+        this.userPresenter.hearMessage()
+        this.userPresenter.hearError()
     }
 
     private fun loadPack(): MutableMap<String, Any>{
@@ -81,20 +83,25 @@ class UserFragment: Fragment(), IUserDetailsView {
         pack[Constants.USER_ROLL] = "Jefe"
         return pack
     }
+
     override fun showLoading() {
 
+    }
+
+    override fun showMessage(message: String) {
+        context.toast(message)
     }
 
     override fun hideLoading() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun renderUser(user: User?){
+    override fun renderUser(user: MapperUser?){
         if (user != null){
-//            etName?.setText(user.name)
-            etName?.error = user.name
+            //context.toast(user.user)
         }
     }
+
 
     override fun showRetry() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -105,10 +112,11 @@ class UserFragment: Fragment(), IUserDetailsView {
     }
 
     override fun showError(message: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        context.toast(message)
     }
 
     override fun context(): Context {
         return activity.applicationContext
     }
+
 }

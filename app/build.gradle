@@ -1,9 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'realm-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 26
@@ -15,6 +14,11 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath false
+            }
+        }
     }
     buildTypes {
         release {
@@ -34,12 +38,13 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     compile 'io.reactivex.rxjava2:rxjava:2.1.0'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    apt "com.google.dagger:dagger-compiler:2.8"
     kapt "com.google.dagger:dagger-compiler:2.8"
     compile 'com.google.dagger:dagger:2.8'
     compile 'com.jakewharton:butterknife:8.8.0'
     kapt "com.jakewharton:butterknife-compiler:8.8.0"
     compile 'com.android.support:design:26.0.1'
+//    kapt "io.realm:realm-annotations-processor:3.7.2"
+//    kapt "io.realm:realm-annotations:3.7.2"
 }
 
 repositories {
