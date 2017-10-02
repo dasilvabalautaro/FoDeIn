@@ -11,6 +11,7 @@
     <string name="save_data">Data was successfully saved</string>
     <string name="delete_data">Data was successfully deleted</string>
     <string name="update_data">Data was updated correctly</string>
+    <string name="value_null">Cannot transform a null value</string>
     <string name="hint_text_email">Email</string>
     <string name="hint_text_name">Name</string>
     <string name="hint_text_description">Description</string>

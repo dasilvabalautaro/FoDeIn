@@ -9,6 +9,8 @@ import com.mobile.fodein.domain.repository.IUserRepository
 import com.mobile.fodein.models.data.User
 import com.mobile.fodein.models.exception.DatabaseOperationException
 import com.mobile.fodein.models.persistent.repository.DatabaseRepository
+import com.mobile.fodein.presentation.mapper.UserModelDataMapper
+import com.mobile.fodein.presentation.model.UserModel
 import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,6 +26,8 @@ class UserExecutor @Inject constructor():
 
     @Inject
     lateinit var interactDatabaseListener: DatabaseListenerExecutor
+    @Inject
+    lateinit var userModelDataMapper: UserModelDataMapper
 
     init {
         component.inject(this)
@@ -40,12 +44,15 @@ class UserExecutor @Inject constructor():
                 .observableMessage.map { s -> s }
     }
 
-    override fun userList(): Observable<List<User>> {
+    override fun userList(): Observable<List<UserModel>> {
         return Observable.create { subscriber ->
             val clazz: Class<User> = User::class.java
             val listUsers: List<User>? = this.getAllData(clazz)
             if (listUsers != null){
-                subscriber.onNext(listUsers)
+                val usersModelCollection: Collection<UserModel> = this
+                    .userModelDataMapper
+                    .transform(listUsers)
+                subscriber.onNext(usersModelCollection as List<UserModel>)
                 subscriber.onComplete()
             }else{
                 subscriber.onError(Throwable())

@@ -1,6 +1,7 @@
 package com.mobile.fodein.dagger
 
 import android.content.Context
+import com.mobile.fodein.domain.interactor.GetUserListUseCase
 import com.mobile.fodein.domain.interactor.GetUserNewUseCase
 import com.mobile.fodein.domain.interfaces.IPostExecutionThread
 import com.mobile.fodein.domain.interfaces.IThreadExecutor
@@ -8,6 +9,7 @@ import com.mobile.fodein.domain.repository.IUserRepository
 import com.mobile.fodein.models.executor.JobExecutor
 import com.mobile.fodein.models.executor.UserExecutor
 import com.mobile.fodein.presentation.UIThread
+import com.mobile.fodein.presentation.presenter.UserListPresenter
 import com.mobile.fodein.presentation.presenter.UserPresenter
 import dagger.Module
 import dagger.Provides
@@ -53,9 +55,22 @@ class PresentationModule(val context: Context) {
     }
 
     @Provides
+    fun provideGetUserListUseCase(uiThread: UIThread,
+                                  jobExecutor: JobExecutor,
+                                  userExecutor: UserExecutor): GetUserListUseCase{
+        return GetUserListUseCase(jobExecutor, uiThread, userExecutor)
+    }
+
+    @Provides
     fun provideUserPresenter(getUserNewUseCase:
                              GetUserNewUseCase): UserPresenter {
         return UserPresenter(getUserNewUseCase)
+    }
+
+    @Provides
+    fun provideUserListPresenter(getUserListUseCase:
+                                 GetUserListUseCase):UserListPresenter{
+        return UserListPresenter(getUserListUseCase)
     }
 
 }
