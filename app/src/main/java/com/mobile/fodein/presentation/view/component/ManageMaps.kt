@@ -14,6 +14,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.mobile.fodein.App
 import com.mobile.fodein.R
+import com.mobile.fodein.domain.data.GeographicCoordinates
 import com.mobile.fodein.presentation.BaseActivity
 import com.mobile.fodein.tools.PermissionUtils
 import javax.inject.Inject
@@ -78,6 +79,14 @@ class ManageMaps @Inject constructor(
                     LOCATION_PERMISSION_REQUEST_CODE,
                     Manifest.permission.ACCESS_FINE_LOCATION)
             googleMap != null -> googleMap!!.isMyLocationEnabled = true
+        }
+    }
+
+    fun setCoordinates(list: List<GeographicCoordinates>?){
+        list?.forEach { geo ->
+            googleMap!!.addMarker(MarkerOptions()
+                    .position(LatLng(geo.latitude, geo.longitude))
+                    .title(geo.title))
         }
     }
 

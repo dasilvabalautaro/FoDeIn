@@ -30,7 +30,6 @@ class ManageImages @Inject constructor(private val activity: BaseActivity) {
     private val permissionUtils: PermissionUtils = PermissionUtils()
     private val context = App.appComponent.context()
 
-
     fun startGalleryChooser() {
         if (permissionUtils.requestPermission(activity,
                 GALLERY_PERMISSIONS_REQUEST,
