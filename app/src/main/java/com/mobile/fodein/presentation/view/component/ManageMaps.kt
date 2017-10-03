@@ -62,26 +62,22 @@ class ManageMaps @Inject constructor(
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<out String>,
                                             grantResults: IntArray) {
-        if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
-            return
-        }
-        if (permissionUtils.isPermissionGranted(permissions, grantResults,
-                Manifest.permission.ACCESS_FINE_LOCATION)) {
-            enableMyLocation()
-        } else {
-            activity.toast(context.getString(R.string.access_not_allowed))
+        when {
+            requestCode != LOCATION_PERMISSION_REQUEST_CODE -> return
+            permissionUtils.isPermissionGranted(permissions, grantResults,
+                    Manifest.permission.ACCESS_FINE_LOCATION) -> enableMyLocation()
+            else -> activity.toast(context.getString(R.string.access_not_allowed))
         }
     }
 
     private fun enableMyLocation() {
-        if (ContextCompat.checkSelfPermission(context,
-                Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED) {
-            permissionUtils.requestPermission(activity,
+        when {
+            ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.ACCESS_FINE_LOCATION) !=
+                    PackageManager.PERMISSION_GRANTED -> permissionUtils.requestPermission(activity,
                     LOCATION_PERMISSION_REQUEST_CODE,
                     Manifest.permission.ACCESS_FINE_LOCATION)
-        } else if (googleMap != null) {
-            googleMap!!.isMyLocationEnabled = true
+            googleMap != null -> googleMap!!.isMyLocationEnabled = true
         }
     }
 
