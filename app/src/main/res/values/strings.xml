@@ -13,7 +13,9 @@
     <string name="update_data">Data was updated correctly</string>
     <string name="value_null">Cannot transform a null value</string>
     <string name="select_photo">Select a photo</string>
+    <string name="google_maps_key">AIzaSyB56hTseqRQzAKKHOzHkrhy74p8oPI3mYM</string>
     <string name="hint_text_email">Email</string>
+    <string name="my_place">My Place</string>
     <string name="hint_text_name">Name</string>
     <string name="hint_text_description">Description</string>
     <string name="hint_text_user">User</string>

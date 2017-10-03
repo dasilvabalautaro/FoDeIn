@@ -10,7 +10,8 @@ import java.util.*
 class PermissionUtils {
 
     fun requestPermission(
-            activity: Activity, requestCode: Int, vararg permissions: String): Boolean {
+            activity: Activity, requestCode: Int,
+            vararg permissions: String): Boolean {
         var granted = true
         val permissionsNeeded = ArrayList<String>()
 
@@ -32,6 +33,14 @@ class PermissionUtils {
                 false
             }
         }
+    }
+
+    fun isPermissionGranted(grantPermissions: Array<out String>, grantResults: IntArray,
+                            permission: String): Boolean {
+        return grantPermissions.indices
+                .firstOrNull { permission == grantPermissions[it] }
+                ?.let { grantResults[it] == PackageManager.PERMISSION_GRANTED }
+                ?: false
     }
 
     fun permissionGranted(
