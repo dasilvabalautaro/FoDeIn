@@ -20,4 +20,7 @@
     <dimen name="input_width">300dp</dimen>
     <dimen name="left_margin">10dp</dimen>
     <dimen name="right_margin">10dp</dimen>
+    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="padding_left">20dp</dimen>
+    <dimen name="padding_right">10dp</dimen>
 </resources>

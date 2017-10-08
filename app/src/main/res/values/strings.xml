@@ -25,4 +25,7 @@
     <string name="hint_text_address">Address</string>
     <string name="lbl_logo_description">Logo</string>
     <string name="lbl_save">Save</string>
+    <string name="lbl_sign_in">Sign In</string>
+    <string name="lbl_send">Send</string>
+    <string name="lbl_sign_up">Sign Up</string>
 </resources>

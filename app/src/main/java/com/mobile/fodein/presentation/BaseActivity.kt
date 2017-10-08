@@ -31,7 +31,6 @@ abstract class BaseActivity: AppCompatActivity(){
     @Inject
     lateinit var manageMaps: ManageMaps
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

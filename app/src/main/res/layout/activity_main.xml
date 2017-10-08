@@ -1,49 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.mobile.fodein.presentation.MainActivity">
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.MapFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:context="com.mobile.fodein.presentation.MainActivity"/>
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="vertical"-->
-        <!--android:gravity="center_horizontal">-->
-        <!--<ImageView-->
-            <!--android:layout_width="300dp"-->
-            <!--android:layout_height="300dp"-->
-            <!--android:scaleType="fitXY"-->
-            <!--android:id="@+id/iv_place"/>-->
-        <!--<Button-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="30dp"-->
-            <!--android:text="Cámara"-->
-            <!--android:id="@+id/bt_camera"/>-->
-        <!--<Button-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="30dp"-->
-            <!--android:text="Galería"-->
-            <!--android:id="@+id/bt_gallery"/>-->
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
 
-
-    <!--</LinearLayout>-->
-    <!--<FrameLayout-->
-        <!--android:id="@+id/fragmentContainer"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
+    <include
+        layout="@layout/app_bar_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </android.support.constraint.ConstraintLayout>
+
+
+
+
+<!--<android.support.constraint.ConstraintLayout-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--tools:context="com.mobile.fodein.presentation.MainActivity">-->
+    <!--<fragment-->
+        <!--android:id="@+id/map"-->
+        <!--android:name="com.google.android.gms.maps.MapFragment"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--tools:context="com.mobile.fodein.presentation.MainActivity"/>-->
+    <!--&lt;!&ndash;<LinearLayout&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:orientation="vertical"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:gravity="center_horizontal">&ndash;&gt;-->
+        <!--&lt;!&ndash;<ImageView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="300dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="300dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:scaleType="fitXY"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/iv_place"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;<Button&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_marginTop="30dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:text="Cámara"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/bt_camera"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;<Button&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_marginTop="30dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:text="Galería"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/bt_gallery"/>&ndash;&gt;-->
+
+
+    <!--&lt;!&ndash;</LinearLayout>&ndash;&gt;-->
+    <!--&lt;!&ndash;<FrameLayout&ndash;&gt;-->
+        <!--&lt;!&ndash;android:id="@+id/fragmentContainer"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="match_parent" />&ndash;&gt;-->
+
+<!--</android.support.constraint.ConstraintLayout>-->

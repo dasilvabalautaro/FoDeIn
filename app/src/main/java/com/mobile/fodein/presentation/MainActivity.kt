@@ -14,7 +14,7 @@ class MainActivity : BaseActivity() {
 //    }
     override fun onStart() {
         super.onStart()
-        manageMaps.getMapAsync()
+        //manageMaps.getMapAsync()
 //        ButterKnife.bind(this)
         //navigator.addFragment(R.id.fragmentContainer, UserFragment())
         //navigator.addFragment(R.id.fragmentContainer, UserListFragment())
