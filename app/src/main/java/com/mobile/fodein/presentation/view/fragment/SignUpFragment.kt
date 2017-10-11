@@ -14,6 +14,7 @@ import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.mobile.fodein.R
 import com.mobile.fodein.tools.Constants
+import com.mobile.fodein.tools.HashUtils
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -74,7 +75,8 @@ class SignUpFragment: AuthenticateFragment() {
     }
 
     private fun setValidationFields(){
-        val regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,20}"
+        val regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])" +
+                "(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{6,20}"
 
         validation.addValidation(activity, R.id.et_name,
                 RegexTemplate.NOT_EMPTY, R.string.invalid_name)
@@ -93,9 +95,10 @@ class SignUpFragment: AuthenticateFragment() {
 
     private fun loadPack(): MutableMap<String, Any>{
         val pack: MutableMap<String, Any> = HashMap()
+        val password = HashUtils.sha256(etPassword?.text!!.trim().toString())
         pack[Constants.USER_NAME] = etName?.text!!.trim().toString()
         pack[Constants.USER_USER] = etUser?.text!!.trim().toString()
-        pack[Constants.USER_PASSWORD] = etPassword?.text!!.trim().toString()
+        pack[Constants.USER_PASSWORD] = password
         pack[Constants.USER_PHONE] = etPhone?.text!!.trim().toString()
         pack[Constants.USER_ADDRESS] = "Plaza Murillo"
         pack[Constants.USER_EMAIL] = etEmail?.text!!.trim().toString()

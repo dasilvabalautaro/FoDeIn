@@ -71,7 +71,8 @@ class SignInFragment: AuthenticateFragment() {
     }
 
     private fun setValidationFields(){
-        val regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,20}"
+        val regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])" +
+                "(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{6,20}"
 
         validation.addValidation(activity, R.id.et_user,
                 RegexTemplate.NOT_EMPTY, R.string.invalid_name)
