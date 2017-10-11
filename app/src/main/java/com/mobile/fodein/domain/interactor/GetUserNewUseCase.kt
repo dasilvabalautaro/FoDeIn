@@ -6,6 +6,7 @@ import com.mobile.fodein.domain.interfaces.IPostExecutionThread
 import com.mobile.fodein.domain.interfaces.IThreadExecutor
 import com.mobile.fodein.domain.repository.IUserRepository
 import com.mobile.fodein.models.exception.DatabaseOperationException
+import com.mobile.fodein.presentation.model.UserModel
 import com.mobile.fodein.tools.Constants
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -14,7 +15,7 @@ import javax.inject.Inject
 class GetUserNewUseCase @Inject constructor(threadExecutor: IThreadExecutor,
                                             postExecutionThread: IPostExecutionThread,
                                             private var userRepository: IUserRepository):
-        UseCase<MapperUser>(threadExecutor, postExecutionThread) {
+        UseCase<UserModel>(threadExecutor, postExecutionThread) {
     var user: MapperUser = MapperUser()
 
     fun setUser(data: MutableMap<String, Any>){
@@ -31,7 +32,7 @@ class GetUserNewUseCase @Inject constructor(threadExecutor: IThreadExecutor,
 
     }
 
-    override fun buildUseCaseObservable(): Observable<MapperUser> {
+    override fun buildUseCaseObservable(): Observable<UserModel> {
         return this.userRepository.userSave(user)
     }
 

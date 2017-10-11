@@ -19,12 +19,12 @@
         android:name=".App"
         android:theme="@style/AppTheme"
         android:fullBackupContent="@xml/backup_descriptor">
-        <!--com.google.android.maps.v2.API_KEY-->
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".presentation.MainActivity"
+        <activity android:name=".presentation.view.activities.AccessActivity"
             android:configChanges="mcc|mnc|locale|keyboardHidden|screenLayout|screenSize|orientation"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -32,6 +32,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".presentation.view.activities.MainActivity"
+            android:configChanges="mcc|mnc|locale|keyboardHidden|screenLayout|screenSize|orientation">
         </activity>
         <provider
             android:name="android.support.v4.content.FileProvider"

@@ -1,7 +1,7 @@
 package com.mobile.fodein.presentation.presenter
 
-import com.mobile.fodein.domain.data.MapperUser
 import com.mobile.fodein.domain.interactor.GetUserNewUseCase
+import com.mobile.fodein.presentation.model.UserModel
 import com.mobile.fodein.presentation.view.IUserDetailsView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -52,7 +52,7 @@ class UserPresenter @Inject constructor(private val getUserNewUseCase:
     override fun pause() {
     }
 
-    fun showUserDetailsInView(user: MapperUser){
+    fun showUserDetailsInView(user: UserModel){
         this.view!!.renderUser(user)
     }
 
@@ -66,8 +66,8 @@ class UserPresenter @Inject constructor(private val getUserNewUseCase:
         if (!this.disposable.isDisposed ) this.disposable.dispose()
     }
 
-    inner class UserObserver : DisposableObserver<MapperUser>() {
-        override fun onNext(t: MapperUser) {
+    inner class UserObserver : DisposableObserver<UserModel>() {
+        override fun onNext(t: UserModel) {
             showUserDetailsInView(t)
         }
 

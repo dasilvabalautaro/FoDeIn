@@ -8,6 +8,7 @@ import io.reactivex.Observable
 
 interface IUserRepository: IMessagePersistent {
     fun userList(): Observable<List<UserModel>>
-    fun userSave(user: MapperUser): Observable<MapperUser>
+    fun userSave(user: MapperUser): Observable<UserModel>
     fun userGetById(id: String): Observable<User>
+    fun userGetByField(value: String, nameField: String): Observable<List<UserModel>>
 }

@@ -60,7 +60,7 @@ class UserExecutor @Inject constructor():
         }
     }
 
-    override fun userSave(user: MapperUser): Observable<MapperUser>{
+    override fun userSave(user: MapperUser): Observable<UserModel>{
         val parcel:Parcel = Parcel.obtain()
         user.writeToParcel(parcel, Parcelable.PARCELABLE_WRITE_RETURN_VALUE)
         parcel.setDataPosition(0)
@@ -70,8 +70,9 @@ class UserExecutor @Inject constructor():
             val clazz: Class<User> = User::class.java
             val newUser = this.save(clazz, parcel, interactDatabaseListener)
             if (newUser != null){
-                user.user = newUser.id
-                subscriber.onNext(user)
+                val userModel = this.userModelDataMapper.transform(newUser)
+
+                subscriber.onNext(userModel)
                 subscriber.onComplete()
             }else{
                 subscriber.onError(Throwable())
@@ -95,4 +96,21 @@ class UserExecutor @Inject constructor():
         }
     }
 
+    override fun userGetByField(value: String, nameField: String):
+            Observable<List<UserModel>> {
+        return Observable.create { subscriber ->
+            val clazz: Class<User> = User::class.java
+            val listUsers: List<User>? = this.getDataByField(clazz,
+                    nameField, value)
+            if (listUsers != null){
+                val usersModelCollection: Collection<UserModel> = this
+                        .userModelDataMapper
+                        .transform(listUsers)
+                subscriber.onNext(usersModelCollection as List<UserModel>)
+                subscriber.onComplete()
+            }else{
+                subscriber.onError(Throwable())
+            }
+        }
+    }
 }

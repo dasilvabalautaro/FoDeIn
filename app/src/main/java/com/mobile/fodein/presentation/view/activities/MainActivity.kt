@@ -1,4 +1,6 @@
-package com.mobile.fodein.presentation
+package com.mobile.fodein.presentation.view.activities
+
+import com.mobile.fodein.presentation.BaseActivity
 
 class MainActivity : BaseActivity() {
     //    @BindView(R.id.iv_place)
@@ -16,7 +18,7 @@ class MainActivity : BaseActivity() {
         super.onStart()
         //manageMaps.getMapAsync()
 //        ButterKnife.bind(this)
-        //navigator.addFragment(R.id.fragmentContainer, UserFragment())
+
         //navigator.addFragment(R.id.fragmentContainer, UserListFragment())
     }
 
