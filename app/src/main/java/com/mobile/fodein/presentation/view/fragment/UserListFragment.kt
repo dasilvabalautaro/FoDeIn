@@ -12,7 +12,6 @@ import butterknife.ButterKnife
 import com.mobile.fodein.App
 import com.mobile.fodein.R
 import com.mobile.fodein.dagger.PresentationModule
-import com.mobile.fodein.models.data.User
 import com.mobile.fodein.presentation.model.UserModel
 import com.mobile.fodein.presentation.presenter.UserListPresenter
 import com.mobile.fodein.presentation.view.IUserListView
@@ -56,11 +55,23 @@ class UserListFragment: BaseFragment(), IUserListView {
         this.userListPresenter.initialize()
     }
 
-    override fun renderUserList(userModelCollection: Collection<UserModel>) {
+
+    override fun <T> renderUserList(userModelCollection: Collection<T>) {
         var res = ""
-        for (user: UserModel in userModelCollection) res += user.id + '\n'
+        for (user in userModelCollection) res += (user as UserModel).id  + '\n'
         tvList!!.text =  res
     }
+
+    override fun <T> viewUser(obj: T) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+//    fun renderUserList1(userModelCollection: Collection<UserModel>) {
+//        var res = ""
+//        for (user: UserModel in userModelCollection) res += user.id + '\n'
+//        tvList!!.text =  res
+//    }
+
 
     override fun showLoading() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -87,11 +98,9 @@ class UserListFragment: BaseFragment(), IUserListView {
         context.toast(message)
     }
 
-    override fun viewUser(user: User) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     override fun context(): Context {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
+

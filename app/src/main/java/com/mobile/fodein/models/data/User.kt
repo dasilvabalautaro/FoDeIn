@@ -3,6 +3,7 @@ package com.mobile.fodein.models.data
 import android.os.Parcel
 import android.os.Parcelable
 import com.mobile.fodein.models.interfaces.IDataParcelable
+import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
@@ -51,6 +52,7 @@ open class User() : RealmObject(), IDataParcelable{
     var roll: String = ""
     var unit: String = ""
     @PrimaryKey var id: String = ""
+    var forms: RealmList<Form> = RealmList()
 
     constructor(parcel: Parcel) : this() {
         name = parcel.readString()
