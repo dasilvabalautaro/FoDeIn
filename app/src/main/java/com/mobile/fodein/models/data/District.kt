@@ -8,6 +8,10 @@ import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
 open class District() : RealmObject(), IDataParcelable {
+    override fun addList(value: Any) {
+        unities.add(value as Unity)
+    }
+
     override fun readFromParcel(parcel: Parcel) {
         name = parcel.readString()
     }

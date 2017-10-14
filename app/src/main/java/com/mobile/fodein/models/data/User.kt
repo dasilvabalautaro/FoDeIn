@@ -8,6 +8,9 @@ import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
 open class User() : RealmObject(), IDataParcelable{
+    override fun addList(value: Any) {
+        forms.add(value as Form)
+    }
 
     override fun writeToParcel(p0: Parcel?, p1: Int) {
         if (p0 != null){

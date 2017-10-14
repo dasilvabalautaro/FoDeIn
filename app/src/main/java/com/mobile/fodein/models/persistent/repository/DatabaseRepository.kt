@@ -92,7 +92,24 @@ abstract class DatabaseRepository : IRepository {
 
     }
 
+    override fun <E : RealmObject> addObjectList(clazz: Class<E>,
+                                                 value: String,
+                                                 newObject: Any,
+                                                 listener: OnDatabaseCompleteListener) {
+        val realm: Realm = Realm.getDefaultInstance()
+        try {
+            val e: E? = realm.where(clazz).equalTo(fieldId, value).findFirst()
+            if (e is IDataParcelable){
+                (e as IDataParcelable).addList(newObject)
+            }
+            listener.onSaveSucceeded()
+        }catch (e: Throwable){
+            listener.onSaveFailed(e.message!!)
+        }finally {
+            realm.close()
+        }
 
+    }
 }
 
 

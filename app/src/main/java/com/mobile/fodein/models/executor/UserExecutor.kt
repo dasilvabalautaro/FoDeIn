@@ -82,12 +82,13 @@ class UserExecutor @Inject constructor():
 
     }
 
-    override fun userGetById(id: String): Observable<User> {
+    override fun userGetById(id: String): Observable<UserModel> {
         return Observable.create { subscriber ->
             val clazz: Class<User> = User::class.java
             val newUser = this.getDataById(clazz, id)
             if (newUser != null){
-                subscriber.onNext(newUser)
+                val userModel = this.userModelDataMapper.transform(newUser)
+                subscriber.onNext(userModel)
                 subscriber.onComplete()
             }else{
                 subscriber.onError(Throwable())

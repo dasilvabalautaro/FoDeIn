@@ -10,6 +10,10 @@ import io.realm.annotations.Required
 
 
 open class Unity() : RealmObject(), IDataParcelable {
+    override fun addList(value: Any) {
+        projects.add(value as Project)
+    }
+
     override fun readFromParcel(parcel: Parcel) {
         district = parcel.readParcelable(District::class.java.classLoader)
         phone = parcel.readString()

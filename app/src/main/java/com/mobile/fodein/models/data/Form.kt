@@ -8,6 +8,10 @@ import io.realm.annotations.PrimaryKey
 import io.realm.annotations.Required
 
 open class Form() : RealmObject(), IDataParcelable {
+    override fun addList(value: Any) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun readFromParcel(parcel: Parcel) {
         project = parcel.readParcelable(Project::class.java.classLoader)
         user = parcel.readParcelable(User::class.java.classLoader)
