@@ -90,11 +90,37 @@ class UnityExecutor @Inject constructor():
     }
 
     override fun unityGetById(id: String): Observable<UnityModel> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return Observable.create { subscriber ->
+            val clazz: Class<Unity> = Unity::class.java
+            val newUnity = this.getDataById(clazz, id)
+            if (newUnity != null){
+                val unityModel = this.unityModelDataMapper
+                        .transform(newUnity)
+                subscriber.onNext(unityModel)
+                subscriber.onComplete()
+            }else{
+                subscriber.onError(Throwable())
+            }
+
+        }
     }
 
-    override fun unityGetByField(value: String, nameField: String): Observable<List<UnityModel>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun unityGetByField(value: String, nameField: String):
+            Observable<List<UnityModel>> {
+        return Observable.create { subscriber ->
+            val clazz: Class<Unity> = Unity::class.java
+            val listUnity: List<Unity>? = this.getDataByField(clazz,
+                    nameField, value)
+            if (listUnity != null){
+                val unityModelCollection: Collection<UnityModel> = this
+                        .unityModelDataMapper
+                        .transform(listUnity)
+                subscriber.onNext(unityModelCollection as List<UnityModel>)
+                subscriber.onComplete()
+            }else{
+                subscriber.onError(Throwable())
+            }
+        }
     }
 
 }

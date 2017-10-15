@@ -1,4 +1,4 @@
-package com.mobile.fodein.presentation
+package com.mobile.fodein.presentation.view.activities
 
 import android.app.Activity
 import android.os.Bundle

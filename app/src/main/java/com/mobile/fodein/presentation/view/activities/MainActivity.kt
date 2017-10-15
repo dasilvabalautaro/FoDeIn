@@ -1,7 +1,5 @@
 package com.mobile.fodein.presentation.view.activities
 
-import com.mobile.fodein.presentation.BaseActivity
-
 class MainActivity : BaseActivity() {
     //    @BindView(R.id.iv_place)
 //    @JvmField var ivPlace: ImageView? = null

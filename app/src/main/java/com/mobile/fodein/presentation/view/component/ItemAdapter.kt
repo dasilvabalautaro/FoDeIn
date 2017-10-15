@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.mobile.fodein.R
-import com.mobile.fodein.domain.interfaces.IEntity
+import com.mobile.fodein.presentation.interfaces.IEntity
 import com.mobile.fodein.tools.DataListDiffCallback
 
 

@@ -1,8 +1,10 @@
 package com.mobile.fodein.presentation.presenter
 
+import com.mobile.fodein.App
+import com.mobile.fodein.R
 import com.mobile.fodein.domain.interactor.GetUserNewUseCase
 import com.mobile.fodein.presentation.model.UserModel
-import com.mobile.fodein.presentation.view.IUserDetailsView
+import com.mobile.fodein.presentation.interfaces.ILoadDataView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
@@ -13,9 +15,8 @@ class UserPresenter @Inject constructor(private val getUserNewUseCase:
         IPresenter {
 
     private var disposable: CompositeDisposable = CompositeDisposable()
-
-
-    var view: IUserDetailsView? = null
+    private val context = App.appComponent.context()
+    var view: ILoadDataView? = null
 
     fun create(){
         getUserNewUseCase.execute(UserObserver())
@@ -25,39 +26,33 @@ class UserPresenter @Inject constructor(private val getUserNewUseCase:
         getUserNewUseCase.setUser(data)
     }
 
-    fun hearMessage(){
+    override fun hearMessage(){
         val hear = getUserNewUseCase.hearMessage()
         disposable.add(hear.observeOn(AndroidSchedulers.mainThread())
                 .subscribe { s ->
-                    showUserMessage(s)
+                    showMessage(s)
                 })
     }
 
-    fun hearError(){
+    override fun hearError(){
         val hear = getUserNewUseCase.hearError()
         disposable.add(hear.observeOn(AndroidSchedulers.mainThread())
                 .subscribe { e ->
-                    showErrorDetailsInView(e.message)
+                    showError(e.message)
                 })
 
     }
 
-    private fun showUserMessage(message: String){
+    fun showUserDetailsInView(user: UserModel){
+        this.view!!.renderObject(user)
+    }
+
+    override fun showMessage(message: String) {
         this.view!!.showMessage(message)
     }
 
-    override fun resume() {
-    }
-
-    override fun pause() {
-    }
-
-    fun showUserDetailsInView(user: UserModel){
-        this.view!!.renderUser(user)
-    }
-
-    fun showErrorDetailsInView(message: String){
-        this.view!!.showError(message)
+    override fun showError(error: String) {
+        this.view!!.showError(error)
     }
 
     override fun destroy() {
@@ -72,12 +67,12 @@ class UserPresenter @Inject constructor(private val getUserNewUseCase:
         }
 
         override fun onComplete() {
-
+            showMessage(context.resources.getString(R.string.task_complete))
         }
 
         override fun onError(e: Throwable) {
             if (e.message != null) {
-                showErrorDetailsInView(e.message!!)
+                showError(e.message!!)
             }
         }
 

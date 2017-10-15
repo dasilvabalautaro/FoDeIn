@@ -7,15 +7,15 @@ import android.view.View
 import android.widget.Toast
 import com.mobile.fodein.App
 import com.mobile.fodein.dagger.PresentationModule
+import com.mobile.fodein.presentation.interfaces.ILoadDataView
 import com.mobile.fodein.presentation.model.UserModel
 import com.mobile.fodein.presentation.presenter.UserLoginPresenter
 import com.mobile.fodein.presentation.presenter.UserPresenter
-import com.mobile.fodein.presentation.view.IUserDetailsView
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 abstract class AuthenticateFragment: Fragment(),
-        IUserDetailsView {
+        ILoadDataView {
     protected var disposable: CompositeDisposable = CompositeDisposable()
 
     val Fragment.app: App
@@ -57,10 +57,14 @@ abstract class AuthenticateFragment: Fragment(),
         context.toast(message)
     }
 
-    override fun renderUser(user: UserModel?) {
-        if (user != null){
-            context.toast(user.name)
+    override fun <T> renderObject(obj: T) {
+        if (obj != null){
+            context.toast((obj as UserModel).name)
         }
+    }
+
+    override fun <T> renderList(objectModelCollection: Collection<T>) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun hideLoading() {

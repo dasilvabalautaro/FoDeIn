@@ -105,10 +105,10 @@ class DistrictExecutor @Inject constructor():
             val listDistrict: List<District>? = this.getDataByField(clazz,
                     nameField, value)
             if (listDistrict != null){
-                val usersModelCollection: Collection<DistrictModel> = this
+                val districtModelCollection: Collection<DistrictModel> = this
                         .districtModelDataMapper
                         .transform(listDistrict)
-                subscriber.onNext(usersModelCollection as List<DistrictModel>)
+                subscriber.onNext(districtModelCollection as List<DistrictModel>)
                 subscriber.onComplete()
             }else{
                 subscriber.onError(Throwable())

@@ -19,6 +19,13 @@ import javax.inject.Inject
 
 
 class UserListFragment: BaseFragment(), IUserListView {
+    override fun <T> renderList(objectModelCollection: Collection<T>) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun <T> renderObject(obj: T) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     val Fragment.app: App
         get() = activity.application as App

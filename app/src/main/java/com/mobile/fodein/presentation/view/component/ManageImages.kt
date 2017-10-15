@@ -11,7 +11,7 @@ import android.util.Base64
 import android.widget.ImageView
 import com.mobile.fodein.App
 import com.mobile.fodein.R
-import com.mobile.fodein.presentation.BaseActivity
+import com.mobile.fodein.presentation.view.activities.BaseActivity
 import com.mobile.fodein.tools.PermissionUtils
 import java.io.ByteArrayOutputStream
 import java.io.File

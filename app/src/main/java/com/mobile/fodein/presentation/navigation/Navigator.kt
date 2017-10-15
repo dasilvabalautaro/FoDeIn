@@ -1,7 +1,7 @@
 package com.mobile.fodein.presentation.navigation
 
 import android.support.v4.app.Fragment
-import com.mobile.fodein.presentation.BaseActivity
+import com.mobile.fodein.presentation.view.activities.BaseActivity
 import javax.inject.Inject
 import javax.inject.Singleton
 

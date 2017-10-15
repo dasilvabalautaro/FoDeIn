@@ -3,8 +3,8 @@ package com.mobile.fodein.presentation.presenter
 import com.mobile.fodein.App
 import com.mobile.fodein.R
 import com.mobile.fodein.domain.interactor.GetUserLoginUseCase
+import com.mobile.fodein.presentation.interfaces.ILoadDataView
 import com.mobile.fodein.presentation.model.UserModel
-import com.mobile.fodein.presentation.view.IUserDetailsView
 import com.mobile.fodein.tools.Constants
 import com.mobile.fodein.tools.HashUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -19,7 +19,7 @@ class UserLoginPresenter @Inject constructor(private val getUserLoginUseCase:
 
     private var disposable: CompositeDisposable = CompositeDisposable()
     private var password: String = ""
-    var view: IUserDetailsView? = null
+    var view: ILoadDataView? = null
     private val context = App.appComponent.context()
 
     fun create(){
@@ -35,7 +35,7 @@ class UserLoginPresenter @Inject constructor(private val getUserLoginUseCase:
                                           Collection<UserModel>){
 
         if (usersModelCollection.isEmpty()){
-            showErrorDetailsInView(context.getString(R.string.register_not_found))
+            showError(context.getString(R.string.register_not_found))
             return
         }
 
@@ -48,47 +48,38 @@ class UserLoginPresenter @Inject constructor(private val getUserLoginUseCase:
             }
         })
 
-        showErrorDetailsInView(context.getString(R.string.register_not_found))
+        showError(context.getString(R.string.register_not_found))
 
     }
 
     private fun showUserDetailsInView(user: UserModel){
-        this.view!!.renderUser(user)
+        this.view!!.renderObject(user)
     }
 
-    fun showErrorDetailsInView(message: String){
-        this.view!!.showError(message)
-    }
-
-    override fun resume() {
-
-    }
-
-    override fun pause() {
-
-    }
-
-    fun hearMessage(){
+    override fun hearMessage(){
         val hear = getUserLoginUseCase.hearMessage()
         disposable.add(hear.observeOn(AndroidSchedulers.mainThread())
                 .subscribe { s ->
-                    showUserMessage(s)
+                    showMessage(s)
                 })
     }
 
-    fun hearError(){
+    override fun hearError(){
         val hear = getUserLoginUseCase.hearError()
         disposable.add(hear.observeOn(AndroidSchedulers.mainThread())
                 .subscribe { e ->
-                    showErrorDetailsInView(e.message)
+                    showError(e.message)
                 })
 
     }
 
-    private fun showUserMessage(message: String){
+    override fun showMessage(message: String) {
         this.view!!.showMessage(message)
     }
 
+    override fun showError(error: String) {
+        this.view!!.showError(error)
+    }
     override fun destroy() {
         this.getUserLoginUseCase.dispose()
         this.view = null
@@ -101,12 +92,12 @@ class UserLoginPresenter @Inject constructor(private val getUserLoginUseCase:
         }
 
         override fun onComplete() {
-
+            showMessage(context.resources.getString(R.string.task_complete))
         }
 
         override fun onError(e: Throwable) {
             if (e.message != null) {
-                showErrorDetailsInView(e.message!!)
+                showError(e.message!!)
             }
         }
     }

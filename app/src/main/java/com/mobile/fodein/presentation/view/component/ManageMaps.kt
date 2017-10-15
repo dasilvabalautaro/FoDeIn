@@ -15,7 +15,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.mobile.fodein.App
 import com.mobile.fodein.R
 import com.mobile.fodein.domain.data.GeographicCoordinates
-import com.mobile.fodein.presentation.BaseActivity
+import com.mobile.fodein.presentation.view.activities.BaseActivity
 import com.mobile.fodein.tools.PermissionUtils
 import javax.inject.Inject
 

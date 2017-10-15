@@ -1,4 +1,4 @@
-package com.mobile.fodein.domain.interfaces
+package com.mobile.fodein.presentation.interfaces
 
 
 interface IEntity {

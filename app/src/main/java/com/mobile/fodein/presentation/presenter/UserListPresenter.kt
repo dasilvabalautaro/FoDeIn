@@ -11,17 +11,26 @@ import javax.inject.Inject
 class UserListPresenter @Inject constructor(private val getUserListUseCase:
                                             GetUserListUseCase
                                             ): IPresenter  {
+    override fun showMessage(message: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showError(error: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun hearMessage() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun hearError() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     private var disposable: CompositeDisposable = CompositeDisposable()
 
     var view: IUserListView? = null
 
-    override fun resume() {
-
-    }
-
-    override fun pause() {
-
-    }
 
     private fun getUserList(){
         this.getUserListUseCase.execute(UserListObserver())

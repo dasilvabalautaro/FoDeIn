@@ -1,6 +1,7 @@
 package com.mobile.fodein.dagger
 
 import com.mobile.fodein.presentation.view.fragment.AuthenticateFragment
+import com.mobile.fodein.presentation.view.fragment.DistrictFragment
 import com.mobile.fodein.presentation.view.fragment.UserListFragment
 import dagger.Subcomponent
 
@@ -8,4 +9,5 @@ import dagger.Subcomponent
 interface PresentationComponent {
     fun inject(userListFragment: UserListFragment)
     fun inject(authenticateFragment: AuthenticateFragment)
+    fun inject(districtFragment: DistrictFragment)
 }

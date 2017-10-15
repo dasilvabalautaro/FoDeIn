@@ -1,4 +1,4 @@
-package com.mobile.fodein.presentation.view
+package com.mobile.fodein.presentation.interfaces
 
 import android.content.Context
 
@@ -11,4 +11,6 @@ interface ILoadDataView {
     fun hideRetry()
     fun showError(message: String)
     fun context(): Context
+    fun <T> renderList(objectModelCollection: Collection<T>)
+    fun <T> renderObject(obj: T)
 }
