@@ -27,7 +27,7 @@ class ItemAdapter(private val listener: (IEntity) -> Unit):
 
     }
 
-    fun setWeighingList(itemList: ArrayList<IEntity>){
+    fun setObjectList(itemList: ArrayList<IEntity>){
         val diffResult: DiffUtil.DiffResult = DiffUtil
                 .calculateDiff(DataListDiffCallback(this.items, itemList))
         this.items.clear()

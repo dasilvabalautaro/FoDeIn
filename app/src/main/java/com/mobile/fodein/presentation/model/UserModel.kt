@@ -1,7 +1,10 @@
 package com.mobile.fodein.presentation.model
 
+import com.mobile.fodein.R
+import com.mobile.fodein.presentation.interfaces.IEntity
 
-class UserModel {
+
+class UserModel: IEntity {
     var name: String = ""
     var user: String = ""
     var idCard: String = ""
@@ -9,8 +12,12 @@ class UserModel {
     var password: String = ""
     var phone: String = ""
     var address: String = ""
-    var description: String = ""
     var roll: String = ""
     var unit: String = ""
     var id: String = ""
+    var list: List<FormModel> = ArrayList()
+    override var graph: Int = R.drawable.ic_person
+    override var title: String = name
+    override var description: String = ""
+    override var imageLink: Int = R.drawable.ic_visibility
 }

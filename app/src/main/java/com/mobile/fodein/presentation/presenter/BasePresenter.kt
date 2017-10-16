@@ -42,4 +42,6 @@ abstract class BasePresenter: IPresenter {
     override fun showError(error: String) {
         this.view!!.showError(error)
     }
+
+
 }

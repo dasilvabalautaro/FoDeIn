@@ -1,12 +1,12 @@
 package com.mobile.fodein.presentation.model
 
-import com.mobile.fodein.models.data.Form
-import com.mobile.fodein.models.data.Unity
+import com.mobile.fodein.R
+import com.mobile.fodein.presentation.interfaces.IEntity
 
 
-class ProjectModel {
+class ProjectModel: IEntity {
     var id: String = ""
-    var unity: Unity? = null
+    var unity: UnityModel? = null
     var type: Int = 0
     var code: String = ""
     var name: String = ""
@@ -17,5 +17,11 @@ class ProjectModel {
     var notFinance: Double = 0.00
     var other: Double = 0.00
     var sum: Double = 0.00
-    var list: List<Form> = ArrayList()
+    var list: List<FormModel> = ArrayList()
+
+    override var graph: Int = R.drawable.ic_project
+    override var title: String = name
+    override var description: String = "Latitud: " + latitude.toString() +
+            " Longitud: " + longitude.toString()
+    override var imageLink: Int = R.drawable.ic_form
 }

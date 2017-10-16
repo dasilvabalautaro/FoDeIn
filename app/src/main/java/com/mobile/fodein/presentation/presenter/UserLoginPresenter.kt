@@ -1,26 +1,24 @@
 package com.mobile.fodein.presentation.presenter
 
-import com.mobile.fodein.App
 import com.mobile.fodein.R
 import com.mobile.fodein.domain.interactor.GetUserLoginUseCase
-import com.mobile.fodein.presentation.interfaces.ILoadDataView
+import com.mobile.fodein.models.persistent.repository.CachingLruRepository
 import com.mobile.fodein.presentation.model.UserModel
 import com.mobile.fodein.tools.Constants
 import com.mobile.fodein.tools.HashUtils
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import javax.inject.Inject
 
 
 class UserLoginPresenter @Inject constructor(private val getUserLoginUseCase:
                                              GetUserLoginUseCase):
-        IPresenter {
+        BasePresenter() {
 
-    private var disposable: CompositeDisposable = CompositeDisposable()
     private var password: String = ""
-    var view: ILoadDataView? = null
-    private val context = App.appComponent.context()
+
+    init {
+        this.iHearMessage = getUserLoginUseCase
+    }
 
     fun create(){
         getUserLoginUseCase.execute(UserListObserver())
@@ -42,6 +40,8 @@ class UserLoginPresenter @Inject constructor(private val getUserLoginUseCase:
         usersModelCollection.forEach({ user: UserModel ->
             when (password) {
                 user.password -> {
+                    CachingLruRepository.instance.getLru()
+                            .put(Constants.CACHE_USER_MODEL, user)
                     showUserDetailsInView(user)
                     return
                 }
@@ -56,34 +56,9 @@ class UserLoginPresenter @Inject constructor(private val getUserLoginUseCase:
         this.view!!.renderObject(user)
     }
 
-    override fun hearMessage(){
-        val hear = getUserLoginUseCase.hearMessage()
-        disposable.add(hear.observeOn(AndroidSchedulers.mainThread())
-                .subscribe { s ->
-                    showMessage(s)
-                })
-    }
-
-    override fun hearError(){
-        val hear = getUserLoginUseCase.hearError()
-        disposable.add(hear.observeOn(AndroidSchedulers.mainThread())
-                .subscribe { e ->
-                    showError(e.message)
-                })
-
-    }
-
-    override fun showMessage(message: String) {
-        this.view!!.showMessage(message)
-    }
-
-    override fun showError(error: String) {
-        this.view!!.showError(error)
-    }
     override fun destroy() {
+        super.destroy()
         this.getUserLoginUseCase.dispose()
-        this.view = null
-        if (!this.disposable.isDisposed ) this.disposable.dispose()
     }
 
     inner class UserListObserver: DisposableObserver<List<UserModel>>(){

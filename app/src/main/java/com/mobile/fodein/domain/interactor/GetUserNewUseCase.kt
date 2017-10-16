@@ -2,6 +2,7 @@ package com.mobile.fodein.domain.interactor
 
 import com.mobile.fodein.domain.UseCase
 import com.mobile.fodein.domain.data.MapperUser
+import com.mobile.fodein.domain.interfaces.IHearMessage
 import com.mobile.fodein.domain.interfaces.IPostExecutionThread
 import com.mobile.fodein.domain.interfaces.IThreadExecutor
 import com.mobile.fodein.domain.repository.IUserRepository
@@ -15,7 +16,8 @@ import javax.inject.Inject
 class GetUserNewUseCase @Inject constructor(threadExecutor: IThreadExecutor,
                                             postExecutionThread: IPostExecutionThread,
                                             private var userRepository: IUserRepository):
-        UseCase<UserModel>(threadExecutor, postExecutionThread) {
+        UseCase<UserModel>(threadExecutor, postExecutionThread),
+        IHearMessage {
     var user: MapperUser = MapperUser()
 
     fun setUser(data: MutableMap<String, Any>){
@@ -36,11 +38,11 @@ class GetUserNewUseCase @Inject constructor(threadExecutor: IThreadExecutor,
         return this.userRepository.userSave(user)
     }
 
-    fun hearMessage(): Observable<String>{
+    override fun hearMessage(): Observable<String>{
         return this.userRepository.userGetMessage()
     }
 
-    fun hearError(): Observable<DatabaseOperationException>{
+    override fun hearError(): Observable<DatabaseOperationException>{
         return this.userRepository.userGetError()
     }
 }

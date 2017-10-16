@@ -8,6 +8,9 @@ import com.mobile.fodein.presentation.model.FormModel
 
 class FormModelDataMapper {
     private val context = App.appComponent.context()
+    private val projectModelDataMapper:
+            ProjectModelDataMapper = ProjectModelDataMapper()
+    private val userModelDataMapper: UserModelDataMapper = UserModelDataMapper()
 
     fun transform(form: Form?): FormModel {
         if (form == null)
@@ -21,8 +24,8 @@ class FormModelDataMapper {
         formModel.dateUpdate = form.dateUpdate
         formModel.latitude = form.latitude
         formModel.longitude = form.longitude
-        formModel.project = form.project
-        formModel.user = form.user
+        formModel.project = projectModelDataMapper.transform(form.project)
+        formModel.user = userModelDataMapper.transform(form.user)
         return formModel
     }
 

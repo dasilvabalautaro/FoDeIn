@@ -50,10 +50,10 @@ class UnityExecutor @Inject constructor():
             val clazz: Class<Unity> = Unity::class.java
             val listUnity: List<Unity>? = this.getAllData(clazz)
             if (listUnity != null){
-                val districtModelCollection: Collection<UnityModel> = this
+                val unityModelCollection: Collection<UnityModel> = this
                         .unityModelDataMapper
                         .transform(listUnity)
-                subscriber.onNext(districtModelCollection as List<UnityModel>)
+                subscriber.onNext(unityModelCollection as List<UnityModel>)
                 subscriber.onComplete()
             }else{
                 subscriber.onError(Throwable())

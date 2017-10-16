@@ -63,7 +63,7 @@ abstract class AuthenticateFragment: Fragment(),
         }
     }
 
-    override fun <T> renderList(objectModelCollection: Collection<T>) {
+    override fun <T> renderList(objectList: List<T>) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

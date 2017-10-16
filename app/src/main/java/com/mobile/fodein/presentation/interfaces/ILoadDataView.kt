@@ -11,6 +11,6 @@ interface ILoadDataView {
     fun hideRetry()
     fun showError(message: String)
     fun context(): Context
-    fun <T> renderList(objectModelCollection: Collection<T>)
+    fun <T> renderList(objectList: List<T>)
     fun <T> renderObject(obj: T)
 }

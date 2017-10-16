@@ -4,11 +4,13 @@ import com.mobile.fodein.App
 import com.mobile.fodein.R
 import com.mobile.fodein.models.data.District
 import com.mobile.fodein.presentation.model.DistrictModel
+import com.mobile.fodein.presentation.model.UnityModel
 
 
 class DistrictModelDataMapper {
 
     private val context = App.appComponent.context()
+    private val unityModelDataMapper: UnityModelDataMapper = UnityModelDataMapper()
 
     fun transform(district: District?): DistrictModel {
         if (district == null)
@@ -16,7 +18,10 @@ class DistrictModelDataMapper {
         val districtModel = DistrictModel()
         districtModel.id = district.id
         districtModel.name = district.name
-        districtModel.list = district.unities
+        val unityModelCollection: Collection<UnityModel> = this
+                .unityModelDataMapper
+                .transform(district.unities)
+        districtModel.list = unityModelCollection as List<UnityModel>
         return districtModel
     }
 
