@@ -1,18 +1,17 @@
 package com.mobile.fodein.presentation.mapper
 
-import com.mobile.fodein.App
+import android.content.Context
 import com.mobile.fodein.R
 import com.mobile.fodein.models.data.Project
 import com.mobile.fodein.presentation.model.FormModel
 import com.mobile.fodein.presentation.model.ProjectModel
+import javax.inject.Inject
+import javax.inject.Singleton
 
-
-class ProjectModelDataMapper {
-    private val context = App.appComponent.context()
-    private val unityModelDataMapper:
-            UnityModelDataMapper = UnityModelDataMapper()
-    private val formModelDataMapper:
-            FormModelDataMapper = FormModelDataMapper()
+@Singleton
+class ProjectModelDataMapper @Inject constructor (val context: Context,
+                                                  private val formModelDataMapper:
+                                                  FormModelDataMapper) {
 
     fun transform(project: Project?): ProjectModel {
         if (project == null)
@@ -29,7 +28,6 @@ class ProjectModelDataMapper {
         projectModel.other = project.other
         projectModel.sum = project.sum
         projectModel.type = project.type
-        projectModel.unity = unityModelDataMapper.transform(project.unity)
         val formModelCollection: Collection<FormModel> = this
                 .formModelDataMapper
                 .transform(project.forms)

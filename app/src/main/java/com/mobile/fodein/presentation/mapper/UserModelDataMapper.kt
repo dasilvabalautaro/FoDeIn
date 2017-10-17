@@ -1,17 +1,17 @@
 package com.mobile.fodein.presentation.mapper
 
-import com.mobile.fodein.App
+import android.content.Context
 import com.mobile.fodein.R
 import com.mobile.fodein.models.data.User
 import com.mobile.fodein.presentation.model.FormModel
 import com.mobile.fodein.presentation.model.UserModel
+import javax.inject.Inject
+import javax.inject.Singleton
 
-
-class UserModelDataMapper {
-
-    private val context = App.appComponent.context()
-    private val formModelDataMapper:
-            FormModelDataMapper = FormModelDataMapper()
+@Singleton
+class UserModelDataMapper @Inject constructor (val context: Context,
+                                               private val formModelDataMapper:
+                                               FormModelDataMapper){
 
     fun transform(user: User?): UserModel{
         if (user == null)

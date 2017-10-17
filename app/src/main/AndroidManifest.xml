@@ -26,6 +26,7 @@
 
         <activity android:name=".presentation.view.activities.AccessActivity"
             android:configChanges="mcc|mnc|locale|keyboardHidden|screenLayout|screenSize|orientation"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,6 +35,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".presentation.view.activities.MainActivity"
+            android:configChanges="mcc|mnc|locale|keyboardHidden|screenLayout|screenSize|orientation">
+        </activity>
+        <activity android:name=".presentation.view.activities.MainListActivity"
             android:configChanges="mcc|mnc|locale|keyboardHidden|screenLayout|screenSize|orientation">
         </activity>
         <provider

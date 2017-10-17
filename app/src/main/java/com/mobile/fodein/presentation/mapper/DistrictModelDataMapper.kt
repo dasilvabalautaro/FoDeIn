@@ -1,16 +1,17 @@
 package com.mobile.fodein.presentation.mapper
 
-import com.mobile.fodein.App
+import android.content.Context
 import com.mobile.fodein.R
 import com.mobile.fodein.models.data.District
 import com.mobile.fodein.presentation.model.DistrictModel
 import com.mobile.fodein.presentation.model.UnityModel
+import javax.inject.Inject
+import javax.inject.Singleton
 
-
-class DistrictModelDataMapper {
-
-    private val context = App.appComponent.context()
-    private val unityModelDataMapper: UnityModelDataMapper = UnityModelDataMapper()
+@Singleton
+class DistrictModelDataMapper @Inject constructor(val context: Context,
+                                                  private val unityModelDataMapper:
+                                                  UnityModelDataMapper){
 
     fun transform(district: District?): DistrictModel {
         if (district == null)

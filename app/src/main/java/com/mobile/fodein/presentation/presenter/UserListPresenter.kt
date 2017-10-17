@@ -1,36 +1,20 @@
 package com.mobile.fodein.presentation.presenter
 
+import com.mobile.fodein.R
 import com.mobile.fodein.domain.interactor.GetUserListUseCase
 import com.mobile.fodein.presentation.model.UserModel
-import com.mobile.fodein.presentation.view.IUserListView
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import javax.inject.Inject
 
 
 class UserListPresenter @Inject constructor(private val getUserListUseCase:
                                             GetUserListUseCase
-                                            ): IPresenter  {
-    override fun showMessage(message: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                                            ):
+        BasePresenter(){
+
+    init {
+        this.iHearMessage = getUserListUseCase
     }
-
-    override fun showError(error: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun hearMessage() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun hearError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    private var disposable: CompositeDisposable = CompositeDisposable()
-
-    var view: IUserListView? = null
-
 
     private fun getUserList(){
         this.getUserListUseCase.execute(UserListObserver())
@@ -40,17 +24,10 @@ class UserListPresenter @Inject constructor(private val getUserListUseCase:
         getUserList()
     }
 
-    override fun destroy() {
-        this.getUserListUseCase.dispose()
-        this.view = null
-        if (!this.disposable.isDisposed ) this.disposable.dispose()
-    }
 
-    private fun showUsersCollectionInView(usersModelColletion: Collection<UserModel>){
-        this.view!!.renderUserList(usersModelColletion)
-    }
-    fun showErrorDetailsInView(message: String){
-        this.view!!.showError(message)
+    private fun showUsersCollectionInView(objectsList:
+                                          List<UserModel>){
+        this.view!!.renderList(objectsList)
     }
 
     inner class UserListObserver: DisposableObserver<List<UserModel>>(){
@@ -59,12 +36,12 @@ class UserListPresenter @Inject constructor(private val getUserListUseCase:
         }
 
         override fun onComplete() {
-
+            showMessage(context.resources.getString(R.string.task_complete))
         }
 
         override fun onError(e: Throwable) {
             if (e.message != null) {
-                showErrorDetailsInView(e.message!!)
+                showError(e.message!!)
             }
         }
     }

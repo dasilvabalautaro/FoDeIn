@@ -2,12 +2,9 @@ package com.mobile.fodein.domain.data
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.mobile.fodein.models.data.Unity
 
 
 class MapperProject() : Parcelable {
-
-    var unity: Unity? = null
     var type: Int = 0
     var code: String = ""
     var name: String = ""
@@ -20,7 +17,6 @@ class MapperProject() : Parcelable {
     var sum: Double = 0.00
 
     constructor(parcel: Parcel) : this() {
-        unity = parcel.readParcelable(Unity::class.java.classLoader)
         type = parcel.readInt()
         code = parcel.readString()
         name = parcel.readString()
@@ -34,7 +30,6 @@ class MapperProject() : Parcelable {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeParcelable(unity, flags)
         parcel.writeInt(type)
         parcel.writeString(code)
         parcel.writeString(name)

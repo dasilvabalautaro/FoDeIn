@@ -6,7 +6,6 @@ import com.mobile.fodein.models.interfaces.IDataParcelable
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import io.realm.annotations.Required
 
 
 open class Project() : RealmObject(), IDataParcelable {
@@ -15,7 +14,6 @@ open class Project() : RealmObject(), IDataParcelable {
     }
 
     override fun readFromParcel(parcel: Parcel) {
-        unity = parcel.readParcelable(Unity::class.java.classLoader)
         type = parcel.readInt()
         code = parcel.readString()
         name = parcel.readString()
@@ -30,8 +28,6 @@ open class Project() : RealmObject(), IDataParcelable {
 
     @PrimaryKey
     var id: String = ""
-    @Required
-    var unity: Unity? = null
     var type: Int = 0
     var code: String = ""
     var name: String = ""
@@ -46,7 +42,6 @@ open class Project() : RealmObject(), IDataParcelable {
 
     constructor(parcel: Parcel) : this() {
         id = parcel.readString()
-        unity = parcel.readParcelable(Unity::class.java.classLoader)
         type = parcel.readInt()
         code = parcel.readString()
         name = parcel.readString()
@@ -61,7 +56,6 @@ open class Project() : RealmObject(), IDataParcelable {
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)
-        parcel.writeParcelable(unity, flags)
         parcel.writeInt(type)
         parcel.writeString(code)
         parcel.writeString(name)

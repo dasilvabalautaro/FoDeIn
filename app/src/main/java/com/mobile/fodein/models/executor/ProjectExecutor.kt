@@ -7,7 +7,6 @@ import com.mobile.fodein.dagger.ModelsModule
 import com.mobile.fodein.domain.data.MapperProject
 import com.mobile.fodein.domain.repository.IProjectRepository
 import com.mobile.fodein.models.data.Project
-import com.mobile.fodein.models.data.Unity
 import com.mobile.fodein.models.exception.DatabaseOperationException
 import com.mobile.fodein.models.persistent.repository.DatabaseRepository
 import com.mobile.fodein.presentation.mapper.ProjectModelDataMapper
@@ -23,7 +22,7 @@ class ProjectExecutor @Inject constructor():
     private val context = App.appComponent.context()
 
     private val component by lazy {(context as App)
-            .getAppComponent().plus(ModelsModule())}
+            .getAppComponent().plus(ModelsModule(context))}
 
     @Inject
     lateinit var interactDatabaseListener: DatabaseListenerExecutor
@@ -73,7 +72,7 @@ class ProjectExecutor @Inject constructor():
             val clazz: Class<Project> = Project::class.java
             val newProject = this.save(clazz, parcel, interactDatabaseListener)
             if (newProject != null){
-                addListPattern(newProject)
+//                addListPattern(newProject)
                 val projectModel = this.projectModelDataMapper
                         .transform(newProject)
                 subscriber.onNext(projectModel)
@@ -84,11 +83,11 @@ class ProjectExecutor @Inject constructor():
         }
     }
 
-    private fun addListPattern(project: Project){
-        val clazz: Class<Unity> = Unity::class.java
-        val idUnity = project.unity!!.id
-        this.addObjectList(clazz, idUnity, project, interactDatabaseListener)
-    }
+//    private fun addListPattern(project: Project){
+//        val clazz: Class<Unity> = Unity::class.java
+//        val idUnity = project.unity!!.id
+//        this.addObjectList(clazz, idUnity, project, interactDatabaseListener)
+//    }
 
     override fun projectGetById(id: String): Observable<ProjectModel> {
         return Observable.create { subscriber ->

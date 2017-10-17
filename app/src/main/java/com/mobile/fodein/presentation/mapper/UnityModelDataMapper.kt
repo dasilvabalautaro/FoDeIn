@@ -1,18 +1,17 @@
 package com.mobile.fodein.presentation.mapper
 
-import com.mobile.fodein.App
+import android.content.Context
 import com.mobile.fodein.R
 import com.mobile.fodein.models.data.Unity
 import com.mobile.fodein.presentation.model.ProjectModel
 import com.mobile.fodein.presentation.model.UnityModel
+import javax.inject.Inject
+import javax.inject.Singleton
 
-
-class UnityModelDataMapper {
-    private val context = App.appComponent.context()
-    private val projectModelDataMapper:
-            ProjectModelDataMapper = ProjectModelDataMapper()
-    private val districtModelDataMapper:
-            DistrictModelDataMapper = DistrictModelDataMapper()
+@Singleton
+class UnityModelDataMapper @Inject constructor (val context: Context,
+                                                val projectModelDataMapper:
+                                                ProjectModelDataMapper) {
 
     fun transform(unity: Unity?): UnityModel {
         if (unity == null)
@@ -20,7 +19,6 @@ class UnityModelDataMapper {
         val unityModel = UnityModel()
         unityModel.id = unity.id
         unityModel.address = unity.address
-        unityModel.district = districtModelDataMapper.transform(unity.district)
         val projectModelCollection: Collection<ProjectModel> = this
                 .projectModelDataMapper
                 .transform(unity.projects)

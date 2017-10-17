@@ -2,12 +2,8 @@ package com.mobile.fodein.domain.data
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.mobile.fodein.models.data.Project
-import com.mobile.fodein.models.data.User
 
 class MapperForm() : Parcelable {
-    var project: Project? = null
-    var user: User? = null
     var date: String = ""
     var latitude: Double = 0.0
     var longitude: Double = 0.0
@@ -17,8 +13,6 @@ class MapperForm() : Parcelable {
     var annotationTwo: String = ""
 
     constructor(parcel: Parcel) : this() {
-        project = parcel.readParcelable(Project::class.java.classLoader)
-        user = parcel.readParcelable(User::class.java.classLoader)
         date = parcel.readString()
         latitude = parcel.readDouble()
         longitude = parcel.readDouble()
@@ -29,8 +23,6 @@ class MapperForm() : Parcelable {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeParcelable(project, flags)
-        parcel.writeParcelable(user, flags)
         parcel.writeString(date)
         parcel.writeDouble(latitude)
         parcel.writeDouble(longitude)

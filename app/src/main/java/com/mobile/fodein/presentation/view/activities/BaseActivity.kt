@@ -9,7 +9,6 @@ import com.mobile.fodein.R
 import com.mobile.fodein.dagger.ActivityModule
 import com.mobile.fodein.presentation.navigation.Navigator
 import com.mobile.fodein.presentation.view.component.ManageImages
-import com.mobile.fodein.presentation.view.component.ManageMaps
 import com.mobile.fodein.tools.PermissionUtils
 import javax.inject.Inject
 
@@ -28,8 +27,8 @@ abstract class BaseActivity: AppCompatActivity(){
     lateinit var manageImages: ManageImages
     @Inject
     lateinit var permissionUtils: PermissionUtils
-    @Inject
-    lateinit var manageMaps: ManageMaps
+//    @Inject
+//    lateinit var manageMaps: ManageMaps
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

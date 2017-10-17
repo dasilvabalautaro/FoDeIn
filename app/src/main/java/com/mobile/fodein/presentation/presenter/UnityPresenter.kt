@@ -1,43 +1,42 @@
 package com.mobile.fodein.presentation.presenter
 
 import com.mobile.fodein.R
-import com.mobile.fodein.domain.interactor.GetDistrictListUseCase
+import com.mobile.fodein.domain.interactor.GetUnityListUseCase
 import com.mobile.fodein.models.persistent.repository.CachingLruRepository
-import com.mobile.fodein.presentation.model.DistrictModel
+import com.mobile.fodein.presentation.model.UnityModel
 import com.mobile.fodein.tools.Constants
 import io.reactivex.observers.DisposableObserver
 import javax.inject.Inject
 
 
-class DistrictPresenter @Inject constructor(private val getDistrictListUseCase:
-                                            GetDistrictListUseCase):
+class UnityPresenter @Inject constructor(private val getUnityListUseCase:
+                                         GetUnityListUseCase):
         BasePresenter(){
 
     init {
-        this.iHearMessage = getDistrictListUseCase
+        this.iHearMessage = getUnityListUseCase
     }
 
-    fun getListDistrict(){
-        if (!existInCache<DistrictModel>(Constants.CACHE_LIST_DISTRICT_MODEL)){
-            getDistrictListUseCase.execute(ListObserver())
+    fun getListUnity(){
+        if (!existInCache<UnityModel>(Constants.CACHE_LIST_UNITY_MODEL)){
+            getUnityListUseCase.execute(ListObserver())
         }
-
     }
 
     private fun showCollectionInView(objectsList:
-                                     List<DistrictModel>){
+                                     List<UnityModel>){
         this.view!!.renderList(objectsList)
     }
 
     override fun destroy() {
         super.destroy()
-        this.getDistrictListUseCase.dispose()
+        this.getUnityListUseCase.dispose()
     }
 
-    inner class ListObserver: DisposableObserver<List<DistrictModel>>(){
-        override fun onNext(t: List<DistrictModel>) {
+    inner class ListObserver: DisposableObserver<List<UnityModel>>(){
+        override fun onNext(t: List<UnityModel>) {
             CachingLruRepository.instance.getLru()
-                    .put(Constants.CACHE_LIST_DISTRICT_MODEL, t)
+                    .put(Constants.CACHE_LIST_UNITY_MODEL, t)
             showCollectionInView(t)
         }
 
@@ -51,4 +50,7 @@ class DistrictPresenter @Inject constructor(private val getDistrictListUseCase:
             }
         }
     }
+
+
+
 }

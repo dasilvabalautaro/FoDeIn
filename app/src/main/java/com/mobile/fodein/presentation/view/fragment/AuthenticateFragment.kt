@@ -1,6 +1,8 @@
 package com.mobile.fodein.presentation.view.fragment
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.View
@@ -11,6 +13,7 @@ import com.mobile.fodein.presentation.interfaces.ILoadDataView
 import com.mobile.fodein.presentation.model.UserModel
 import com.mobile.fodein.presentation.presenter.UserLoginPresenter
 import com.mobile.fodein.presentation.presenter.UserPresenter
+import com.mobile.fodein.presentation.view.activities.MainListActivity
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
@@ -36,11 +39,7 @@ abstract class AuthenticateFragment: Fragment(),
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.userPresenter.view = this
-        this.userPresenter.hearMessage()
-        this.userPresenter.hearError()
         this.userLoginPresenter.view = this
-        this.userLoginPresenter.hearMessage()
-        this.userLoginPresenter.hearError()
     }
 
     fun Context.toast(message: CharSequence,
@@ -60,6 +59,8 @@ abstract class AuthenticateFragment: Fragment(),
     override fun <T> renderObject(obj: T) {
         if (obj != null){
             context.toast((obj as UserModel).name)
+            activity.navigate<MainListActivity>()
+            activity.finish()
         }
     }
 
@@ -87,4 +88,8 @@ abstract class AuthenticateFragment: Fragment(),
         return activity.applicationContext
     }
 
+    inline fun <reified T : Activity> Activity.navigate() {
+        val intent = Intent(activity, T::class.java)
+        startActivity(intent)
+    }
 }

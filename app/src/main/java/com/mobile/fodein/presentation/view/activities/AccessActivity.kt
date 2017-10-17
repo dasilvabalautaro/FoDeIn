@@ -8,9 +8,13 @@ import com.mobile.fodein.R
 import com.mobile.fodein.presentation.view.component.AuthenticateAdapter
 
 class AccessActivity: AppCompatActivity() {
+//    @BindView(R.id.vp_access)
+//    @JvmField var pager: ViewPager? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_access)
+        //ButterKnife.bind(this)
         val pager: ViewPager = ButterKnife.findById(this, R.id.vp_access)
         pager.adapter = AuthenticateAdapter(supportFragmentManager, pager)
 

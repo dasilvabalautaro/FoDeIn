@@ -2,6 +2,7 @@ package com.mobile.fodein.presentation.presenter
 
 import com.mobile.fodein.App
 import com.mobile.fodein.domain.interfaces.IHearMessage
+import com.mobile.fodein.models.persistent.repository.CachingLruRepository
 import com.mobile.fodein.presentation.interfaces.ILoadDataView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -43,5 +44,15 @@ abstract class BasePresenter: IPresenter {
         this.view!!.showError(error)
     }
 
-
+    protected inline fun <reified E> existInCache(keyCache:String): Boolean{
+        val dataCache = CachingLruRepository.instance.getLru()
+                .get(keyCache)
+        if (dataCache != null && dataCache is List<*>){
+            val list: List<E> = dataCache
+                    .filterIsInstance<E>()
+            this.view!!.renderList(list)
+            return true
+        }
+        return false
+    }
 }

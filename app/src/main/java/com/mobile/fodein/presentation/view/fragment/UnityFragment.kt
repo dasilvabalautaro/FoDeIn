@@ -1,22 +1,14 @@
 package com.mobile.fodein.presentation.view.fragment
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.RequiresApi
 import android.support.v4.app.Fragment
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
-import butterknife.BindView
 import butterknife.ButterKnife
 import com.mobile.fodein.App
 import com.mobile.fodein.R
@@ -27,15 +19,12 @@ import com.mobile.fodein.presentation.model.DistrictModel
 import com.mobile.fodein.presentation.model.UnityModel
 import com.mobile.fodein.presentation.presenter.DistrictPresenter
 import com.mobile.fodein.presentation.view.component.ItemAdapter
-import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Cancellable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 
-class DistrictFragment: BaseFragment(), ILoadDataView {
+class UnityFragment : BaseFragment(), ILoadDataView {
     val Fragment.app: App
         get() = activity.application as App
 
@@ -45,15 +34,8 @@ class DistrictFragment: BaseFragment(), ILoadDataView {
     @Inject
     lateinit var districtPresenter: DistrictPresenter
 
-    var adapter: ItemAdapter? = null
-    var listModel: List<DistrictModel> = ArrayList()
 
-    @BindView(R.id.sp_filter)
-    @JvmField var spFilter: Spinner? = null
-    @BindView(R.id.sr_data)
-    @JvmField var srData: SwipeRefreshLayout? = null
-    @BindView(R.id.rv_data)
-    @JvmField var rvData: RecyclerView? = null
+    var listModel: List<DistrictModel> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -137,18 +119,6 @@ class DistrictFragment: BaseFragment(), ILoadDataView {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun addDecorationRecycler(){
-        val horizontalDecoration =
-                DividerItemDecoration(rvData!!.context,
-                        DividerItemDecoration.VERTICAL)
-        val horizontalDivider: Drawable = context
-                .getDrawable(R.drawable.horizontal_divider)
-        horizontalDecoration.setDrawable(horizontalDivider)
-        rvData!!.addItemDecoration(horizontalDecoration)
-    }
-
     private fun setupRecyclerView(){
         rvData!!.setHasFixedSize(true)
         rvData!!.layoutManager = LinearLayoutManager(this.context)
@@ -174,28 +144,6 @@ class DistrictFragment: BaseFragment(), ILoadDataView {
                 android.R.layout.simple_list_item_1, contentSpinner)
         spFilter!!.adapter = spinnerAdapter
         spFilter!!.setSelection(0)
-    }
-
-    private fun actionOnItemSelectedListenerObservable(): Observable<Int> {
-        return Observable.create({
-            e: ObservableEmitter<Int>? ->
-            spFilter!!.onItemSelectedListener = object:
-                    AdapterView.OnItemSelectedListener{
-                override fun onItemSelected(parent:
-                                            AdapterView<*>?,
-                                            view: View?,
-                                            position: Int, id: Long) {
-                    e!!.onNext(position)
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    e!!.setCancellable { Cancellable{
-                        spFilter!!.onItemSelectedListener = null
-                    } }
-                }
-            }
-
-        })
     }
 
     private fun showDataList(unityList: ArrayList<UnityModel>, position: Int) {

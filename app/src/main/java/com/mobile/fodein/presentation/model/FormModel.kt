@@ -6,8 +6,6 @@ import com.mobile.fodein.presentation.interfaces.IEntity
 
 class FormModel: IEntity {
     var id: String = ""
-    var project: ProjectModel? = null
-    var user: UserModel? = null
     var date: String = ""
     var latitude: Double = 0.0
     var longitude: Double = 0.0

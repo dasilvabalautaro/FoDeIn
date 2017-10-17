@@ -1,43 +1,40 @@
 package com.mobile.fodein.presentation.presenter
 
 import com.mobile.fodein.R
-import com.mobile.fodein.domain.interactor.GetDistrictListUseCase
+import com.mobile.fodein.domain.interactor.GetProjectListUseCase
 import com.mobile.fodein.models.persistent.repository.CachingLruRepository
-import com.mobile.fodein.presentation.model.DistrictModel
+import com.mobile.fodein.presentation.model.ProjectModel
 import com.mobile.fodein.tools.Constants
 import io.reactivex.observers.DisposableObserver
 import javax.inject.Inject
 
 
-class DistrictPresenter @Inject constructor(private val getDistrictListUseCase:
-                                            GetDistrictListUseCase):
+class ProjectPresenter @Inject constructor(private val getProjectListUseCase:
+                                           GetProjectListUseCase):
         BasePresenter(){
-
     init {
-        this.iHearMessage = getDistrictListUseCase
+        this.iHearMessage = getProjectListUseCase
     }
 
-    fun getListDistrict(){
-        if (!existInCache<DistrictModel>(Constants.CACHE_LIST_DISTRICT_MODEL)){
-            getDistrictListUseCase.execute(ListObserver())
+    fun getListProject(){
+        if (!existInCache<ProjectModel>(Constants.CACHE_LIST_PROJECT_MODEL)){
+            getProjectListUseCase.execute(ListObserver())
         }
 
     }
-
     private fun showCollectionInView(objectsList:
-                                     List<DistrictModel>){
+                                     List<ProjectModel>){
         this.view!!.renderList(objectsList)
     }
 
     override fun destroy() {
         super.destroy()
-        this.getDistrictListUseCase.dispose()
+        this.getProjectListUseCase.dispose()
     }
-
-    inner class ListObserver: DisposableObserver<List<DistrictModel>>(){
-        override fun onNext(t: List<DistrictModel>) {
+    inner class ListObserver: DisposableObserver<List<ProjectModel>>(){
+        override fun onNext(t: List<ProjectModel>) {
             CachingLruRepository.instance.getLru()
-                    .put(Constants.CACHE_LIST_DISTRICT_MODEL, t)
+                    .put(Constants.CACHE_LIST_PROJECT_MODEL, t)
             showCollectionInView(t)
         }
 

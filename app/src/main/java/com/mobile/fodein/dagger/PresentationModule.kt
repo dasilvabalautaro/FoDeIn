@@ -7,10 +7,7 @@ import com.mobile.fodein.domain.interfaces.IThreadExecutor
 import com.mobile.fodein.domain.repository.*
 import com.mobile.fodein.models.executor.*
 import com.mobile.fodein.presentation.UIThread
-import com.mobile.fodein.presentation.presenter.DistrictPresenter
-import com.mobile.fodein.presentation.presenter.UserListPresenter
-import com.mobile.fodein.presentation.presenter.UserLoginPresenter
-import com.mobile.fodein.presentation.presenter.UserPresenter
+import com.mobile.fodein.presentation.presenter.*
 import dagger.Module
 import dagger.Provides
 
@@ -161,8 +158,28 @@ class PresentationModule(val context: Context) {
     }
 
     @Provides
+    fun provideFormPresenter(getFormListUseCase:
+                             GetFormListUseCase): FormPresenter{
+        return FormPresenter(getFormListUseCase)
+    }
+
+    @Provides
     fun provideDistrictPresenter(getDistrictListUseCase:
                                  GetDistrictListUseCase): DistrictPresenter{
         return DistrictPresenter(getDistrictListUseCase)
     }
+
+    @Provides
+    fun provideUnityPresenter(getUnityListUseCase:
+                              GetUnityListUseCase): UnityPresenter{
+        return UnityPresenter(getUnityListUseCase)
+    }
+
+    @Provides
+    fun provideProjectPresenter(getProjectListUseCase:
+                                GetProjectListUseCase): ProjectPresenter{
+        return ProjectPresenter(getProjectListUseCase)
+    }
+
+
 }

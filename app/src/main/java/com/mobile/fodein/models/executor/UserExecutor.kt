@@ -22,7 +22,7 @@ class UserExecutor @Inject constructor():
     private val context = App.appComponent.context()
 
     private val component by lazy {(context as App)
-            .getAppComponent().plus(ModelsModule())}
+            .getAppComponent().plus(ModelsModule(context))}
 
     @Inject
     lateinit var interactDatabaseListener: DatabaseListenerExecutor
@@ -49,6 +49,7 @@ class UserExecutor @Inject constructor():
             val clazz: Class<User> = User::class.java
             val listUsers: List<User>? = this.getAllData(clazz)
             if (listUsers != null){
+
                 val usersModelCollection: Collection<UserModel> = this
                     .userModelDataMapper
                     .transform(listUsers)

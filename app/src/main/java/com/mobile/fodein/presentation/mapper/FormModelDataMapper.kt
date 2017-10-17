@@ -1,17 +1,14 @@
 package com.mobile.fodein.presentation.mapper
 
-import com.mobile.fodein.App
+import android.content.Context
 import com.mobile.fodein.R
 import com.mobile.fodein.models.data.Form
 import com.mobile.fodein.presentation.model.FormModel
+import javax.inject.Inject
+import javax.inject.Singleton
 
-
-class FormModelDataMapper {
-    private val context = App.appComponent.context()
-    private val projectModelDataMapper:
-            ProjectModelDataMapper = ProjectModelDataMapper()
-    private val userModelDataMapper: UserModelDataMapper = UserModelDataMapper()
-
+@Singleton
+class FormModelDataMapper @Inject constructor(val context: Context) {
     fun transform(form: Form?): FormModel {
         if (form == null)
             throw IllegalArgumentException(context.getString(R.string.value_null))
@@ -24,8 +21,6 @@ class FormModelDataMapper {
         formModel.dateUpdate = form.dateUpdate
         formModel.latitude = form.latitude
         formModel.longitude = form.longitude
-        formModel.project = projectModelDataMapper.transform(form.project)
-        formModel.user = userModelDataMapper.transform(form.user)
         return formModel
     }
 

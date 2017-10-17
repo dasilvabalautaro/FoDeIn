@@ -22,7 +22,7 @@ class DistrictExecutor @Inject constructor():
     private val context = App.appComponent.context()
 
     private val component by lazy {(context as App)
-            .getAppComponent().plus(ModelsModule())}
+            .getAppComponent().plus(ModelsModule(context))}
 
     @Inject
     lateinit var interactDatabaseListener: DatabaseListenerExecutor

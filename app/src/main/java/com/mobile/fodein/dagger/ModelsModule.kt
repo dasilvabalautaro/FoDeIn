@@ -1,12 +1,13 @@
 package com.mobile.fodein.dagger
 
+import android.content.Context
 import com.mobile.fodein.models.executor.DatabaseListenerExecutor
 import com.mobile.fodein.presentation.mapper.*
 import dagger.Module
 import dagger.Provides
 
 @Module
-class ModelsModule {
+class ModelsModule(val context: Context) {
 
     @Provides
     fun provideInteractDatabaseListener(): DatabaseListenerExecutor {
@@ -14,26 +15,34 @@ class ModelsModule {
     }
 
     @Provides
-    fun provideUserModelDataMapper(): UserModelDataMapper {
-        return UserModelDataMapper()
-    }
-
-    @Provides
-    fun provideDistrictModelDataMapper(): DistrictModelDataMapper{
-        return DistrictModelDataMapper()
-    }
-
-    @Provides
     fun provideFormModelDataMapper(): FormModelDataMapper {
-        return FormModelDataMapper()
+        return FormModelDataMapper(context)
     }
+
     @Provides
-    fun provideProjectModelDataMapper(): ProjectModelDataMapper {
-        return ProjectModelDataMapper()
+    fun provideUserModelDataMapper(formModelDataMapper:
+                                   FormModelDataMapper): UserModelDataMapper {
+        return UserModelDataMapper(context, formModelDataMapper)
     }
+
     @Provides
-    fun provideUnityModelDataMapper(): UnityModelDataMapper {
-        return UnityModelDataMapper()
+    fun provideProjectModelDataMapper(formModelDataMapper:
+                                      FormModelDataMapper): ProjectModelDataMapper {
+        return ProjectModelDataMapper(context, formModelDataMapper)
     }
+
+    @Provides
+    fun provideUnityModelDataMapper(projectModelDataMapper:
+                                    ProjectModelDataMapper): UnityModelDataMapper {
+        return UnityModelDataMapper(context, projectModelDataMapper)
+    }
+
+    @Provides
+    fun provideDistrictModelDataMapper(unityModelDataMapper:
+                                       UnityModelDataMapper): DistrictModelDataMapper{
+        return DistrictModelDataMapper(context, unityModelDataMapper)
+    }
+
+
 
 }

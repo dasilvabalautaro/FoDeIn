@@ -25,9 +25,9 @@ class SignInFragment: AuthenticateFragment() {
     private val validation: AwesomeValidation =
             AwesomeValidation(ValidationStyle.BASIC)
 
-    @BindView(R.id.et_user)
+    @BindView(R.id.et_user_sign_in)
     @JvmField var etUser: EditText? = null
-    @BindView(R.id.et_password)
+    @BindView(R.id.et_password_sign_in)
     @JvmField var etPassword: EditText? = null
     @BindView(R.id.bt_send)
     @JvmField var btSend: Button? = null
@@ -71,12 +71,12 @@ class SignInFragment: AuthenticateFragment() {
     }
 
     private fun setValidationFields(){
-        val regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])" +
-                "(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{6,20}"
-
-        validation.addValidation(activity, R.id.et_user,
+//        val regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])" +
+//                "(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{6,}"
+        val regexPassword = ".{6,}"
+        validation.addValidation(activity, R.id.et_user_sign_in,
                 RegexTemplate.NOT_EMPTY, R.string.invalid_name)
-        validation.addValidation(activity, R.id.et_password,
+        validation.addValidation(activity, R.id.et_password_sign_in,
                 regexPassword, R.string.invalid_password)
 
     }

@@ -6,7 +6,6 @@ import com.mobile.fodein.App
 import com.mobile.fodein.dagger.ModelsModule
 import com.mobile.fodein.domain.data.MapperUnity
 import com.mobile.fodein.domain.repository.IUnityRepository
-import com.mobile.fodein.models.data.District
 import com.mobile.fodein.models.data.Unity
 import com.mobile.fodein.models.exception.DatabaseOperationException
 import com.mobile.fodein.models.persistent.repository.DatabaseRepository
@@ -23,7 +22,7 @@ class UnityExecutor @Inject constructor():
     private val context = App.appComponent.context()
 
     private val component by lazy {(context as App)
-            .getAppComponent().plus(ModelsModule())}
+            .getAppComponent().plus(ModelsModule(context))}
 
     @Inject
     lateinit var interactDatabaseListener: DatabaseListenerExecutor
@@ -71,7 +70,7 @@ class UnityExecutor @Inject constructor():
             val clazz: Class<Unity> = Unity::class.java
             val newUnity = this.save(clazz, parcel, interactDatabaseListener)
             if (newUnity != null){
-                addListPattern(newUnity)
+//                addListPattern(newUnity)
                 val unityModel = this.unityModelDataMapper
                         .transform(newUnity)
                 subscriber.onNext(unityModel)
@@ -83,11 +82,11 @@ class UnityExecutor @Inject constructor():
         }
     }
 
-    private fun addListPattern(unity: Unity){
-        val clazz: Class<District> = District::class.java
-        val idDistrict = unity.district!!.id
-        this.addObjectList(clazz, idDistrict, unity, interactDatabaseListener)
-    }
+//    private fun addListPattern(unity: Unity){
+//        val clazz: Class<District> = District::class.java
+//        val idDistrict = unity.district!!.id
+//        this.addObjectList(clazz, idDistrict, unity, interactDatabaseListener)
+//    }
 
     override fun unityGetById(id: String): Observable<UnityModel> {
         return Observable.create { subscriber ->

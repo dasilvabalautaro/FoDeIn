@@ -7,8 +7,6 @@ import com.mobile.fodein.dagger.ModelsModule
 import com.mobile.fodein.domain.data.MapperForm
 import com.mobile.fodein.domain.repository.IFormRepository
 import com.mobile.fodein.models.data.Form
-import com.mobile.fodein.models.data.Project
-import com.mobile.fodein.models.data.User
 import com.mobile.fodein.models.exception.DatabaseOperationException
 import com.mobile.fodein.models.persistent.repository.DatabaseRepository
 import com.mobile.fodein.presentation.mapper.FormModelDataMapper
@@ -24,7 +22,7 @@ class FormExecutor @Inject constructor():
     private val context = App.appComponent.context()
 
     private val component by lazy {(context as App)
-            .getAppComponent().plus(ModelsModule())}
+            .getAppComponent().plus(ModelsModule(context))}
 
     @Inject
     lateinit var interactDatabaseListener: DatabaseListenerExecutor
@@ -75,8 +73,8 @@ class FormExecutor @Inject constructor():
             val clazz: Class<Form> = Form::class.java
             val newForm = this.save(clazz, parcel, interactDatabaseListener)
             if (newForm != null){
-                addListProject(newForm)
-                addListUser(newForm)
+//                addListProject(newForm)
+//                addListUser(newForm)
                 val formModel = this.formModelDataMapper
                         .transform(newForm)
                 subscriber.onNext(formModel)
@@ -88,17 +86,17 @@ class FormExecutor @Inject constructor():
 
     }
 
-    private fun addListProject(form: Form){
-        val clazz: Class<Project> = Project::class.java
-        val idProject = form.project!!.id
-        this.addObjectList(clazz, idProject, form, interactDatabaseListener)
-    }
-
-    private fun addListUser(form: Form){
-        val clazz: Class<User> = User::class.java
-        val idUser = form.user!!.id
-        this.addObjectList(clazz, idUser, form, interactDatabaseListener)
-    }
+//    private fun addListProject(form: Form){
+//        val clazz: Class<Project> = Project::class.java
+//        val idProject = form.project!!.id
+//        this.addObjectList(clazz, idProject, form, interactDatabaseListener)
+//    }
+//
+//    private fun addListUser(form: Form){
+//        val clazz: Class<User> = User::class.java
+//        val idUser = form.user!!.id
+//        this.addObjectList(clazz, idUser, form, interactDatabaseListener)
+//    }
 
     override fun formGetById(id: String): Observable<FormModel> {
         return Observable.create { subscriber ->

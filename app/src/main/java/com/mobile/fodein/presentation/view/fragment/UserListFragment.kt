@@ -12,20 +12,12 @@ import butterknife.ButterKnife
 import com.mobile.fodein.App
 import com.mobile.fodein.R
 import com.mobile.fodein.dagger.PresentationModule
-import com.mobile.fodein.presentation.model.UserModel
+import com.mobile.fodein.presentation.interfaces.ILoadDataView
 import com.mobile.fodein.presentation.presenter.UserListPresenter
-import com.mobile.fodein.presentation.view.IUserListView
 import javax.inject.Inject
 
 
-class UserListFragment: BaseFragment(), IUserListView {
-    override fun <T> renderList(objectModelCollection: Collection<T>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun <T> renderObject(obj: T) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+class UserListFragment: BaseFragment(), ILoadDataView {
 
     val Fragment.app: App
         get() = activity.application as App
@@ -61,25 +53,6 @@ class UserListFragment: BaseFragment(), IUserListView {
         super.onResume()
         this.userListPresenter.initialize()
     }
-
-
-    override fun <T> renderUserList(userModelCollection: Collection<T>) {
-        var res = ""
-        for (user in userModelCollection) res += (user as UserModel).id  + '\n'
-        tvList!!.text =  res
-    }
-
-    override fun <T> viewUser(obj: T) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-//    fun renderUserList1(userModelCollection: Collection<UserModel>) {
-//        var res = ""
-//        for (user: UserModel in userModelCollection) res += user.id + '\n'
-//        tvList!!.text =  res
-//    }
-
-
     override fun showLoading() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -92,7 +65,6 @@ class UserListFragment: BaseFragment(), IUserListView {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-
     override fun showRetry() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -102,12 +74,20 @@ class UserListFragment: BaseFragment(), IUserListView {
     }
 
     override fun showError(message: String) {
-        context.toast(message)
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-
 
     override fun context(): Context {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
+    override fun <T> renderList(objectList: List<T>) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun <T> renderObject(obj: T) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
 }
 

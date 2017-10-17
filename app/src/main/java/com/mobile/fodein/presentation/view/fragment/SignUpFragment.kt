@@ -75,9 +75,9 @@ class SignUpFragment: AuthenticateFragment() {
     }
 
     private fun setValidationFields(){
-        val regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])" +
-                "(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{6,20}"
-
+//        val regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])" +
+//                "(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{6,}"
+        val regexPassword = ".{6,}"
         validation.addValidation(activity, R.id.et_name,
                 RegexTemplate.NOT_EMPTY, R.string.invalid_name)
         validation.addValidation(activity, R.id.et_user,
@@ -85,7 +85,7 @@ class SignUpFragment: AuthenticateFragment() {
         validation.addValidation(activity, R.id.et_email,
                 Patterns.EMAIL_ADDRESS, R.string.invalid_email)
         validation.addValidation(activity, R.id.et_mobile,
-                "^[+]?[0-9]{10,13}$", R.string.invalid_phone)
+                "^[+]?[0-9]{8,13}$", R.string.invalid_phone)
         validation.addValidation(activity, R.id.et_password,
                 regexPassword, R.string.invalid_password)
         validation.addValidation(activity, R.id.et_repeat_password,

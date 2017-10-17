@@ -5,7 +5,6 @@ import com.mobile.fodein.presentation.interfaces.IEntity
 
 
 class UnityModel: IEntity {
-    var district: DistrictModel? = null
     var phone: String = ""
     var address: String = ""
     var name: String = ""

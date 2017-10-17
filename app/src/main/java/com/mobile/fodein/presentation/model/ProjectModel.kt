@@ -6,7 +6,6 @@ import com.mobile.fodein.presentation.interfaces.IEntity
 
 class ProjectModel: IEntity {
     var id: String = ""
-    var unity: UnityModel? = null
     var type: Int = 0
     var code: String = ""
     var name: String = ""
