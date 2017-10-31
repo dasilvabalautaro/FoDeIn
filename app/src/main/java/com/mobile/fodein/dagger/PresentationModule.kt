@@ -6,8 +6,11 @@ import com.mobile.fodein.domain.interfaces.IPostExecutionThread
 import com.mobile.fodein.domain.interfaces.IThreadExecutor
 import com.mobile.fodein.domain.repository.*
 import com.mobile.fodein.models.executor.*
+import com.mobile.fodein.models.persistent.network.ServiceRemoteGet
+import com.mobile.fodein.models.persistent.network.ServiceRemotePost
 import com.mobile.fodein.presentation.UIThread
 import com.mobile.fodein.presentation.presenter.*
+import com.mobile.fodein.tools.ConnectionNetwork
 import dagger.Module
 import dagger.Provides
 
@@ -181,5 +184,43 @@ class PresentationModule(val context: Context) {
         return ProjectPresenter(getProjectListUseCase)
     }
 
+    @Provides
+    fun provideServiceRemotePost(): ServiceRemotePost {
+        return ServiceRemotePost()
+    }
 
+    @Provides
+    fun provideServiceRemoteGet(): ServiceRemoteGet {
+        return ServiceRemoteGet()
+    }
+
+    @Provides
+    fun provideRequestLoginGetUseCase(serviceRemoteGet: ServiceRemoteGet):
+            RequestLoginGetUseCase {
+        return RequestLoginGetUseCase(serviceRemoteGet)
+    }
+
+    @Provides
+    fun provideUserLoginNetworkPresenter(requestLoginGetUseCase:
+                                         RequestLoginGetUseCase):
+            UserLoginNetworkPresenter{
+        return UserLoginNetworkPresenter(requestLoginGetUseCase)
+    }
+
+    @Provides
+    fun provideRequestRegisterPostUseCase(serviceRemotePost: ServiceRemotePost):
+            RequestRegisterPostUseCase{
+        return RequestRegisterPostUseCase(serviceRemotePost)
+    }
+
+    @Provides
+    fun provideUserRegisterNetworkPresenter(requestRegisterPostUseCase:
+                                            RequestRegisterPostUseCase):
+            UserRegisterNetworkPresenter{
+        return UserRegisterNetworkPresenter(requestRegisterPostUseCase)
+    }
+    @Provides
+    fun provideConnectionNetwork(): ConnectionNetwork{
+        return ConnectionNetwork(context)
+    }
 }

@@ -20,6 +20,7 @@ import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Cancellable
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 
 
 class SignUpFragment: AuthenticateFragment() {
@@ -58,8 +59,14 @@ class SignUpFragment: AuthenticateFragment() {
                 .map { validate ->
                     run{
                         if (validate){
-                            this.userPresenter.setUser(loadPack())
-                            this.userPresenter.create()
+                            if (connectionNetwork.isOnline()){
+                                this.userRegisterNetworkPresenter.setUser(loadPack(true))
+                                this.userRegisterNetworkPresenter.registerUser()
+                            }else{
+                                this.userPresenter.setUser(loadPack(false))
+                                this.userPresenter.registerUser()
+
+                            }
 
                             return@map resources
                                     .getString(R.string.data_sent)
@@ -93,18 +100,26 @@ class SignUpFragment: AuthenticateFragment() {
 
     }
 
-    private fun loadPack(): MutableMap<String, Any>{
+    private fun loadPack(isRemote: Boolean): MutableMap<String, Any>{
         val pack: MutableMap<String, Any> = HashMap()
-        val password = HashUtils.sha256(etPassword?.text!!.trim().toString())
+        if (isRemote){
+            pack[Constants.USER_ID] = UUID.randomUUID().toString()
+            pack[Constants.USER_PASSWORD] = etPassword?.text!!.trim().toString()
+            pack[Constants.USER_TOKEN] = "123"
+            pack[Constants.USER_IMAGE] = "123"
+        }else{
+            val password = HashUtils.sha256(etPassword?.text!!.trim().toString())
+            pack[Constants.USER_PASSWORD] = password
+        }
+
         pack[Constants.USER_NAME] = etName?.text!!.trim().toString()
         pack[Constants.USER_USER] = etUser?.text!!.trim().toString()
-        pack[Constants.USER_PASSWORD] = password
         pack[Constants.USER_PHONE] = etPhone?.text!!.trim().toString()
         pack[Constants.USER_ADDRESS] = "Plaza Murillo"
         pack[Constants.USER_EMAIL] = etEmail?.text!!.trim().toString()
         pack[Constants.USER_IDCARD] = "1234567"
         pack[Constants.USER_DESCRIPTION] = "Recolector de datos"
-        pack[Constants.USER_UNIT] = "Planes"
+        pack[Constants.USER_UNIT] = "1"
         pack[Constants.USER_ROLL] = "Jefe"
         return pack
     }

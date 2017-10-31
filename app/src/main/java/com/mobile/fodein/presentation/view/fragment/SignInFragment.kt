@@ -54,8 +54,14 @@ class SignInFragment: AuthenticateFragment() {
                 .map { validate ->
                     run{
                         if (validate){
-                            this.userLoginPresenter.setUser(loadPack())
-                            this.userLoginPresenter.create()
+                            if (connectionNetwork.isOnline()){
+                                this.userLoginNetworkPresenter.setUser(loadPack())
+                                this.userLoginNetworkPresenter.verifyLogin()
+                            }else{
+                                this.userLoginPresenter.setUser(loadPack())
+                                this.userLoginPresenter.verifyLogin()
+
+                            }
 
                             return@map resources
                                     .getString(R.string.data_sent)

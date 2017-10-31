@@ -16,7 +16,7 @@ class UserPresenter @Inject constructor(private val getUserNewUseCase:
         this.iHearMessage = getUserNewUseCase
     }
 
-    fun create(){
+    fun registerUser(){
         getUserNewUseCase.execute(UserObserver())
     }
 

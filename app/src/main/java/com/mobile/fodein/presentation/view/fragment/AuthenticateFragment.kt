@@ -11,9 +11,12 @@ import com.mobile.fodein.App
 import com.mobile.fodein.dagger.PresentationModule
 import com.mobile.fodein.presentation.interfaces.ILoadDataView
 import com.mobile.fodein.presentation.model.UserModel
+import com.mobile.fodein.presentation.presenter.UserLoginNetworkPresenter
 import com.mobile.fodein.presentation.presenter.UserLoginPresenter
 import com.mobile.fodein.presentation.presenter.UserPresenter
+import com.mobile.fodein.presentation.presenter.UserRegisterNetworkPresenter
 import com.mobile.fodein.presentation.view.activities.MainListActivity
+import com.mobile.fodein.tools.ConnectionNetwork
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
@@ -31,6 +34,13 @@ abstract class AuthenticateFragment: Fragment(),
     lateinit var userPresenter: UserPresenter
     @Inject
     lateinit var userLoginPresenter: UserLoginPresenter
+    @Inject
+    lateinit var userLoginNetworkPresenter: UserLoginNetworkPresenter
+    @Inject
+    lateinit var connectionNetwork: ConnectionNetwork
+    @Inject
+    lateinit var userRegisterNetworkPresenter: UserRegisterNetworkPresenter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +50,8 @@ abstract class AuthenticateFragment: Fragment(),
         super.onViewCreated(view, savedInstanceState)
         this.userPresenter.view = this
         this.userLoginPresenter.view = this
+        this.userLoginNetworkPresenter.view = this
+        this.userRegisterNetworkPresenter.view = this
     }
 
     fun Context.toast(message: CharSequence,

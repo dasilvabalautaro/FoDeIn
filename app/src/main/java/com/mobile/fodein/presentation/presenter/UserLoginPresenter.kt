@@ -20,7 +20,7 @@ class UserLoginPresenter @Inject constructor(private val getUserLoginUseCase:
         this.iHearMessage = getUserLoginUseCase
     }
 
-    fun create(){
+    fun verifyLogin(){
         getUserLoginUseCase.execute(UserListObserver())
     }
 
