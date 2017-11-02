@@ -73,7 +73,6 @@ class UnityFragment : BaseFragment(), ILoadDataView {
         if (connectionNetwork.isOnline()){
             districtNetworkPresenter.setVariables(DeliveryOfResource.token)
             districtNetworkPresenter.getList()
-            Thread.sleep(2000)
             unityNetworkPresenter.setVariables(DeliveryOfResource.token)
             unityNetworkPresenter.getList()
         }else{

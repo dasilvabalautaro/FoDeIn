@@ -12,15 +12,15 @@ object DeliveryOfResource {
     fun setUnitToDistrict(id: String, unity: UnityModel){
 
         try {
-            val list: List<*>? = CachingLruRepository
+            val list= CachingLruRepository
                     .instance
                     .getLru()
-                    .get(Constants.CACHE_LIST_DISTRICT_MODEL) as List<*>
-            if (list != null && list.isNotEmpty()){
+                    .get(Constants.CACHE_LIST_DISTRICT_MODEL)
+            if (list != null && list is ArrayList<*>){
                 list.indices
-                        .map { list[it] as DistrictModel }
-                        .filter { it.id == id }
-                        .forEach { it.list.add(unity) }
+                    .map { list[it] as DistrictModel }
+                    .filter { it.id == id }
+                    .forEach { it.list.add(unity) }
             }
 
         }catch (te: TypeCastException){
