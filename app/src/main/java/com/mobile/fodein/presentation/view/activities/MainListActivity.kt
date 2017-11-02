@@ -25,10 +25,10 @@ class MainListActivity: AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        tab!!.addTab(tab!!.newTab().setIcon(R.drawable.ic_group_work))
+       /* tab!!.addTab(tab!!.newTab().setIcon(R.drawable.ic_group_work))
         tab!!.addTab(tab!!.newTab().setIcon(R.drawable.ic_project))
         tab!!.addTab(tab!!.newTab().setIcon(R.drawable.ic_form))
-        tab!!.setupWithViewPager(pager)
+        tab!!.setupWithViewPager(pager)*/
         tab!!.tabGravity = TabLayout.GRAVITY_CENTER
         tab!!.tabMode = TabLayout.MODE_SCROLLABLE
     }

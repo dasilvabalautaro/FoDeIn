@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
@@ -15,13 +16,12 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.mobile.fodein.App
 import com.mobile.fodein.R
 import com.mobile.fodein.domain.data.GeographicCoordinates
-import com.mobile.fodein.presentation.view.activities.BaseActivity
 import com.mobile.fodein.tools.PermissionUtils
 import javax.inject.Inject
 
 
 class ManageMaps @Inject constructor(
-        private val activity: BaseActivity):
+        private val activity: AppCompatActivity):
         GoogleMap.OnMyLocationButtonClickListener,
         OnMapReadyCallback, GoogleMap.OnMyLocationClickListener,
         ActivityCompat.OnRequestPermissionsResultCallback{

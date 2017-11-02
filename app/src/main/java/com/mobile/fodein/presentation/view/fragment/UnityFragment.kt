@@ -13,14 +13,17 @@ import butterknife.ButterKnife
 import com.mobile.fodein.App
 import com.mobile.fodein.R
 import com.mobile.fodein.dagger.PresentationModule
+import com.mobile.fodein.domain.DeliveryOfResource
 import com.mobile.fodein.presentation.interfaces.IEntity
 import com.mobile.fodein.presentation.interfaces.ILoadDataView
 import com.mobile.fodein.presentation.model.DistrictModel
 import com.mobile.fodein.presentation.model.UnityModel
+import com.mobile.fodein.presentation.presenter.DistrictNetworkPresenter
 import com.mobile.fodein.presentation.presenter.DistrictPresenter
+import com.mobile.fodein.presentation.presenter.UnityNetworkPresenter
 import com.mobile.fodein.presentation.view.component.ItemAdapter
+import com.mobile.fodein.tools.ConnectionNetwork
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 
@@ -33,7 +36,12 @@ class UnityFragment : BaseFragment(), ILoadDataView {
 
     @Inject
     lateinit var districtPresenter: DistrictPresenter
-
+    @Inject
+    lateinit var districtNetworkPresenter: DistrictNetworkPresenter
+    @Inject
+    lateinit var connectionNetwork: ConnectionNetwork
+    @Inject
+    lateinit var unityNetworkPresenter: UnityNetworkPresenter
 
     var listModel: List<DistrictModel> = ArrayList()
 
@@ -60,23 +68,31 @@ class UnityFragment : BaseFragment(), ILoadDataView {
         setupRecyclerView()
         setupSwipeRefresh()
         districtPresenter.view = this
-        districtPresenter.getListDistrict()
-
+        districtNetworkPresenter.view = this
+        unityNetworkPresenter.view = this
+        if (connectionNetwork.isOnline()){
+            districtNetworkPresenter.setVariables(DeliveryOfResource.token)
+            districtNetworkPresenter.getList()
+            Thread.sleep(2000)
+            unityNetworkPresenter.setVariables(DeliveryOfResource.token)
+            unityNetworkPresenter.getList()
+        }else{
+            districtPresenter.getListDistrict()
+        }
     }
 
     override fun onStart() {
         super.onStart()
         disposable.add( actionOnItemSelectedListenerObservable()
-                .observeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .map { position ->
                     run{
                         val listUnityDistrict = listModel[position].list
-                        showDataList(listUnityDistrict as ArrayList<UnityModel>
+                        showDataList(listUnityDistrict
                                 , position)
                         return@map resources.getString(R.string.new_filter)
                     }
                 }
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { result -> context.toast(result)})
     }
 
@@ -134,9 +150,22 @@ class UnityFragment : BaseFragment(), ILoadDataView {
         rvData!!.adapter = adapter
     }
 
-    private fun setupSwipeRefresh() = srData!!.setOnRefreshListener(
-            districtPresenter::getListDistrict)
+    private fun setupSwipeRefresh() = srData!!
+            .setOnRefreshListener(districtPresenter::getListDistrict)
 
+//    districtPresenter::getListDistrict
+//    private fun refreshData(){
+//        val list = CachingLruRepository
+//                .instance
+//                .getLru()
+//                .get(Constants.CACHE_LIST_DISTRICT_MODEL) as List<*>
+//
+//        if ({
+//            listModel = list.filterIsInstance<DistrictModel>()
+//            setDataSpinner(listModel)
+//        }
+//        srData!!.isRefreshing = false
+//    }
     private fun setDataSpinner(list: List<DistrictModel>){
         val contentSpinner: MutableList<String> = ArrayList()
         list.mapTo(contentSpinner) { it.name }

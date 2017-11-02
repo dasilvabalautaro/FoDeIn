@@ -1,6 +1,6 @@
 package com.mobile.fodein.dagger
 
-import com.mobile.fodein.presentation.view.activities.BaseActivity
+import android.support.v7.app.AppCompatActivity
 import com.mobile.fodein.presentation.navigation.Navigator
 import com.mobile.fodein.presentation.view.component.ManageImages
 import com.mobile.fodein.presentation.view.component.ManageMaps
@@ -9,7 +9,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class ActivityModule(private val activity: BaseActivity) {
+class ActivityModule(private val activity: AppCompatActivity) {
 
     @Provides
     fun provideNavigator(): Navigator{

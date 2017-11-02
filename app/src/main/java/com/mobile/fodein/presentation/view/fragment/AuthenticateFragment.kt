@@ -3,12 +3,14 @@ package com.mobile.fodein.presentation.view.fragment
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.View
 import android.widget.Toast
 import com.mobile.fodein.App
 import com.mobile.fodein.dagger.PresentationModule
+import com.mobile.fodein.domain.DeliveryOfResource
 import com.mobile.fodein.presentation.interfaces.ILoadDataView
 import com.mobile.fodein.presentation.model.UserModel
 import com.mobile.fodein.presentation.presenter.UserLoginNetworkPresenter
@@ -22,13 +24,23 @@ import javax.inject.Inject
 
 abstract class AuthenticateFragment: Fragment(),
         ILoadDataView {
+    companion object Factory{
+        var userImage: Bitmap? = null
+        var imageBase64: String = ""
+    }
     protected var disposable: CompositeDisposable = CompositeDisposable()
+
+    interface Callback{
+        fun remove(fragment: AuthenticateFragment)
+    }
 
     val Fragment.app: App
         get() = activity.application as App
 
     private val component by lazy { app.
             getAppComponent().plus(PresentationModule(context))}
+
+    var callback: Callback? = null
 
     @Inject
     lateinit var userPresenter: UserPresenter
@@ -71,6 +83,7 @@ abstract class AuthenticateFragment: Fragment(),
     override fun <T> renderObject(obj: T) {
         if (obj != null){
             context.toast((obj as UserModel).name)
+            DeliveryOfResource.token = (obj as UserModel).token
             activity.navigate<MainListActivity>()
             activity.finish()
         }
@@ -100,7 +113,7 @@ abstract class AuthenticateFragment: Fragment(),
         return activity.applicationContext
     }
 
-    inline fun <reified T : Activity> Activity.navigate() {
+    private inline fun <reified T : Activity> Activity.navigate() {
         val intent = Intent(activity, T::class.java)
         startActivity(intent)
     }

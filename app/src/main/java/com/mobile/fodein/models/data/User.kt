@@ -24,6 +24,8 @@ open class User() : RealmObject(), IDataParcelable{
             p0.writeString(description)
             p0.writeString(roll)
             p0.writeString(unit)
+            p0.writeString(token)
+            p0.writeString(image)
             p0.writeString(id)
         }
     }
@@ -39,6 +41,8 @@ open class User() : RealmObject(), IDataParcelable{
         description = parcel.readString()
         roll = parcel.readString()
         unit = parcel.readString()
+        token = parcel.readString()
+        image = parcel.readString()
     }
     override fun describeContents(): Int {
         return 0
@@ -54,6 +58,8 @@ open class User() : RealmObject(), IDataParcelable{
     var description: String = ""
     var roll: String = ""
     var unit: String = ""
+    var token: String = ""
+    var image: String = ""
     @PrimaryKey var id: String = ""
     var forms: RealmList<Form> = RealmList()
 
@@ -68,6 +74,8 @@ open class User() : RealmObject(), IDataParcelable{
         description = parcel.readString()
         roll = parcel.readString()
         unit = parcel.readString()
+        token = parcel.readString()
+        image = parcel.readString()
         id = parcel.readString()
     }
 

@@ -30,7 +30,7 @@ class RequestLoginGetUseCase @Inject constructor(serviceRemoteGet:
             val gsonResult = gson.toJson(messageOfService.result)
 
             if (!gsonResult.isEmpty()){
-                val jsonObject: JSONObject = JSONObject(gsonResult)
+                val jsonObject = JSONObject(gsonResult)
                 user.id = jsonObject.getString("id")?: ""
                 user.name = jsonObject.getString("name")?: ""
                 user.user = jsonObject.getString("user")?: ""
@@ -43,7 +43,7 @@ class RequestLoginGetUseCase @Inject constructor(serviceRemoteGet:
                 user.roll = jsonObject.getString("roll")?: ""
                 user.token = jsonObject.getString("token")?: ""
                 user.unit = jsonObject.getString("unit_id")?: ""
-
+                user.image = jsonObject.getString("image")?: ""
                 this.observableUser.onNext(this.user)
             }
 

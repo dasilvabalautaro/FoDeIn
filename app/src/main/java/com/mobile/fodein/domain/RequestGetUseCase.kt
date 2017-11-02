@@ -20,6 +20,7 @@ abstract class RequestGetUseCase constructor(private val serviceRemoteGet:
     var service: String = ""
     var nameUser: String = ""
     var password: String = ""
+    var token: String = ""
     var messageError: String = ""
     var observableMessage: Subject<String> = PublishSubject.create()
 
@@ -53,9 +54,15 @@ abstract class RequestGetUseCase constructor(private val serviceRemoteGet:
     }
 
     fun createAgent(): Boolean{
-        if (nameUser.isEmpty() || password.isEmpty() ||
-                service.isEmpty()) return false
-        val license = "user=$nameUser; password=$password"
+        var license = ""
+
+        if (!nameUser.isEmpty() && !password.isEmpty()) {
+            license = "user=$nameUser; password=$password"
+        }else if (!token.isEmpty()){
+            license = "token=$token"
+        }
+        if (license.isEmpty()) return false
+
         agentCarrier =  AgentCarrier(service,
                 Constants.HTTPBase, service,
                 license, null)

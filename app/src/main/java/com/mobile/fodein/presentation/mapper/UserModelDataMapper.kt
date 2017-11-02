@@ -31,7 +31,7 @@ class UserModelDataMapper @Inject constructor (val context: Context,
         val formModelCollection: Collection<FormModel> = this
                 .formModelDataMapper
                 .transform(user.forms)
-        userModel.list = formModelCollection as List<FormModel>
+        userModel.list = formModelCollection as ArrayList<FormModel>
         return userModel
     }
 

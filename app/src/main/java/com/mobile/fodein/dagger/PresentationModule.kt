@@ -219,6 +219,33 @@ class PresentationModule(val context: Context) {
             UserRegisterNetworkPresenter{
         return UserRegisterNetworkPresenter(requestRegisterPostUseCase)
     }
+
+    @Provides
+    fun provideRequestDistrictGetUseCase(serviceRemoteGet: ServiceRemoteGet):
+            RequestDistrictGetUseCase{
+        return RequestDistrictGetUseCase(serviceRemoteGet)
+    }
+
+    @Provides
+    fun provideRequestUnitsGetUseCase(serviceRemoteGet: ServiceRemoteGet):
+            RequestUnitsGetUseCase{
+        return RequestUnitsGetUseCase(serviceRemoteGet)
+    }
+
+    @Provides
+    fun provideDistrictNetworkPresenter(requestDistrictGetUseCase:
+                                        RequestDistrictGetUseCase):
+            DistrictNetworkPresenter{
+        return DistrictNetworkPresenter(requestDistrictGetUseCase)
+    }
+
+    @Provides
+    fun provideUnityNetworkPresenter(requestUnitsGetUseCase:
+                                     RequestUnitsGetUseCase):
+            UnityNetworkPresenter{
+        return UnityNetworkPresenter(requestUnitsGetUseCase)
+    }
+
     @Provides
     fun provideConnectionNetwork(): ConnectionNetwork{
         return ConnectionNetwork(context)

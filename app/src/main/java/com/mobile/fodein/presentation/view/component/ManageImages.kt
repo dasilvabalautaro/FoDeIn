@@ -3,15 +3,16 @@ package com.mobile.fodein.presentation.view.component
 import android.Manifest
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.content.FileProvider
+import android.support.v7.app.AppCompatActivity
 import android.util.Base64
 import android.widget.ImageView
 import com.mobile.fodein.App
 import com.mobile.fodein.R
-import com.mobile.fodein.presentation.view.activities.BaseActivity
 import com.mobile.fodein.tools.PermissionUtils
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -19,7 +20,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 
-class ManageImages @Inject constructor(private val activity: BaseActivity) {
+class ManageImages @Inject constructor(private val activity: AppCompatActivity) {
     val GALLERY_PERMISSIONS_REQUEST = 0
     val GALLERY_IMAGE_REQUEST = 1
     val CAMERA_PERMISSIONS_REQUEST = 2
@@ -112,5 +113,11 @@ class ManageImages @Inject constructor(private val activity: BaseActivity) {
         bitmap.compress(Bitmap.CompressFormat.JPEG, QUALITY, byteArrayOutputStream)
         val imageBytes = byteArrayOutputStream.toByteArray()
         return Base64.encodeToString(imageBytes, Base64.DEFAULT)
+    }
+
+    fun base64DecodeImage(baseString: String): Bitmap{
+        val decode: ByteArray = Base64.decode(baseString, Base64.DEFAULT)
+        return BitmapFactory.decodeByteArray(decode,
+                0, decode.size)
     }
 }

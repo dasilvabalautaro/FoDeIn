@@ -22,7 +22,7 @@ class UnityModelDataMapper @Inject constructor (val context: Context,
         val projectModelCollection: Collection<ProjectModel> = this
                 .projectModelDataMapper
                 .transform(unity.projects)
-        unityModel.list = projectModelCollection as List<ProjectModel>
+        unityModel.list = projectModelCollection as ArrayList<ProjectModel>
         unityModel.name = unity.name
         unityModel.phone = unity.phone
         return unityModel

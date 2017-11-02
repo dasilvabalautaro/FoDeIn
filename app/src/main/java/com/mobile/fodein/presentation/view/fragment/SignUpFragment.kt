@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.OnClick
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
@@ -24,8 +25,7 @@ import java.util.*
 
 
 class SignUpFragment: AuthenticateFragment() {
-    private val validation: AwesomeValidation =
-            AwesomeValidation(ValidationStyle.BASIC)
+    private var validation: AwesomeValidation? = null
 
     @BindView(R.id.et_name)
     @JvmField var etName: EditText? = null
@@ -41,6 +41,13 @@ class SignUpFragment: AuthenticateFragment() {
     @JvmField var etRepeatPassword: EditText? = null
     @BindView(R.id.bt_send)
     @JvmField var btSend: Button? = null
+    @OnClick(R.id.ib_photo)
+    fun makeTransition(){
+        if (callback != null){
+            callback!!.remove(this)
+        }
+    }
+
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root: View = inflater!!.inflate(R.layout.view_sign_up,
@@ -50,6 +57,7 @@ class SignUpFragment: AuthenticateFragment() {
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        validation = AwesomeValidation(ValidationStyle.BASIC)
         setValidationFields()
     }
     override fun onStart() {
@@ -81,21 +89,44 @@ class SignUpFragment: AuthenticateFragment() {
                 .subscribe { result -> context.toast(result)})
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState!!.putString("name", etName!!.text.toString())
+        outState.putString("user", etUser!!.text.toString())
+        outState.putString("email", etEmail!!.text.toString())
+        outState.putString("phone", etPhone!!.text.toString())
+        outState.putString("password", etPassword!!.text.toString())
+        outState.putString("repeatPassword", etRepeatPassword!!.text.toString())
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if (savedInstanceState != null){
+            etName!!.setText(savedInstanceState.getString("name"))
+            etUser!!.setText(savedInstanceState.getString("user"))
+            etEmail!!.setText(savedInstanceState.getString("email"))
+            etPhone!!.setText(savedInstanceState.getString("phone"))
+            etPassword!!.setText(savedInstanceState.getString("password"))
+            etRepeatPassword!!.setText(savedInstanceState.getString("repeatPassword"))
+
+        }
+    }
+
     private fun setValidationFields(){
 //        val regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])" +
 //                "(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{6,}"
         val regexPassword = ".{6,}"
-        validation.addValidation(activity, R.id.et_name,
+        validation!!.addValidation(activity, R.id.et_name,
                 RegexTemplate.NOT_EMPTY, R.string.invalid_name)
-        validation.addValidation(activity, R.id.et_user,
+        validation!!.addValidation(activity, R.id.et_user,
                 RegexTemplate.NOT_EMPTY, R.string.invalid_name)
-        validation.addValidation(activity, R.id.et_email,
+        validation!!.addValidation(activity, R.id.et_email,
                 Patterns.EMAIL_ADDRESS, R.string.invalid_email)
-        validation.addValidation(activity, R.id.et_mobile,
+        validation!!.addValidation(activity, R.id.et_mobile,
                 "^[+]?[0-9]{8,13}$", R.string.invalid_phone)
-        validation.addValidation(activity, R.id.et_password,
+        validation!!.addValidation(activity, R.id.et_password,
                 regexPassword, R.string.invalid_password)
-        validation.addValidation(activity, R.id.et_repeat_password,
+        validation!!.addValidation(activity, R.id.et_repeat_password,
                 R.id.et_password, R.string.invalid_confirm_password)
 
     }
@@ -105,13 +136,13 @@ class SignUpFragment: AuthenticateFragment() {
         if (isRemote){
             pack[Constants.USER_ID] = UUID.randomUUID().toString()
             pack[Constants.USER_PASSWORD] = etPassword?.text!!.trim().toString()
-            pack[Constants.USER_TOKEN] = "123"
-            pack[Constants.USER_IMAGE] = "123"
+
         }else{
             val password = HashUtils.sha256(etPassword?.text!!.trim().toString())
             pack[Constants.USER_PASSWORD] = password
         }
-
+        pack[Constants.USER_TOKEN] = ""
+        pack[Constants.USER_IMAGE] = imageBase64
         pack[Constants.USER_NAME] = etName?.text!!.trim().toString()
         pack[Constants.USER_USER] = etUser?.text!!.trim().toString()
         pack[Constants.USER_PHONE] = etPhone?.text!!.trim().toString()
@@ -128,7 +159,7 @@ class SignUpFragment: AuthenticateFragment() {
         return Observable.create({
             e: ObservableEmitter<Boolean>? ->
             btSend!!.setOnClickListener({
-                e!!.onNext(validation.validate())
+                e!!.onNext(validation!!.validate())
             })
             e!!.setCancellable { Cancellable{
                 btSend!!.setOnClickListener(null)

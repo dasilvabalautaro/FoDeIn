@@ -26,6 +26,7 @@ abstract class RequestPostUseCase constructor(private val serviceRemotePost:
     var service: String = ""
     var nameUser: String = ""
     var password: String = ""
+    var token: String = ""
     var messageError: String = ""
     var backPack: Map<String, Any>? = null
     private var body: RequestBody? = null
@@ -46,6 +47,8 @@ abstract class RequestPostUseCase constructor(private val serviceRemotePost:
         if (service.isEmpty() || backPack == null) return false
         if (!nameUser.isEmpty() && !password.isEmpty()){
             license = "user=$nameUser; password=$password"
+        }else if (!token.isEmpty()){
+            license = "token=$token"
         }
 
         agentCarrier =  AgentCarrier(service,

@@ -28,4 +28,5 @@ object Constants {
     val CACHE_LIST_PROJECT_MODEL = "list_project_model"
     val CACHE_LIST_FORM_MODEL = "list_form_model"
     val CACHE_USER_MODEL = "user_model"
+    val END_TASK = "End Task"
 }

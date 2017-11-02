@@ -15,6 +15,8 @@ class MapperUser() : Parcelable {
     var description: String = ""
     var roll: String = ""
     var unit: String = ""
+    var token: String = ""
+    var image: String = ""
 
     constructor(parcel: Parcel) : this() {
         name = parcel.readString()
@@ -27,6 +29,8 @@ class MapperUser() : Parcelable {
         description = parcel.readString()
         roll = parcel.readString()
         unit = parcel.readString()
+        token = parcel.readString()
+        image = parcel.readString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -40,6 +44,8 @@ class MapperUser() : Parcelable {
         parcel.writeString(description)
         parcel.writeString(roll)
         parcel.writeString(unit)
+        parcel.writeString(token)
+        parcel.writeString(image)
     }
 
     override fun describeContents(): Int {

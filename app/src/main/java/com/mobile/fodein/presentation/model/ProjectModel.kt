@@ -16,7 +16,7 @@ class ProjectModel: IEntity {
     var notFinance: Double = 0.00
     var other: Double = 0.00
     var sum: Double = 0.00
-    var list: List<FormModel> = ArrayList()
+    var list: ArrayList<FormModel> = ArrayList()
 
     override var graph: Int = R.drawable.ic_project
     override var title: String = name

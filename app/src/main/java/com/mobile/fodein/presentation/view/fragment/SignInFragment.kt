@@ -22,15 +22,16 @@ import io.reactivex.schedulers.Schedulers
 
 class SignInFragment: AuthenticateFragment() {
 
-    private val validation: AwesomeValidation =
-            AwesomeValidation(ValidationStyle.BASIC)
+    private var validation: AwesomeValidation? = null
+
 
     @BindView(R.id.et_user_sign_in)
-    @JvmField var etUser: EditText? = null
+    @JvmField var etUserSignIn: EditText? = null
     @BindView(R.id.et_password_sign_in)
-    @JvmField var etPassword: EditText? = null
-    @BindView(R.id.bt_send)
-    @JvmField var btSend: Button? = null
+    @JvmField var etPasswordSignIn: EditText? = null
+    @BindView(R.id.bt_send_sign_in)
+    @JvmField var btSendSignIn: Button? = null
+
 
     override fun onCreateView(inflater: LayoutInflater?,
                               container: ViewGroup?,
@@ -44,6 +45,7 @@ class SignInFragment: AuthenticateFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        validation = AwesomeValidation(ValidationStyle.BASIC)
         setValidationFields()
     }
 
@@ -80,17 +82,17 @@ class SignInFragment: AuthenticateFragment() {
 //        val regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])" +
 //                "(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{6,}"
         val regexPassword = ".{6,}"
-        validation.addValidation(activity, R.id.et_user_sign_in,
+        validation!!.addValidation(activity, R.id.et_user_sign_in,
                 RegexTemplate.NOT_EMPTY, R.string.invalid_name)
-        validation.addValidation(activity, R.id.et_password_sign_in,
+        validation!!.addValidation(activity, R.id.et_password_sign_in,
                 regexPassword, R.string.invalid_password)
 
     }
 
     private fun loadPack(): MutableMap<String, Any>{
         val pack: MutableMap<String, Any> = HashMap()
-        pack[Constants.USER_USER] = etUser?.text!!.trim().toString()
-        pack[Constants.USER_PASSWORD] = etPassword?.text!!.trim().toString()
+        pack[Constants.USER_USER] = etUserSignIn?.text!!.trim().toString()
+        pack[Constants.USER_PASSWORD] = etPasswordSignIn?.text!!.trim().toString()
         return pack
     }
 
@@ -98,11 +100,11 @@ class SignInFragment: AuthenticateFragment() {
     private fun actionSingUpButtonClickObservable(): Observable<Boolean> {
         return Observable.create({
             e: ObservableEmitter<Boolean>? ->
-            btSend!!.setOnClickListener({
-                e!!.onNext(validation.validate())
+            btSendSignIn!!.setOnClickListener({
+                e!!.onNext(validation!!.validate())
             })
             e!!.setCancellable { Cancellable{
-                btSend!!.setOnClickListener(null)
+                btSendSignIn!!.setOnClickListener(null)
             } }
         })
     }

@@ -22,7 +22,7 @@ class DistrictModelDataMapper @Inject constructor(val context: Context,
         val unityModelCollection: Collection<UnityModel> = this
                 .unityModelDataMapper
                 .transform(district.unities)
-        districtModel.list = unityModelCollection as List<UnityModel>
+        districtModel.list = unityModelCollection as ArrayList<UnityModel>
         return districtModel
     }
 
