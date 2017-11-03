@@ -14,21 +14,25 @@ open class District() : RealmObject(), IDataParcelable {
 
     override fun readFromParcel(parcel: Parcel) {
         name = parcel.readString()
+        idNet = parcel.readString()
     }
 
     @PrimaryKey
     var id: String = ""
     var name: String = ""
+    var idNet: String = ""
     var unities: RealmList<Unity> = RealmList()
 
     constructor(parcel: Parcel) : this() {
         id = parcel.readString()
         name = parcel.readString()
+        idNet = parcel.readString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)
         parcel.writeString(name)
+        parcel.writeString(idNet)
     }
 
     override fun describeContents(): Int {

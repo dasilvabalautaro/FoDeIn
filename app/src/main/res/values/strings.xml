@@ -41,4 +41,5 @@
     <string name="register_not_found">The register not found</string>
     <string name="task_complete">Task Complete</string>
     <string name="new_filter">New Filter</string>
+    <string name="error_save_database">Error Save Database</string>
 </resources>

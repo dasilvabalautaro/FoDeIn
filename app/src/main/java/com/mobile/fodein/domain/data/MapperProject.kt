@@ -15,6 +15,7 @@ class MapperProject() : Parcelable {
     var notFinance: Double = 0.00
     var other: Double = 0.00
     var sum: Double = 0.00
+    var idNet: String = ""
 
     constructor(parcel: Parcel) : this() {
         type = parcel.readInt()
@@ -27,6 +28,7 @@ class MapperProject() : Parcelable {
         notFinance = parcel.readDouble()
         other = parcel.readDouble()
         sum = parcel.readDouble()
+        idNet = parcel.readString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -40,6 +42,7 @@ class MapperProject() : Parcelable {
         parcel.writeDouble(notFinance)
         parcel.writeDouble(other)
         parcel.writeDouble(sum)
+        parcel.writeString(idNet)
     }
 
     override fun describeContents(): Int {

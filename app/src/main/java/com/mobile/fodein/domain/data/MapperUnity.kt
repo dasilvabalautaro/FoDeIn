@@ -8,17 +8,20 @@ class MapperUnity() : Parcelable {
     var phone: String = ""
     var address: String = ""
     var name: String = ""
+    var idNet: String = ""
 
     constructor(parcel: Parcel) : this() {
         phone = parcel.readString()
         address = parcel.readString()
         name = parcel.readString()
+        idNet = parcel.readString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(phone)
         parcel.writeString(address)
         parcel.writeString(name)
+        parcel.writeString(idNet)
     }
 
     override fun describeContents(): Int {

@@ -8,6 +8,9 @@ import com.mobile.fodein.tools.Constants
 
 object DeliveryOfResource {
     var token = ""
+    var updateDistrict = false
+    var updateProjects = false
+    var updateForms = false
 
     fun setUnitToDistrict(id: String, unity: UnityModel){
 
@@ -19,8 +22,9 @@ object DeliveryOfResource {
             if (list != null && list is ArrayList<*>){
                 list.indices
                     .map { list[it] as DistrictModel }
-                    .filter { it.id == id }
+                    .filter { it.idNet == id }
                     .forEach { it.list.add(unity) }
+
             }
 
         }catch (te: TypeCastException){

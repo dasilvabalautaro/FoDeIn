@@ -17,11 +17,13 @@ open class Unity() : RealmObject(), IDataParcelable {
         phone = parcel.readString()
         address = parcel.readString()
         name = parcel.readString()
+        idNet = parcel.readString()
     }
 
     var phone: String = ""
     var address: String = ""
     var name: String = ""
+    var idNet: String = ""
     @PrimaryKey
     var id: String = ""
     var projects: RealmList<Project> = RealmList()
@@ -30,6 +32,7 @@ open class Unity() : RealmObject(), IDataParcelable {
         phone = parcel.readString()
         address = parcel.readString()
         name = parcel.readString()
+        idNet = parcel.readString()
         id = parcel.readString()
     }
 
@@ -37,6 +40,7 @@ open class Unity() : RealmObject(), IDataParcelable {
         parcel.writeString(phone)
         parcel.writeString(address)
         parcel.writeString(name)
+        parcel.writeString(idNet)
         parcel.writeString(id)
     }
 

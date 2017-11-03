@@ -9,7 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 abstract class BasePresenter: IPresenter {
 
-    private var disposable: CompositeDisposable = CompositeDisposable()
+    protected var disposable: CompositeDisposable = CompositeDisposable()
     var iHearMessage: IHearMessage? = null
     var view: ILoadDataView? = null
 
@@ -44,13 +44,16 @@ abstract class BasePresenter: IPresenter {
         this.view!!.showError(error)
     }
 
-    protected inline fun <reified E> existInCache(keyCache:String): Boolean{
+    protected inline fun <reified E> existInCache(keyCache:String, render:Boolean = true): Boolean{
         val dataCache = CachingLruRepository.instance.getLru()
                 .get(keyCache)
         if (dataCache != null && dataCache is List<*>){
             val list: List<E> = dataCache
                     .filterIsInstance<E>()
-            this.view!!.renderList(list)
+            if (render){
+                this.view!!.renderList(list)
+            }
+
             return true
         }
         return false

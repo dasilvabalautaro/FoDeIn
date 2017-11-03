@@ -24,6 +24,7 @@ open class Project() : RealmObject(), IDataParcelable {
         notFinance = parcel.readDouble()
         other = parcel.readDouble()
         sum = parcel.readDouble()
+        idNet = parcel.readString()
     }
 
     @PrimaryKey
@@ -38,6 +39,7 @@ open class Project() : RealmObject(), IDataParcelable {
     var notFinance: Double = 0.00
     var other: Double = 0.00
     var sum: Double = 0.00
+    var idNet: String = ""
     var forms: RealmList<Form> = RealmList()
 
     constructor(parcel: Parcel) : this() {
@@ -52,6 +54,7 @@ open class Project() : RealmObject(), IDataParcelable {
         notFinance = parcel.readDouble()
         other = parcel.readDouble()
         sum = parcel.readDouble()
+        idNet = parcel.readString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -66,6 +69,7 @@ open class Project() : RealmObject(), IDataParcelable {
         parcel.writeDouble(notFinance)
         parcel.writeDouble(other)
         parcel.writeDouble(sum)
+        parcel.writeString(idNet)
     }
 
     override fun describeContents(): Int {

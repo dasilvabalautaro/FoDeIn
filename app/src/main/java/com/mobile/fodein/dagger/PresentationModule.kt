@@ -105,6 +105,22 @@ class PresentationModule(val context: Context) {
     }
 
     @Provides
+    fun provideUpdateDistrictListUseCase(uiThread: UIThread,
+                                         jobExecutor: JobExecutor,
+                                         districtExecutor: DistrictExecutor):
+            UpdateDistrictListUseCase{
+        return UpdateDistrictListUseCase(jobExecutor, uiThread, districtExecutor)
+    }
+
+    @Provides
+    fun provideAddUnitsDistrictListUseCase(uiThread: UIThread,
+                                           jobExecutor: JobExecutor,
+                                           districtExecutor: DistrictExecutor):
+            AddUnitsDistrictListUseCase{
+        return AddUnitsDistrictListUseCase(jobExecutor, uiThread, districtExecutor)
+    }
+
+    @Provides
     fun provideUnityExecutor(): UnityExecutor{
         return UnityExecutor()
     }
@@ -121,6 +137,14 @@ class PresentationModule(val context: Context) {
                                    unityExecutor: UnityExecutor):
             GetUnityListUseCase{
         return GetUnityListUseCase(jobExecutor, uiThread, unityExecutor)
+    }
+
+    @Provides
+    fun provideUpdateUnityListUseCase(uiThread: UIThread,
+                                      jobExecutor: JobExecutor,
+                                      unityExecutor: UnityExecutor):
+            UpdateUnityListUseCase{
+        return UpdateUnityListUseCase(jobExecutor, uiThread, unityExecutor)
     }
 
     @Provides
@@ -233,18 +257,34 @@ class PresentationModule(val context: Context) {
     }
 
     @Provides
+    fun provideRequestProjectsGetUseCase(serviceRemoteGet:
+                                         ServiceRemoteGet):
+            RequestProjectsGetUseCase{
+        return RequestProjectsGetUseCase(serviceRemoteGet)
+    }
+
+    @Provides
     fun provideDistrictNetworkPresenter(requestDistrictGetUseCase:
-                                        RequestDistrictGetUseCase):
+                                        RequestDistrictGetUseCase,
+                                        updateDistrictListUseCase:
+                                        UpdateDistrictListUseCase):
             DistrictNetworkPresenter{
-        return DistrictNetworkPresenter(requestDistrictGetUseCase)
+        return DistrictNetworkPresenter(requestDistrictGetUseCase,
+                updateDistrictListUseCase)
     }
 
     @Provides
     fun provideUnityNetworkPresenter(requestUnitsGetUseCase:
-                                     RequestUnitsGetUseCase):
+                                     RequestUnitsGetUseCase,
+                                     updateUnityListUseCase:
+                                     UpdateUnityListUseCase,
+                                     addUnitsDistrictListUseCase:
+                                     AddUnitsDistrictListUseCase):
             UnityNetworkPresenter{
-        return UnityNetworkPresenter(requestUnitsGetUseCase)
+        return UnityNetworkPresenter(requestUnitsGetUseCase,
+                updateUnityListUseCase, addUnitsDistrictListUseCase)
     }
+
 
     @Provides
     fun provideConnectionNetwork(): ConnectionNetwork{

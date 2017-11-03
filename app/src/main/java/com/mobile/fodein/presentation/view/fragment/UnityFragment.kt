@@ -14,6 +14,7 @@ import com.mobile.fodein.App
 import com.mobile.fodein.R
 import com.mobile.fodein.dagger.PresentationModule
 import com.mobile.fodein.domain.DeliveryOfResource
+import com.mobile.fodein.models.persistent.repository.CachingLruRepository
 import com.mobile.fodein.presentation.interfaces.IEntity
 import com.mobile.fodein.presentation.interfaces.ILoadDataView
 import com.mobile.fodein.presentation.model.DistrictModel
@@ -23,6 +24,7 @@ import com.mobile.fodein.presentation.presenter.DistrictPresenter
 import com.mobile.fodein.presentation.presenter.UnityNetworkPresenter
 import com.mobile.fodein.presentation.view.component.ItemAdapter
 import com.mobile.fodein.tools.ConnectionNetwork
+import com.mobile.fodein.tools.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
@@ -70,11 +72,11 @@ class UnityFragment : BaseFragment(), ILoadDataView {
         districtPresenter.view = this
         districtNetworkPresenter.view = this
         unityNetworkPresenter.view = this
-        if (connectionNetwork.isOnline()){
+        if (connectionNetwork.isOnline() &&
+                !DeliveryOfResource.updateDistrict){
             districtNetworkPresenter.setVariables(DeliveryOfResource.token)
             districtNetworkPresenter.getList()
-            unityNetworkPresenter.setVariables(DeliveryOfResource.token)
-            unityNetworkPresenter.getList()
+
         }else{
             districtPresenter.getListDistrict()
         }
@@ -125,6 +127,8 @@ class UnityFragment : BaseFragment(), ILoadDataView {
 
     override fun <T> renderList(objectList: List<T>) {
         if (!objectList.isEmpty()){
+            unityNetworkPresenter.setVariables(DeliveryOfResource.token)
+            unityNetworkPresenter.getList()
             listModel = objectList.filterIsInstance<DistrictModel>()
             setDataSpinner(listModel)
         }
@@ -150,21 +154,21 @@ class UnityFragment : BaseFragment(), ILoadDataView {
     }
 
     private fun setupSwipeRefresh() = srData!!
-            .setOnRefreshListener(districtPresenter::getListDistrict)
+            .setOnRefreshListener(this::refreshData)
 
 //    districtPresenter::getListDistrict
-//    private fun refreshData(){
-//        val list = CachingLruRepository
-//                .instance
-//                .getLru()
-//                .get(Constants.CACHE_LIST_DISTRICT_MODEL) as List<*>
-//
-//        if ({
-//            listModel = list.filterIsInstance<DistrictModel>()
-//            setDataSpinner(listModel)
-//        }
-//        srData!!.isRefreshing = false
-//    }
+    private fun refreshData(){
+        val list = CachingLruRepository
+                .instance
+                .getLru()
+                .get(Constants.CACHE_LIST_DISTRICT_MODEL)
+        if (list != null && list is ArrayList<*>){
+            listModel = list.filterIsInstance<DistrictModel>()
+            setDataSpinner(listModel)
+        }
+        srData!!.isRefreshing = false
+    }
+
     private fun setDataSpinner(list: List<DistrictModel>){
         val contentSpinner: MutableList<String> = ArrayList()
         list.mapTo(contentSpinner) { it.name }

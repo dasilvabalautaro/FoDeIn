@@ -8,6 +8,7 @@ import com.mobile.fodein.domain.RequestGetUseCase
 import com.mobile.fodein.models.persistent.network.MessageOfService
 import com.mobile.fodein.models.persistent.network.ServiceRemoteGet
 import com.mobile.fodein.models.persistent.repository.CachingLruRepository
+import com.mobile.fodein.presentation.model.ProjectModel
 import com.mobile.fodein.presentation.model.UnityModel
 import com.mobile.fodein.tools.Constants
 import io.reactivex.subjects.PublishSubject
@@ -17,10 +18,10 @@ import org.json.JSONObject
 import javax.inject.Inject
 
 
-class RequestUnitsGetUseCase @Inject constructor(serviceRemoteGet:
-                                                 ServiceRemoteGet):
+class RequestProjectsGetUseCase @Inject constructor(serviceRemoteGet:
+                                                    ServiceRemoteGet):
         RequestGetUseCase(serviceRemoteGet){
-    private var list: ArrayList<UnityModel>? = null
+    private var list: ArrayList<ProjectModel>? = null
 
     private var messageEnd: String = ""
     var observableEndTask: Subject<String> = PublishSubject.create()
@@ -32,6 +33,9 @@ class RequestUnitsGetUseCase @Inject constructor(serviceRemoteGet:
         observableMessage
                 .subscribe { messageError }
     }
+
+
+
     override fun getJsonArray(messageOfService: MessageOfService) {
         val gson = Gson()
         if (messageOfService.success){
@@ -47,6 +51,7 @@ class RequestUnitsGetUseCase @Inject constructor(serviceRemoteGet:
             this.messageError =  gsonError.toString()
             this.observableMessage.onNext(this.messageError)
         }
+
     }
 
     private fun getList(jsonArray: JSONArray){
@@ -54,21 +59,21 @@ class RequestUnitsGetUseCase @Inject constructor(serviceRemoteGet:
 
         (0 until jsonArray.length()).forEach { i ->
             val jsonObject: JSONObject = jsonArray.getJSONObject(i)
-            val unity = UnityModel()
-            unity.idNet = jsonObject.getString("id")?: ""
-            unity.name = jsonObject.getString("name")?: ""
-            unity.phone = jsonObject.getString("phone")?: ""
-            unity.address = jsonObject.getString("address")?: ""
-            unity.title = context.resources
-                    .getString(R.string.hint_text_name) + ": " + unity.name
-            unity.description = context.resources
+            val project = ProjectModel()
+            project.idNet = jsonObject.getString("id")?: ""
+            project.name = jsonObject.getString("name")?: ""
+            project.phone = jsonObject.getString("phone")?: ""
+            project.address = jsonObject.getString("address")?: ""
+            project.title = context.resources
+                    .getString(R.string.hint_text_name) + ": " + project.name
+            project.description = context.resources
                     .getString(R.string.hint_text_address) + ": " +
-                    unity.address + "\n" + context.resources
-                    .getString(R.string.hint_text_phone) + ": " + unity.phone
-            list!!.add(unity)
+                    project.address + "\n" + context.resources
+                    .getString(R.string.hint_text_phone) + ": " + project.phone
+            list!!.add(project)
             val idDistrict = jsonObject.getString("district_id")?: ""
 
-            DeliveryOfResource.setUnitToDistrict(idDistrict, unity)
+            DeliveryOfResource.setUnitToDistrict(idDistrict, project)
         }
 
         CachingLruRepository.instance.getLru()
@@ -77,4 +82,5 @@ class RequestUnitsGetUseCase @Inject constructor(serviceRemoteGet:
         this.messageEnd = Constants.END_TASK
         this.observableEndTask.onNext(this.messageEnd)
     }
+
 }

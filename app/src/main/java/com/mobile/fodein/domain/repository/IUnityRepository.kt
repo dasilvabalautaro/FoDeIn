@@ -10,5 +10,5 @@ interface IUnityRepository: IMessagePersistent {
     fun unitySave(unity: MapperUnity): Observable<UnityModel>
     fun unityGetById(id: String): Observable<UnityModel>
     fun unityGetByField(value: String, nameField: String): Observable<List<UnityModel>>
-
+    fun unityUpdate(): Observable<Boolean>
 }

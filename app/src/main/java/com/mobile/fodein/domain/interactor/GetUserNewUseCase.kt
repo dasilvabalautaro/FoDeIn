@@ -31,6 +31,8 @@ class GetUserNewUseCase @Inject constructor(threadExecutor: IThreadExecutor,
         user.description = data[Constants.USER_DESCRIPTION].toString()
         user.roll = data[Constants.USER_ROLL].toString()
         user.unit = data[Constants.USER_UNIT].toString()
+        user.token = data[Constants.USER_TOKEN].toString()
+        user.image = data[Constants.USER_IMAGE].toString()
 
     }
 

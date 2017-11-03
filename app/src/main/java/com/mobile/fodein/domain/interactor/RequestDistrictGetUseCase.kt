@@ -48,7 +48,7 @@ class RequestDistrictGetUseCase @Inject constructor(serviceRemoteGet:
         (0 until jsonArray.length()).forEach { i ->
             val jsonObject: JSONObject = jsonArray.getJSONObject(i)
             val district = DistrictModel()
-            district.id = jsonObject.getString("id")?: ""
+            district.idNet = jsonObject.getString("id")?: ""
             district.name = jsonObject.getString("name")?: ""
             list!!.add(district)
         }

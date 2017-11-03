@@ -10,5 +10,8 @@ interface IDistrictRepository: IMessagePersistent {
     fun districtList(): Observable<List<DistrictModel>>
     fun districtSave(district: MapperDistrict): Observable<DistrictModel>
     fun districtGetById(id: String): Observable<DistrictModel>
-    fun districtGetByField(value: String, nameField: String): Observable<List<DistrictModel>>
+    fun districtGetByField(value: String, nameField: String):
+            Observable<List<DistrictModel>>
+    fun districtUpdate(): Observable<Boolean>
+    fun addUnities(): Observable<Boolean>
 }

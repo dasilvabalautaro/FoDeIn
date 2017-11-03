@@ -3,15 +3,21 @@ package com.mobile.fodein.models.executor
 import android.os.Parcel
 import android.os.Parcelable
 import com.mobile.fodein.App
+import com.mobile.fodein.R
 import com.mobile.fodein.dagger.ModelsModule
 import com.mobile.fodein.domain.data.MapperDistrict
 import com.mobile.fodein.domain.repository.IDistrictRepository
 import com.mobile.fodein.models.data.District
+import com.mobile.fodein.models.data.Unity
 import com.mobile.fodein.models.exception.DatabaseOperationException
+import com.mobile.fodein.models.persistent.repository.CachingLruRepository
 import com.mobile.fodein.models.persistent.repository.DatabaseRepository
 import com.mobile.fodein.presentation.mapper.DistrictModelDataMapper
 import com.mobile.fodein.presentation.model.DistrictModel
+import com.mobile.fodein.tools.Constants
 import io.reactivex.Observable
+import io.realm.RealmList
+import io.realm.RealmResults
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,6 +25,7 @@ import javax.inject.Singleton
 class DistrictExecutor @Inject constructor():
         DatabaseRepository(), IDistrictRepository {
 
+    private val ID_NET = "idNet"
     private val context = App.appComponent.context()
 
     private val component by lazy {(context as App)
@@ -114,5 +121,100 @@ class DistrictExecutor @Inject constructor():
                 subscriber.onError(Throwable())
             }
         }
+    }
+
+    override fun districtUpdate(): Observable<Boolean> {
+
+        val list= CachingLruRepository
+                .instance
+                .getLru()
+                .get(Constants.CACHE_LIST_DISTRICT_MODEL)
+        return Observable.create { subscriber ->
+
+            if (list != null && list is ArrayList<*>) {
+                list.indices.forEach { i ->
+                    val district = list[i] as DistrictModel
+                    (list[i] as DistrictModel).id = saveDistrict(district)
+                }
+                subscriber.onNext(true)
+                subscriber.onComplete()
+            }else{
+                subscriber.onError(Throwable())
+            }
+        }
+    }
+
+    private fun saveDistrict(district: DistrictModel): String{
+        var result = ""
+        val clazz: Class<District> = District::class.java
+        val listDistrict: List<District>? = this.getDataByField(clazz,
+                ID_NET, district.idNet)
+        if (listDistrict == null) {
+            val mapperDistrict = MapperDistrict()
+            mapperDistrict.name = district.name
+            mapperDistrict.idNet = district.idNet
+            val parcel: Parcel = Parcel.obtain()
+            mapperDistrict.writeToParcel(parcel, Parcelable.PARCELABLE_WRITE_RETURN_VALUE)
+            parcel.setDataPosition(0)
+            val newDistrict = this.save(clazz, parcel, interactDatabaseListener)
+            if (newDistrict == null) {
+                println(context.resources.getString(R.string.error_save_database))
+            }else{
+                result = newDistrict.id
+
+            }
+        }else{
+            result = listDistrict[0].id
+        }
+        return result
+    }
+
+    override fun addUnities(): Observable<Boolean> {
+        val list= CachingLruRepository
+                .instance
+                .getLru()
+                .get(Constants.CACHE_LIST_DISTRICT_MODEL)
+        return Observable.create { subscriber ->
+
+
+            if (list != null && list is ArrayList<*>) {
+                list.indices.forEach { i ->
+                    val district = list[i] as DistrictModel
+                    executeAdd(district)
+                }
+                subscriber.onNext(true)
+                subscriber.onComplete()
+            }else{
+                subscriber.onError(Throwable())
+            }
+        }
+    }
+
+    private fun executeAdd(district: DistrictModel){
+        val clazz: Class<Unity> = Unity::class.java
+        val listUnity = district.list
+        if (listUnity.isNotEmpty()){
+            val idDistrict = district.id
+            listUnity.indices.forEach { j ->
+                val unity = listUnity[j]
+                val newUnity = this.getDataById(clazz, unity.id)
+                if (verifyUnityInList(idDistrict, unity.id)){
+                    this.addObjectList(clazz, idDistrict,
+                            newUnity!!, interactDatabaseListener)
+                }
+            }
+
+        }
+    }
+
+    private fun verifyUnityInList(idDistrict:String, idUnity: String): Boolean{
+        val clazz: Class<District> = District::class.java
+        val newDistrict = this.getDataById(clazz, idDistrict)
+        val unities: RealmList<Unity> = newDistrict!!.unities
+        val filterUnities: RealmResults<Unity> = unities
+                .where()
+                .contains("id", idUnity)
+                .findAll()
+        return filterUnities.isEmpty()
     }
 }
