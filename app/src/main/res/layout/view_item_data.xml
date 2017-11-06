@@ -64,6 +64,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:id="@+id/tv_title"
+        android:paddingTop="10dp"
         android:paddingStart="20dp"
         android:paddingEnd="10dp"/>
     <TextView
@@ -76,7 +77,8 @@
         android:textStyle="italic"
         android:id="@+id/tv_description"
         android:paddingStart="20dp"
-        android:paddingEnd="10dp"/>
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"/>
     <ImageButton
         android:layout_width="0dp"
         android:layout_height="wrap_content"

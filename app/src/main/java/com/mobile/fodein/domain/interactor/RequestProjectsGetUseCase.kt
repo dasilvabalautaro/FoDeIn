@@ -7,9 +7,7 @@ import com.mobile.fodein.domain.DeliveryOfResource
 import com.mobile.fodein.domain.RequestGetUseCase
 import com.mobile.fodein.models.persistent.network.MessageOfService
 import com.mobile.fodein.models.persistent.network.ServiceRemoteGet
-import com.mobile.fodein.models.persistent.repository.CachingLruRepository
 import com.mobile.fodein.presentation.model.ProjectModel
-import com.mobile.fodein.presentation.model.UnityModel
 import com.mobile.fodein.tools.Constants
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
@@ -21,7 +19,7 @@ import javax.inject.Inject
 class RequestProjectsGetUseCase @Inject constructor(serviceRemoteGet:
                                                     ServiceRemoteGet):
         RequestGetUseCase(serviceRemoteGet){
-    private var list: ArrayList<ProjectModel>? = null
+    //private var list: ArrayList<ProjectModel>? = null
 
     private var messageEnd: String = ""
     var observableEndTask: Subject<String> = PublishSubject.create()
@@ -55,29 +53,38 @@ class RequestProjectsGetUseCase @Inject constructor(serviceRemoteGet:
     }
 
     private fun getList(jsonArray: JSONArray){
-        list = ArrayList()
+        //list = ArrayList()
 
         (0 until jsonArray.length()).forEach { i ->
             val jsonObject: JSONObject = jsonArray.getJSONObject(i)
             val project = ProjectModel()
             project.idNet = jsonObject.getString("id")?: ""
+            project.type = jsonObject.getInt("type")
+            project.code = jsonObject.getString("code")?: ""
             project.name = jsonObject.getString("name")?: ""
-            project.phone = jsonObject.getString("phone")?: ""
-            project.address = jsonObject.getString("address")?: ""
+            project.latitude = jsonObject.getDouble("latitude")
+            project.longitude = jsonObject.getDouble("longitude")
+            project.finance = jsonObject.getDouble("finance")
+            project.counterpart = jsonObject.getDouble("counterpart")
+            project.notFinance = jsonObject.getDouble("notFinance")
+            project.other = jsonObject.getDouble("other")
+            project.sum = jsonObject.getDouble("sum")
+
             project.title = context.resources
                     .getString(R.string.hint_text_name) + ": " + project.name
             project.description = context.resources
-                    .getString(R.string.hint_text_address) + ": " +
-                    project.address + "\n" + context.resources
-                    .getString(R.string.hint_text_phone) + ": " + project.phone
-            list!!.add(project)
-            val idDistrict = jsonObject.getString("district_id")?: ""
+                    .getString(R.string.lbl_latitude) + ": " +
+                    project.latitude.toString() + "\n" + context.resources
+                    .getString(R.string.lbl_longitude) + ": " +
+                    project.longitude.toString()
+            //list!!.add(project)
+            val idUnit = jsonObject.getString("unit_id")?: ""
 
-            DeliveryOfResource.setUnitToDistrict(idDistrict, project)
+            DeliveryOfResource.setProjectToUnit(idUnit, project)
         }
 
-        CachingLruRepository.instance.getLru()
-                .put(Constants.CACHE_LIST_UNITY_MODEL, list!!.toList())
+//        CachingLruRepository.instance.getLru()
+//                .put(Constants.CACHE_LIST_PROJECT_MODEL, list!!.toList())
 
         this.messageEnd = Constants.END_TASK
         this.observableEndTask.onNext(this.messageEnd)

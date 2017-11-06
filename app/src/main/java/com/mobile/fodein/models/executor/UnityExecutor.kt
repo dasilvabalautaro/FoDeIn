@@ -7,6 +7,7 @@ import com.mobile.fodein.R
 import com.mobile.fodein.dagger.ModelsModule
 import com.mobile.fodein.domain.data.MapperUnity
 import com.mobile.fodein.domain.repository.IUnityRepository
+import com.mobile.fodein.models.data.Project
 import com.mobile.fodein.models.data.Unity
 import com.mobile.fodein.models.exception.DatabaseOperationException
 import com.mobile.fodein.models.persistent.repository.CachingLruRepository
@@ -16,12 +17,16 @@ import com.mobile.fodein.presentation.model.DistrictModel
 import com.mobile.fodein.presentation.model.UnityModel
 import com.mobile.fodein.tools.Constants
 import io.reactivex.Observable
+import io.realm.Realm
+import io.realm.RealmList
+import io.realm.RealmResults
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class UnityExecutor @Inject constructor():
         DatabaseRepository(), IUnityRepository {
+
     private val ID_NET = "idNet"
     private val context = App.appComponent.context()
 
@@ -151,7 +156,7 @@ class UnityExecutor @Inject constructor():
         val clazz: Class<Unity> = Unity::class.java
         val listResult: List<Unity>? = this.getDataByField(clazz,
                 ID_NET, unity.idNet)
-        if (listResult == null) {
+        if (listResult == null || listResult.isEmpty()) {
             val mapperUnity = MapperUnity()
             mapperUnity.phone = unity.phone
             mapperUnity.address = unity.address
@@ -175,4 +180,62 @@ class UnityExecutor @Inject constructor():
 
         return result
     }
+
+    override fun addProjects(): Observable<Boolean> {
+        val list= CachingLruRepository
+                .instance
+                .getLru()
+                .get(Constants.CACHE_LIST_UNITY_MODEL)
+        return Observable.create { subscriber ->
+
+            if (list != null && list is ArrayList<*>) {
+                list.indices.forEach { i ->
+                    val unity = list[i] as UnityModel
+                    executeAdd(unity)
+                }
+                subscriber.onNext(true)
+                subscriber.onComplete()
+            }else{
+                subscriber.onError(Throwable())
+            }
+        }
+    }
+    private fun executeAdd(unity: UnityModel){
+        val clazz: Class<Project> = Project::class.java
+        val listProject = unity.list
+        if (listProject.isNotEmpty()){
+            val idUnity = unity.id
+            listProject.indices.forEach { j ->
+                val project = listProject[j]
+                val newProject = this.getDataById(clazz, project.id)
+                if (newProject != null){
+                    saveProjectInList(idUnity, project.id, newProject)
+                }
+            }
+        }
+    }
+    private fun saveProjectInList(idUnity:String,
+                                  idProject: String,
+                                  project: Project){
+        val realm: Realm = Realm.getDefaultInstance()
+        try {
+            realm.executeTransaction {
+                val newUnity = realm.where(Unity::class.java).equalTo(
+                        "id", idUnity).findFirst()
+                val projects: RealmList<Project> = newUnity!!.projects
+                val filterProjects: RealmResults<Project> = projects
+                        .where()
+                        .contains("id", idProject)
+                        .findAll()
+                if (filterProjects.isEmpty()){
+                    newUnity.projects.add(project)
+                }
+            }
+
+
+        }catch (e: Throwable){
+            println(e.message!!)
+        }
+    }
+
 }

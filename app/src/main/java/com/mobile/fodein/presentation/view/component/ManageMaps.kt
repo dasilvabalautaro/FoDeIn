@@ -34,8 +34,8 @@ class ManageMaps @Inject constructor(
     var mapFragment: MapFragment? = null
 
     init {
-//        mapFragment = activity.fragmentManager
-//                .findFragmentById(R.id.map) as MapFragment
+        mapFragment = activity.fragmentManager
+                .findFragmentById(R.id.map) as MapFragment
     }
 
     fun getMapAsync(){
@@ -88,6 +88,7 @@ class ManageMaps @Inject constructor(
                     .position(LatLng(geo.latitude, geo.longitude))
                     .title(geo.title))
         }
+
     }
 
     private fun Activity.toast(message: CharSequence) =

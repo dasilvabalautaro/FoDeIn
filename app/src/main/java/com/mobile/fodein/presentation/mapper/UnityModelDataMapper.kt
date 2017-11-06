@@ -25,6 +25,12 @@ class UnityModelDataMapper @Inject constructor (val context: Context,
         unityModel.list = projectModelCollection as ArrayList<ProjectModel>
         unityModel.name = unity.name
         unityModel.phone = unity.phone
+        unityModel.title = context.resources
+                .getString(R.string.hint_text_name) + ": " + unityModel.name
+        unityModel.description = context.resources
+                .getString(R.string.hint_text_address) + ": " +
+                unity.address + "\n" + context.resources
+                .getString(R.string.hint_text_phone) + ": " + unityModel.phone
         return unityModel
     }
 

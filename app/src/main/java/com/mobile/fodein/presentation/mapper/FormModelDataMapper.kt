@@ -21,6 +21,15 @@ class FormModelDataMapper @Inject constructor(val context: Context) {
         formModel.dateUpdate = form.dateUpdate
         formModel.latitude = form.latitude
         formModel.longitude = form.longitude
+
+        formModel.title = context.resources
+                .getString(R.string.lbl_date) + ": " + formModel.date
+        formModel.description = context.resources
+                .getString(R.string.lbl_latitude) + ": " +
+                formModel.latitude.toString() + "\n" + context.resources
+                .getString(R.string.lbl_longitude) + ": " +
+                formModel.longitude.toString()
+
         return formModel
     }
 

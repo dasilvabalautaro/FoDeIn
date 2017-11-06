@@ -5,7 +5,7 @@ import com.mobile.fodein.domain.DeliveryOfResource
 import com.mobile.fodein.domain.interactor.AddUnitsDistrictListUseCase
 import com.mobile.fodein.domain.interactor.RequestUnitsGetUseCase
 import com.mobile.fodein.domain.interactor.UpdateUnityListUseCase
-import com.mobile.fodein.presentation.model.DistrictModel
+import com.mobile.fodein.presentation.model.UnityModel
 import com.mobile.fodein.tools.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.observers.DisposableObserver
@@ -19,7 +19,7 @@ class UnityNetworkPresenter @Inject constructor(private val requestUnitsGetUseCa
                                                 private val addUnitsDistrictListUseCase:
                                                 AddUnitsDistrictListUseCase):
         BasePresenter(){
-    var flag = 0
+    private var flag = 0
     init {
         val message = this.requestUnitsGetUseCase.observableMessage.map { s -> s }
         disposable.add(message.observeOn(AndroidSchedulers.mainThread())
@@ -33,6 +33,7 @@ class UnityNetworkPresenter @Inject constructor(private val requestUnitsGetUseCa
                 .subscribe { m ->
                     kotlin.run {
                         updateUnityListUseCase.execute(UpdateObserver())
+                        view!!.showRetry()
                         view!!.showMessage(m)
                     }
                 })
@@ -45,7 +46,7 @@ class UnityNetworkPresenter @Inject constructor(private val requestUnitsGetUseCa
     }
 
     fun getList(){
-        if (!existInCache<DistrictModel>(Constants.CACHE_LIST_DISTRICT_MODEL,
+        if (!existInCache<UnityModel>(Constants.CACHE_LIST_UNITY_MODEL,
                 false)){
             if (requestUnitsGetUseCase.createAgent()){
                 requestUnitsGetUseCase.getDataServer()

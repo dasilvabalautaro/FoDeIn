@@ -16,10 +16,13 @@ class ProjectPresenter @Inject constructor(private val getProjectListUseCase:
         this.iHearMessage = getProjectListUseCase
     }
 
-    fun getListProject(){
-        if (!existInCache<ProjectModel>(Constants.CACHE_LIST_PROJECT_MODEL)){
+    fun getListProject(clear: Boolean = false){
+
+        if (!existInCache<ProjectModel>(Constants.CACHE_LIST_PROJECT_MODEL) ||
+                clear){
             getProjectListUseCase.execute(ListObserver())
         }
+
 
     }
     private fun showCollectionInView(objectsList:

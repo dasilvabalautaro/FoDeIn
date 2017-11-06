@@ -15,13 +15,11 @@ import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.mobile.fodein.R
 import com.mobile.fodein.tools.Constants
-import com.mobile.fodein.tools.HashUtils
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Cancellable
 import io.reactivex.schedulers.Schedulers
-import java.util.*
 
 
 class SignUpFragment: AuthenticateFragment() {
@@ -67,15 +65,8 @@ class SignUpFragment: AuthenticateFragment() {
                 .map { validate ->
                     run{
                         if (validate){
-                            if (connectionNetwork.isOnline()){
-                                this.userRegisterNetworkPresenter.setUser(loadPack(true))
-                                this.userRegisterNetworkPresenter.registerUser()
-                            }else{
-                                this.userPresenter.setUser(loadPack(false))
-                                this.userPresenter.registerUser()
-
-                            }
-
+                            this.userPresenter.setUser(loadPack())
+                            this.userPresenter.registerUser()
                             return@map resources
                                     .getString(R.string.data_sent)
 
@@ -131,16 +122,10 @@ class SignUpFragment: AuthenticateFragment() {
 
     }
 
-    private fun loadPack(isRemote: Boolean): MutableMap<String, Any>{
-        val pack: MutableMap<String, Any> = HashMap()
-        if (isRemote){
-            pack[Constants.USER_ID] = UUID.randomUUID().toString()
-            pack[Constants.USER_PASSWORD] = etPassword?.text!!.trim().toString()
-
-        }else{
-            val password = HashUtils.sha256(etPassword?.text!!.trim().toString())
-            pack[Constants.USER_PASSWORD] = password
-        }
+    private fun loadPack(): MutableMap<String, Any>{
+        pack.clear()
+        pack[Constants.USER_ID] = ""
+        pack[Constants.USER_PASSWORD] = etPassword?.text!!.trim().toString()
         pack[Constants.USER_TOKEN] = ""
         pack[Constants.USER_IMAGE] = imageBase64
         pack[Constants.USER_NAME] = etName?.text!!.trim().toString()

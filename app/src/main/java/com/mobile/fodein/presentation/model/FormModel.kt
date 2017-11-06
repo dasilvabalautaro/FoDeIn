@@ -5,7 +5,7 @@ import com.mobile.fodein.presentation.interfaces.IEntity
 
 
 class FormModel: IEntity {
-    var id: String = ""
+    override var id: String = ""
     var date: String = ""
     var latitude: Double = 0.0
     var longitude: Double = 0.0
@@ -13,6 +13,8 @@ class FormModel: IEntity {
     var annotation: String = ""
     var annotationOne: String = ""
     var annotationTwo: String = ""
+    var userid: String = ""
+    var project_id: String = ""
 
     override var graph: Int = R.drawable.ic_form
     override var title: String = date

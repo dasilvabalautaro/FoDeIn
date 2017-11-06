@@ -16,7 +16,7 @@ class UserModel: IEntity {
     var unit: String = ""
     var token: String = ""
     var image: String = ""
-    var id: String = ""
+    override var id: String = ""
     var list: ArrayList<FormModel> = ArrayList()
     override var graph: Int = R.drawable.ic_person
     override var title: String = name

@@ -5,7 +5,7 @@ import com.mobile.fodein.presentation.interfaces.IEntity
 
 
 class ProjectModel: IEntity {
-    var id: String = ""
+    override var id: String = ""
     var type: Int = 0
     var code: String = ""
     var name: String = ""

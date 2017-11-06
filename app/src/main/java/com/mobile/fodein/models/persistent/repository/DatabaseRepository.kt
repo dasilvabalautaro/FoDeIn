@@ -1,6 +1,8 @@
 package com.mobile.fodein.models.persistent.repository
 
 import android.os.Parcel
+import com.mobile.fodein.models.data.Form
+import com.mobile.fodein.models.data.Project
 import com.mobile.fodein.models.interfaces.IDataParcelable
 import com.mobile.fodein.models.interfaces.IRepository
 import com.mobile.fodein.models.interfaces.OnDatabaseCompleteListener
@@ -99,6 +101,7 @@ abstract class DatabaseRepository : IRepository {
         val realm: Realm = Realm.getDefaultInstance()
         try {
             val e: E? = realm.where(clazz).equalTo(fieldId, value).findFirst()
+
             if (e is IDataParcelable){
                 (e as IDataParcelable).addList(newObject)
             }
@@ -109,6 +112,27 @@ abstract class DatabaseRepository : IRepository {
             realm.close()
         }
 
+    }
+
+    override fun saveFormInList(idProject:String,
+                               idForm: String): Boolean{
+        val realm: Realm = Realm.getDefaultInstance()
+        try {
+                realm.executeTransaction {
+                    val newForm = realm.where(Form::class.java).equalTo(
+                            "id", idForm).findFirst()
+                    val newProject = realm.where(Project::class.java).equalTo(
+                            "id", idProject).findFirst()
+                    newProject!!.forms.add(newForm!!)
+
+                }
+
+        }catch (e: Throwable){
+            println(e.message!!)
+            return false
+        }
+
+        return true
     }
 }
 

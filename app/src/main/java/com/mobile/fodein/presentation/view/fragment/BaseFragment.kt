@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import butterknife.BindView
 import com.mobile.fodein.R
@@ -19,18 +20,39 @@ import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Cancellable
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 
 
 abstract class BaseFragment: Fragment() {
+
+    companion object Factory{
+        var serviceDown = 0
+        var observableDown: Subject<Int> = PublishSubject.create()
+        var idSelect: String = ""
+    }
+
+    interface CallbackSelect{
+        fun select(fragment: BaseFragment)
+    }
+
     protected var disposable: CompositeDisposable = CompositeDisposable()
     var adapter: ItemAdapter? = null
+    var callbackSelect: CallbackSelect? = null
+
     @BindView(R.id.sp_filter)
     @JvmField var spFilter: Spinner? = null
     @BindView(R.id.sr_data)
     @JvmField var srData: SwipeRefreshLayout? = null
     @BindView(R.id.rv_data)
     @JvmField var rvData: RecyclerView? = null
+    @BindView(R.id.tv_search)
+    @JvmField var tvSearch: TextView? = null
 
+    init {
+        observableDown
+                .subscribe { serviceDown }
+    }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     protected fun addDecorationRecycler(){

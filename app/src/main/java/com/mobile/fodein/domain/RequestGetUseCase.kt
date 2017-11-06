@@ -5,11 +5,11 @@ import com.mobile.fodein.models.interfaces.IServiceGet
 import com.mobile.fodein.models.persistent.network.MessageOfService
 import com.mobile.fodein.models.persistent.network.ServiceRemoteGet
 import com.mobile.fodein.tools.Constants
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
+import java.net.ConnectException
 import java.net.SocketTimeoutException
 
 abstract class RequestGetUseCase constructor(private val serviceRemoteGet:
@@ -30,17 +30,19 @@ abstract class RequestGetUseCase constructor(private val serviceRemoteGet:
             return true
         }catch (ie: IllegalArgumentException){
             println(ie.message)
+        }catch (ex: Exception){
+            println(ex.message)
         }
         return false
     }
 
+    //.observeOn(AndroidSchedulers.mainThread())
     fun getDataServer(){
         if (setServiceGet()){
             try {
                 disposable.add(serviceGet!!.sendGet(agentCarrier!!.license,
                         agentCarrier!!.address + agentCarrier!!.service)
                         .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             response -> getJsonArray(response)
                         })
@@ -48,6 +50,8 @@ abstract class RequestGetUseCase constructor(private val serviceRemoteGet:
 
             }catch (se: SocketTimeoutException){
                 println(se.message)
+            }catch (ce: ConnectException){
+                println(ce.message)
             }
 
         }

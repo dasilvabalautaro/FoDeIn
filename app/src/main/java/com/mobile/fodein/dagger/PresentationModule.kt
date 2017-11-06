@@ -148,6 +148,14 @@ class PresentationModule(val context: Context) {
     }
 
     @Provides
+    fun provideAddProjectsUnitsListUseCase(uiThread: UIThread,
+                                           jobExecutor: JobExecutor,
+                                           unityExecutor: UnityExecutor):
+            AddProjectsUnitsListUseCase{
+        return AddProjectsUnitsListUseCase(jobExecutor, uiThread, unityExecutor)
+    }
+
+    @Provides
     fun provideProjectExecutor(): ProjectExecutor {
         return ProjectExecutor()
     }
@@ -164,6 +172,14 @@ class PresentationModule(val context: Context) {
                                      projectExecutor: ProjectExecutor):
             GetProjectListUseCase{
         return GetProjectListUseCase(jobExecutor, uiThread, projectExecutor)
+    }
+
+    @Provides
+    fun provideUpdateProjectListUseCase(uiThread: UIThread,
+                                        jobExecutor: JobExecutor,
+                                        projectExecutor: ProjectExecutor):
+            UpdateProjectListUseCase{
+        return UpdateProjectListUseCase(jobExecutor, uiThread, projectExecutor)
     }
 
     @Provides
@@ -261,6 +277,18 @@ class PresentationModule(val context: Context) {
                                          ServiceRemoteGet):
             RequestProjectsGetUseCase{
         return RequestProjectsGetUseCase(serviceRemoteGet)
+    }
+
+    @Provides
+    fun provideProjectNetworkPresenter(requestProjectsGetUseCase:
+                                       RequestProjectsGetUseCase,
+                                       updateProjectListUseCase:
+                                       UpdateProjectListUseCase,
+                                       addProjectsUnitsListUseCase:
+                                       AddProjectsUnitsListUseCase):
+            ProjectNetworkPresenter{
+        return ProjectNetworkPresenter(requestProjectsGetUseCase,
+                updateProjectListUseCase, addProjectsUnitsListUseCase)
     }
 
     @Provides

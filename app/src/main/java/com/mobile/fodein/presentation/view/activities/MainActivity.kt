@@ -1,58 +1,355 @@
 package com.mobile.fodein.presentation.view.activities
 
-class MainActivity : BaseActivity() {
-    //    @BindView(R.id.iv_place)
-//    @JvmField var ivPlace: ImageView? = null
-//
-//    @OnClick(R.id.bt_camera)
-//    fun camera(){
-//        manageImages.startCamera()
-//    }
-//    @OnClick(R.id.bt_gallery)
-//    fun gallery(){
-//        manageImages.startGalleryChooser()
-//    }
-    override fun onStart() {
-        super.onStart()
-        //manageMaps.getMapAsync()
-//        ButterKnife.bind(this)
+import android.Manifest
+import android.app.Activity
+import android.app.DatePickerDialog
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v4.content.FileProvider
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.text.InputType
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.*
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.OnClick
+import com.mobile.fodein.App
+import com.mobile.fodein.R
+import com.mobile.fodein.dagger.ActivityModule
+import com.mobile.fodein.domain.DeliveryOfResource
+import com.mobile.fodein.models.persistent.repository.CachingLruRepository
+import com.mobile.fodein.presentation.interfaces.ILoadDataView
+import com.mobile.fodein.presentation.model.FormModel
+import com.mobile.fodein.presentation.model.ProjectModel
+import com.mobile.fodein.presentation.presenter.AddFormProjectListPresenter
+import com.mobile.fodein.presentation.presenter.FormNewPresenter
+import com.mobile.fodein.presentation.presenter.FormRegisterNetworkPresenter
+import com.mobile.fodein.presentation.presenter.ProjectPresenter
+import com.mobile.fodein.presentation.view.component.ImageAdapter
+import com.mobile.fodein.presentation.view.component.ManageImages
+import com.mobile.fodein.tools.Constants
+import com.mobile.fodein.tools.LocationUser
+import com.mobile.fodein.tools.PermissionUtils
+import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.Cancellable
+import java.text.SimpleDateFormat
+import java.util.*
+import javax.inject.Inject
+import kotlin.collections.ArrayList
 
-        //navigator.addFragment(R.id.fragmentContainer, UserListFragment())
+class MainActivity : AppCompatActivity(), ILoadDataView {
+
+    private var disposable: CompositeDisposable = CompositeDisposable()
+
+    val Activity.app: App
+        get() = application as App
+
+    private val component by lazy { app.getAppComponent()
+            .plus(ActivityModule(this))}
+
+    @Inject
+    lateinit var manageImages: ManageImages
+    @Inject
+    lateinit var permissionUtils: PermissionUtils
+    @Inject
+    lateinit var projectPresenter: ProjectPresenter
+    @Inject
+    lateinit var locationUser: LocationUser
+    @Inject
+    lateinit var formNewPresenter: FormNewPresenter
+    @Inject
+    lateinit var addFormProjectListPresenter: AddFormProjectListPresenter
+    @Inject
+    lateinit var formRegisterNetworkPresenter: FormRegisterNetworkPresenter
+
+
+    private var idProject: String = ""
+    var idNetProject: String = ""
+    var image: ImageView? = null
+    private var listImages: ArrayList<ImageView> = ArrayList()
+    private var listModel: List<ProjectModel> = ArrayList()
+    private var dateFormatter: SimpleDateFormat =
+            SimpleDateFormat("dd-MM-yyyy", Locale.US)
+    private val pack: MutableMap<String, Any> = HashMap()
+    val LOCATION_PERMISSION_REQUEST_CODE = 1
+    var adapter: ImageAdapter? = null
+    @BindView(R.id.rv_images)
+    @JvmField var rvImages: RecyclerView? = null
+    @BindView(R.id.tv_title)
+    @JvmField var tvTitle: TextView? = null
+    @BindView(R.id.et_day)
+    @JvmField var etDay: EditText? = null
+    @BindView(R.id.et_annotation)
+    @JvmField var etAnnotation: EditText? = null
+    @BindView(R.id.et_annotation_one)
+    @JvmField var etAnnotationOne: EditText? = null
+    @BindView(R.id.et_annotation_two)
+    @JvmField var etAnnotationTwo: EditText? = null
+    @BindView(R.id.sp_filter)
+    @JvmField var spFilter: Spinner? = null
+    @OnClick(R.id.ib_save_form)
+    fun saveForm(){
+        formNewPresenter.setForm(loadPack())
+        formNewPresenter.registerForm()
+    }
+    @OnClick(R.id.ib_save_image)
+    fun shootCamera(){
+        manageImages.startCamera()
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == manageImages.GALLERY_IMAGE_REQUEST &&
-//                resultCode == Activity.RESULT_OK && data != null) {
-//            manageImages.setControlImage(data.data, ivPlace!!)
-//        } else if (requestCode == manageImages.CAMERA_IMAGE_REQUEST &&
-//                resultCode == Activity.RESULT_OK) {
-//            val photoUri = FileProvider.getUriForFile(this,
-//                    applicationContext.packageName +
-//                            ".provider", manageImages.getCameraFile())
-//            manageImages.setControlImage(photoUri, ivPlace!!)
-//        }
-//    }
-//
-//    override fun onRequestPermissionsResult(requestCode: Int,
-//                                            permissions: Array<out String>,
-//                                            grantResults: IntArray) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//
-//        when (requestCode) {
-//            manageImages.CAMERA_PERMISSIONS_REQUEST ->
-//                if (permissionUtils.permissionGranted(requestCode,
-//                        manageImages.CAMERA_PERMISSIONS_REQUEST, grantResults)) {
-//                    manageImages.startCamera()
-//            }
-//            manageImages.GALLERY_PERMISSIONS_REQUEST ->
-//                if (permissionUtils.permissionGranted(requestCode,
-//                        manageImages.GALLERY_PERMISSIONS_REQUEST, grantResults)) {
-//                    manageImages.startGalleryChooser()
-//            }
-//        }
-//
-//    }
+    @OnClick(R.id.et_day)
+    fun defineDate(){
+        val newCalendar: Calendar = Calendar.getInstance()
+        val startTime = DatePickerDialog(this,
+                DatePickerDialog.OnDateSetListener {
+                    _, year, monthOfYear, dayOfMonth ->
+                    val newDate = Calendar.getInstance()
+                    newDate.set(year, monthOfYear, dayOfMonth)
+                    etDay!!.setText(dateFormatter.format(newDate.time))
+                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH))
+        startTime.show()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.view_new_form)
+        component.inject(this)
+        ButterKnife.bind(this)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        setupRecyclerView()
+    }
+
+    private fun setupRecyclerView(){
+        rvImages!!.setHasFixedSize(true)
+        rvImages!!.layoutManager = GridLayoutManager(this, 2)
+        //LinearLayoutManager(this)
+        adapter = ImageAdapter()
+        rvImages!!.adapter = adapter
+    }
+    override fun onStart() {
+        super.onStart()
+        tvTitle!!.text = resources.getString(R.string.lbl_new_form)
+        etDay!!.inputType = InputType.TYPE_NULL
+        etDay!!.setText(dateFormatter.format(Date()))
+        image = ImageView(this)
+        projectPresenter.view = this
+        formNewPresenter.view = this
+        addFormProjectListPresenter.view = this
+        formRegisterNetworkPresenter.view = this
+        projectPresenter.getListProject()
+
+        locationUser.updateLocation()
+        disposable.add( actionOnItemSelectedListenerObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .map { position ->
+                    run{
+                        val project = listModel[position]
+                        idProject = project.id
+                        idNetProject = project.idNet
+
+                        return@map resources.getString(
+                                com.mobile.fodein.R.string.new_filter)
+                    }
+                }
+                .subscribe { result -> toast(result)})
+        enableMyLocation()
+
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        val id = item!!.itemId
+        if (id == R.id.action_item_map){
+            this.navigate<MapActivity>()
+            this.finish()
+        }
+        if (id == R.id.action_item_form){
+
+        }
+        if (id == R.id.action_item_list){
+            this.navigate<MainListActivity>()
+            this.finish()
+        }
+
+        return super.onOptionsItemSelected(item)
+
+    }
+
+    private inline fun <reified T : Activity> Activity.navigate() {
+        val intent = Intent(this, T::class.java)
+        startActivity(intent)
+    }
+    private fun loadPack():MutableMap<String, Any>{
+        pack[Constants.FORM_ID] = ""
+        pack[Constants.FORM_DATE] = etDay!!.text.toString()
+        pack[Constants.FORM_LATITUDE] = locationUser.latitude
+        pack[Constants.FORM_LONGITUDE] = locationUser.longitude
+        pack[Constants.FORM_DATE_UPDATE] = etDay!!.text.toString()
+        pack[Constants.FORM_ANNOTATION] = etAnnotation!!.text.toString()
+        pack[Constants.FORM_ANNOTATION_ONE] = etAnnotationOne!!.text.toString()
+        pack[Constants.FORM_ANNOTATION_TWO] = etAnnotationTwo!!.text.toString()
+        pack[Constants.FORM_USER] = DeliveryOfResource.userId
+        pack[Constants.FORM_PROJECT] = idProject
+        pack[Constants.FORM_PROJECT_NET] = idNetProject
+
+        return pack
+    }
+    private fun enableMyLocation() {
+        when {
+            ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION) !=
+                    PackageManager.PERMISSION_GRANTED ->
+                permissionUtils.requestPermission(this,
+                    LOCATION_PERMISSION_REQUEST_CODE,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+    }
+
+    fun Activity.toast(message: CharSequence) =
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        CachingLruRepository.instance.getLru().evictAll()
+    }
+
+    //navigator.addFragment(R.id.fragmentContainer, UserListFragment())
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == manageImages.GALLERY_IMAGE_REQUEST &&
+                resultCode == Activity.RESULT_OK && data != null) {
+            manageImages.setControlImage(data.data, image!!)
+        } else if (requestCode == manageImages.CAMERA_IMAGE_REQUEST &&
+                resultCode == Activity.RESULT_OK) {
+            val photoUri = FileProvider.getUriForFile(this,
+                    applicationContext.packageName +
+                            ".provider", manageImages.getCameraFile())
+            manageImages.setControlImage(photoUri, image!!)
+            this.listImages.add(image!!)
+            adapter!!.setObjectList(this.listImages)
+            rvImages!!.scrollToPosition(0)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<out String>,
+                                            grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when (requestCode) {
+            manageImages.CAMERA_PERMISSIONS_REQUEST ->
+                if (permissionUtils.permissionGranted(requestCode,
+                        manageImages.CAMERA_PERMISSIONS_REQUEST, grantResults)) {
+                    manageImages.startCamera()
+            }
+            manageImages.GALLERY_PERMISSIONS_REQUEST ->
+                if (permissionUtils.permissionGranted(requestCode,
+                        manageImages.GALLERY_PERMISSIONS_REQUEST, grantResults)) {
+                    manageImages.startGalleryChooser()
+            }
+            LOCATION_PERMISSION_REQUEST_CODE ->
+                if (permissionUtils.isPermissionGranted(permissions, grantResults,
+                    Manifest.permission.ACCESS_FINE_LOCATION)){
+                    enableMyLocation()
+                }else {toast(getString(R.string.access_not_allowed))}
+        }
+
+    }
+
+    private fun actionOnItemSelectedListenerObservable(): Observable<Int> {
+        return Observable.create({
+            e: ObservableEmitter<Int>? ->
+            spFilter!!.onItemSelectedListener = object:
+                    AdapterView.OnItemSelectedListener{
+                override fun onItemSelected(parent:
+                                            AdapterView<*>?,
+                                            view: View?,
+                                            position: Int, id: Long) {
+                    e!!.onNext(position)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    e!!.setCancellable { Cancellable{
+                        spFilter!!.onItemSelectedListener = null
+                    } }
+                }
+            }
+
+        })
+    }
+
+    private fun setDataSpinner(list: List<ProjectModel>){
+        val contentSpinner: MutableList<String> = ArrayList()
+        list.mapTo(contentSpinner) { it.name }
+        val spinnerAdapter: ArrayAdapter<String> = ArrayAdapter(context(),
+                android.R.layout.simple_list_item_1, contentSpinner)
+        spFilter!!.adapter = spinnerAdapter
+        spFilter!!.setSelection(0)
+    }
+
+    override fun showLoading() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showMessage(message: String) {
+        toast(message)
+    }
+
+    override fun hideLoading() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showRetry() {
+        pack[Constants.FORM_PROJECT] = idNetProject
+        pack.remove(Constants.FORM_PROJECT_NET)
+        formRegisterNetworkPresenter.setForm(pack, DeliveryOfResource.token)
+        formRegisterNetworkPresenter.registerForm()
+        projectPresenter.getListProject(true)
+    }
+
+    override fun hideRetry() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showError(message: String) {
+        toast(message)
+    }
+
+    override fun context(): Context {
+        return this.applicationContext
+    }
+
+    override fun <T> renderList(objectList: List<T>) {
+        if (!objectList.isEmpty()){
+            listModel = objectList.filterIsInstance<ProjectModel>()
+            setDataSpinner(listModel)
+        }
+    }
+
+    override fun <T> renderObject(obj: T) {
+        if (obj != null){
+            val idForm = (obj as FormModel).id
+            pack[Constants.FORM_ID] = idForm
+            toast((obj as FormModel).id)
+            addFormProjectListPresenter.setVariables(idForm, idProject)
+            addFormProjectListPresenter.addFormListProject()
+        }
+    }
+
 }
 
 

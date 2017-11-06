@@ -13,7 +13,7 @@
     <string name="update_data">Data was updated correctly</string>
     <string name="value_null">Cannot transform a null value</string>
     <string name="select_photo">Select a photo</string>
-    <string name="google_maps_key">AIzaSyB56hTseqRQzAKKHOzHkrhy74p8oPI3mYM</string>
+    <string name="google_maps_key">AIzaSyDrRAU60StymUhYA0pKAvqP21Ew6FdAUmw</string>
     <string name="hint_text_email">Email</string>
     <string name="my_place">My Place</string>
     <string name="hint_text_name">Name</string>
@@ -30,7 +30,13 @@
     <string name="lbl_send">Send</string>
     <string name="lbl_camera">Camera</string>
     <string name="lbl_gallery">Gallery</string>
+    <string name="lbl_latitude">Latitude</string>
+    <string name="lbl_longitude">Longitude</string>
     <string name="lbl_sign_up">Sign Up</string>
+    <string name="lbl_list_units">List of Units</string>
+    <string name="lbl_new_form">New Form</string>
+    <string name="lbl_list_projects">List of Projects</string>
+    <string name="lbl_list_forms">List of Forms</string>
     <string name="invalid_name">Please enter a valid Name</string>
     <string name="invalid_email">Please enter a valid email</string>
     <string name="invalid_password">Please enter a valid password</string>
@@ -40,6 +46,13 @@
     <string name="data_sent">Data sent</string>
     <string name="register_not_found">The register not found</string>
     <string name="task_complete">Task Complete</string>
+    <string name="add_pattern">Add Pattern</string>
     <string name="new_filter">New Filter</string>
     <string name="error_save_database">Error Save Database</string>
+    <string name="lbl_date">Date</string>
+    <string name="lbl_annotation">Annotation</string>
+    <string name="lbl_annotation_one">Annotation One</string>
+    <string name="lbl_annotation_two">Annotation Two</string>
+    <string name="lbl_map">Map</string>
+    <string name="lbl_list">List</string>
 </resources>

@@ -11,4 +11,5 @@ interface IUnityRepository: IMessagePersistent {
     fun unityGetById(id: String): Observable<UnityModel>
     fun unityGetByField(value: String, nameField: String): Observable<List<UnityModel>>
     fun unityUpdate(): Observable<Boolean>
+    fun addProjects(): Observable<Boolean>
 }

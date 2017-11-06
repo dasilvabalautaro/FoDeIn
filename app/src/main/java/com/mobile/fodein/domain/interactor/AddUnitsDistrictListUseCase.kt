@@ -17,5 +17,4 @@ class AddUnitsDistrictListUseCase @Inject constructor(threadExecutor: IThreadExe
         return districtRepository.addUnities()
     }
 
-
 }

@@ -69,9 +69,11 @@ class UnityFragment : BaseFragment(), ILoadDataView {
         super.onActivityCreated(savedInstanceState)
         setupRecyclerView()
         setupSwipeRefresh()
+        tvSearch!!.text = resources.getString(R.string.lbl_list_units)
         districtPresenter.view = this
         districtNetworkPresenter.view = this
         unityNetworkPresenter.view = this
+
         if (connectionNetwork.isOnline() &&
                 !DeliveryOfResource.updateDistrict){
             districtNetworkPresenter.setVariables(DeliveryOfResource.token)
@@ -88,6 +90,7 @@ class UnityFragment : BaseFragment(), ILoadDataView {
                 .observeOn(AndroidSchedulers.mainThread())
                 .map { position ->
                     run{
+                        idSelect = ""
                         val listUnityDistrict = listModel[position].list
                         showDataList(listUnityDistrict
                                 , position)
@@ -110,7 +113,9 @@ class UnityFragment : BaseFragment(), ILoadDataView {
     }
 
     override fun showRetry() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        serviceDown = 1
+        observableDown.onNext(serviceDown)
+        refreshData()
     }
 
     override fun hideRetry() {
@@ -127,8 +132,12 @@ class UnityFragment : BaseFragment(), ILoadDataView {
 
     override fun <T> renderList(objectList: List<T>) {
         if (!objectList.isEmpty()){
-            unityNetworkPresenter.setVariables(DeliveryOfResource.token)
-            unityNetworkPresenter.getList()
+            if (connectionNetwork.isOnline() &&
+                    !DeliveryOfResource.updateDistrict){
+                unityNetworkPresenter.setVariables(DeliveryOfResource.token)
+                unityNetworkPresenter.getList()
+            }
+
             listModel = objectList.filterIsInstance<DistrictModel>()
             setDataSpinner(listModel)
         }
@@ -146,7 +155,11 @@ class UnityFragment : BaseFragment(), ILoadDataView {
         }
         adapter = ItemAdapter{
             if (!srData!!.isRefreshing) {
-                //presenter.clickWeighing(it)
+                idSelect = it.id
+                if (callbackSelect != null){
+                    callbackSelect!!.select(this)
+                }
+
             }
         }
 
@@ -162,9 +175,11 @@ class UnityFragment : BaseFragment(), ILoadDataView {
                 .instance
                 .getLru()
                 .get(Constants.CACHE_LIST_DISTRICT_MODEL)
-        if (list != null && list is ArrayList<*>){
+        if (list != null && list is ArrayList<*> && list.size != 0){
             listModel = list.filterIsInstance<DistrictModel>()
             setDataSpinner(listModel)
+        }else{
+            districtPresenter.getListDistrict()
         }
         srData!!.isRefreshing = false
     }

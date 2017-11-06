@@ -73,8 +73,6 @@ class FormExecutor @Inject constructor():
             val clazz: Class<Form> = Form::class.java
             val newForm = this.save(clazz, parcel, interactDatabaseListener)
             if (newForm != null){
-//                addListProject(newForm)
-//                addListUser(newForm)
                 val formModel = this.formModelDataMapper
                         .transform(newForm)
                 subscriber.onNext(formModel)

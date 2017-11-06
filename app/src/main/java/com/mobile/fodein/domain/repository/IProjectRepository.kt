@@ -11,5 +11,6 @@ interface IProjectRepository: IMessagePersistent {
     fun projectSave(project: MapperProject): Observable<ProjectModel>
     fun projectGetById(id: String): Observable<ProjectModel>
     fun projectGetByField(value: String, nameField: String): Observable<List<ProjectModel>>
-
+    fun projectUpdate(): Observable<Boolean>
+    fun addForm(idForm:String, idProject:String): Observable<Boolean>
 }

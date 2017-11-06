@@ -19,7 +19,8 @@ open class Form() : RealmObject(), IDataParcelable {
         annotation = parcel.readString()
         annotationOne = parcel.readString()
         annotationTwo = parcel.readString()
-
+        userid = parcel.readString()
+        project_id = parcel.readString()
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
@@ -31,6 +32,8 @@ open class Form() : RealmObject(), IDataParcelable {
         dest.writeString(annotation)
         dest.writeString(annotationOne)
         dest.writeString(annotationTwo)
+        dest.writeString(userid)
+        dest.writeString(project_id)
     }
 
     override fun describeContents(): Int {
@@ -46,6 +49,8 @@ open class Form() : RealmObject(), IDataParcelable {
     var annotation: String = ""
     var annotationOne: String = ""
     var annotationTwo: String = ""
+    var userid: String = ""
+    var project_id: String = ""
 
     constructor(parcel: Parcel) : this() {
         id = parcel.readString()
@@ -56,6 +61,8 @@ open class Form() : RealmObject(), IDataParcelable {
         annotation = parcel.readString()
         annotationOne = parcel.readString()
         annotationTwo = parcel.readString()
+        userid = parcel.readString()
+        project_id = parcel.readString()
     }
 
     companion object CREATOR : Parcelable.Creator<Form> {

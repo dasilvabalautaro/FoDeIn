@@ -13,12 +13,17 @@ import android.widget.ArrayAdapter
 import butterknife.ButterKnife
 import com.mobile.fodein.App
 import com.mobile.fodein.dagger.PresentationModule
+import com.mobile.fodein.domain.DeliveryOfResource
+import com.mobile.fodein.models.persistent.repository.CachingLruRepository
 import com.mobile.fodein.presentation.interfaces.IEntity
 import com.mobile.fodein.presentation.interfaces.ILoadDataView
 import com.mobile.fodein.presentation.model.ProjectModel
 import com.mobile.fodein.presentation.model.UnityModel
+import com.mobile.fodein.presentation.presenter.ProjectNetworkPresenter
 import com.mobile.fodein.presentation.presenter.UnityPresenter
 import com.mobile.fodein.presentation.view.component.ItemAdapter
+import com.mobile.fodein.tools.ConnectionNetwork
+import com.mobile.fodein.tools.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -33,9 +38,28 @@ class ProjectFragment: BaseFragment(), ILoadDataView {
 
     @Inject
     lateinit var unityPresenter: UnityPresenter
+    @Inject
+    lateinit var projectNetworkPresenter: ProjectNetworkPresenter
+    @Inject
+    lateinit var connectionNetwork: ConnectionNetwork
 
     var listModel: List<UnityModel> = ArrayList()
 
+    init {
+        val down = observableDown.map { d -> d }
+        disposable.add(down.observeOn(Schedulers.newThread())
+                .subscribe { d ->
+                    kotlin.run {
+                        if (d == 1){
+                            if (connectionNetwork.isOnline() &&
+                                    !DeliveryOfResource.updateProjects){
+                                projectNetworkPresenter.setVariables(DeliveryOfResource.token)
+                                projectNetworkPresenter.getList()
+                            }
+                        }
+                    }
+                })
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,26 +83,30 @@ class ProjectFragment: BaseFragment(), ILoadDataView {
         super.onActivityCreated(savedInstanceState)
         setupRecyclerView()
         setupSwipeRefresh()
+        tvSearch!!.text = resources.getString(com.mobile.fodein.R.string.lbl_list_projects)
         unityPresenter.view = this
-        unityPresenter.getListUnity()
-
+        projectNetworkPresenter.view = this
+        if (!connectionNetwork.isOnline()){
+            unityPresenter.getListUnity()
+        }
     }
 
     override fun onStart() {
         super.onStart()
         disposable.add( actionOnItemSelectedListenerObservable()
-                .observeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .map { position ->
                     run{
-                        val listUnityDistrict = listModel[position].list
-                        showDataList(listUnityDistrict as ArrayList<ProjectModel>
+                        idSelect = ""
+                        val listProjectsUnity = listModel[position].list
+                        showDataList(listProjectsUnity
                                 , position)
                         return@map resources.getString(com.mobile.fodein.R.string.new_filter)
                     }
                 }
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { result -> context.toast(result)})
     }
+
 
     override fun showLoading() {
         srData!!.isRefreshing = true
@@ -93,11 +121,12 @@ class ProjectFragment: BaseFragment(), ILoadDataView {
     }
 
     override fun showRetry() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        refreshData()
     }
 
     override fun hideRetry() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        serviceDown = 2
+        observableDown.onNext(serviceDown)
     }
 
     override fun showError(message: String) {
@@ -127,7 +156,10 @@ class ProjectFragment: BaseFragment(), ILoadDataView {
         }
         adapter = ItemAdapter{
             if (!srData!!.isRefreshing) {
-                //presenter.clickWeighing(it)
+                idSelect = it.id
+                if (callbackSelect != null){
+                    callbackSelect!!.select(this)
+                }
             }
         }
 
@@ -135,7 +167,33 @@ class ProjectFragment: BaseFragment(), ILoadDataView {
     }
 
     private fun setupSwipeRefresh() = srData!!.setOnRefreshListener(
-            unityPresenter::getListUnity)
+            this::refreshData)
+
+    private fun refreshData(){
+        val list = CachingLruRepository
+                .instance
+                .getLru()
+                .get(Constants.CACHE_LIST_UNITY_MODEL)
+        if (list != null && list is ArrayList<*> && list.size != 0){
+            listModel = list.filterIsInstance<UnityModel>()
+            setDataSpinner(listModel)
+        }else{
+            unityPresenter.getListUnity()
+        }
+        srData!!.isRefreshing = false
+    }
+
+    private fun selectIndexFilter(idSelect: String,
+                                  list: List<UnityModel>){
+        for (i in list.indices){
+            val unity = list[i]
+            if (unity.id == idSelect){
+                spFilter!!.setSelection(i)
+                return
+            }
+        }
+        spFilter!!.setSelection(0)
+    }
 
     private fun setDataSpinner(list: List<UnityModel>){
         val contentSpinner: MutableList<String> = ArrayList()
@@ -143,7 +201,8 @@ class ProjectFragment: BaseFragment(), ILoadDataView {
         val spinnerAdapter: ArrayAdapter<String> = ArrayAdapter(context(),
                 R.layout.simple_list_item_1, contentSpinner)
         spFilter!!.adapter = spinnerAdapter
-        spFilter!!.setSelection(0)
+        selectIndexFilter(idSelect, list)
+
     }
 
     private fun showDataList(unityList: ArrayList<ProjectModel>, position: Int) {

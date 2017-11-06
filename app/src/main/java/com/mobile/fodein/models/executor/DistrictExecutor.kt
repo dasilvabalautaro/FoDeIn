@@ -16,6 +16,7 @@ import com.mobile.fodein.presentation.mapper.DistrictModelDataMapper
 import com.mobile.fodein.presentation.model.DistrictModel
 import com.mobile.fodein.tools.Constants
 import io.reactivex.Observable
+import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmResults
 import javax.inject.Inject
@@ -149,7 +150,7 @@ class DistrictExecutor @Inject constructor():
         val clazz: Class<District> = District::class.java
         val listDistrict: List<District>? = this.getDataByField(clazz,
                 ID_NET, district.idNet)
-        if (listDistrict == null) {
+        if (listDistrict == null || listDistrict.isEmpty()) {
             val mapperDistrict = MapperDistrict()
             mapperDistrict.name = district.name
             mapperDistrict.idNet = district.idNet
@@ -198,23 +199,36 @@ class DistrictExecutor @Inject constructor():
             listUnity.indices.forEach { j ->
                 val unity = listUnity[j]
                 val newUnity = this.getDataById(clazz, unity.id)
-                if (verifyUnityInList(idDistrict, unity.id)){
-                    this.addObjectList(clazz, idDistrict,
-                            newUnity!!, interactDatabaseListener)
+                if (newUnity != null){
+                    saveUnityInList(idDistrict, unity.id, newUnity)
                 }
+
             }
 
         }
     }
 
-    private fun verifyUnityInList(idDistrict:String, idUnity: String): Boolean{
-        val clazz: Class<District> = District::class.java
-        val newDistrict = this.getDataById(clazz, idDistrict)
-        val unities: RealmList<Unity> = newDistrict!!.unities
-        val filterUnities: RealmResults<Unity> = unities
-                .where()
-                .contains("id", idUnity)
-                .findAll()
-        return filterUnities.isEmpty()
+    private fun saveUnityInList(idDistrict:String,
+                                idUnity: String,
+                                unity: Unity){
+        val realm: Realm = Realm.getDefaultInstance()
+        try {
+            realm.executeTransaction {
+                val newDistrict = realm.where(District::class.java).equalTo(
+                        "id", idDistrict).findFirst()
+                val unities: RealmList<Unity> = newDistrict!!.unities
+                val filterUnities: RealmResults<Unity> = unities
+                        .where()
+                        .contains("id", idUnity)
+                        .findAll()
+                if (filterUnities.isEmpty()){
+                    newDistrict.unities.add(unity)
+                }
+            }
+
+        }catch (e: Throwable){
+            println(e.message!!)
+        }
+
     }
 }

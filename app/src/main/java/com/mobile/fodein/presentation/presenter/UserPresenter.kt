@@ -25,6 +25,7 @@ class UserPresenter @Inject constructor(private val getUserNewUseCase:
     }
 
     fun showUserDetailsInView(user: UserModel){
+        this.view!!.showRetry()
         this.view!!.renderObject(user)
     }
 

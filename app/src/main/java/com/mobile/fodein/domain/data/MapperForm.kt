@@ -11,6 +11,8 @@ class MapperForm() : Parcelable {
     var annotation: String = ""
     var annotationOne: String = ""
     var annotationTwo: String = ""
+    var userid: String = ""
+    var project_id: String = ""
 
     constructor(parcel: Parcel) : this() {
         date = parcel.readString()
@@ -20,6 +22,8 @@ class MapperForm() : Parcelable {
         annotation = parcel.readString()
         annotationOne = parcel.readString()
         annotationTwo = parcel.readString()
+        userid = parcel.readString()
+        project_id = parcel.readString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -30,6 +34,8 @@ class MapperForm() : Parcelable {
         parcel.writeString(annotation)
         parcel.writeString(annotationOne)
         parcel.writeString(annotationTwo)
+        parcel.writeString(userid)
+        parcel.writeString(project_id)
     }
 
     override fun describeContents(): Int {

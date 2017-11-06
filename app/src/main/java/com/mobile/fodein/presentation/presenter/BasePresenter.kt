@@ -45,17 +45,44 @@ abstract class BasePresenter: IPresenter {
     }
 
     protected inline fun <reified E> existInCache(keyCache:String, render:Boolean = true): Boolean{
-        val dataCache = CachingLruRepository.instance.getLru()
-                .get(keyCache)
-        if (dataCache != null && dataCache is List<*>){
-            val list: List<E> = dataCache
-                    .filterIsInstance<E>()
-            if (render){
-                this.view!!.renderList(list)
+        try {
+            val dataCache = CachingLruRepository.instance.getLru()
+                    .get(keyCache)
+            if (dataCache != null && dataCache is List<*> && dataCache.size != 0){
+
+                if (render){
+                    val list: List<E> = dataCache
+                            .filterIsInstance<E>()
+                    this.view!!.renderList(list)
+                }
+
+                return true
             }
 
-            return true
+        }catch (ex: Exception){
+            println(ex.message)
         }
         return false
     }
+
+  /*  protected fun existInCache(keyCache:String): Boolean{
+        try {
+            val dataCache = CachingLruRepository.instance.getLru()
+                    .get(keyCache)
+            if (dataCache != null && dataCache is List<*> && dataCache.size != 0){
+//                val list: List<E> = dataCache
+//                        .filterIsInstance<E>()
+//                if (render){
+//                    this.view!!.renderList(list)
+//                }
+
+                return true
+            }
+
+        }catch (ex: Exception){
+            println(ex.message)
+        }
+        return false
+    }*/
+
 }

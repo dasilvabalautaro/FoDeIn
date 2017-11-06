@@ -40,6 +40,9 @@
         <activity android:name=".presentation.view.activities.MainListActivity"
             android:configChanges="mcc|mnc|locale|keyboardHidden|screenLayout|screenSize|orientation">
         </activity>
+        <activity android:name=".presentation.view.activities.MapActivity"
+            android:configChanges="mcc|mnc|locale|keyboardHidden|screenLayout|screenSize|orientation">
+        </activity>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"

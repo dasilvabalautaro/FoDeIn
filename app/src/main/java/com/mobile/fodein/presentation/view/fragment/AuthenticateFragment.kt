@@ -19,7 +19,9 @@ import com.mobile.fodein.presentation.presenter.UserPresenter
 import com.mobile.fodein.presentation.presenter.UserRegisterNetworkPresenter
 import com.mobile.fodein.presentation.view.activities.MainListActivity
 import com.mobile.fodein.tools.ConnectionNetwork
+import com.mobile.fodein.tools.Constants
 import io.reactivex.disposables.CompositeDisposable
+import java.util.*
 import javax.inject.Inject
 
 abstract class AuthenticateFragment: Fragment(),
@@ -27,6 +29,7 @@ abstract class AuthenticateFragment: Fragment(),
     companion object Factory{
         var userImage: Bitmap? = null
         var imageBase64: String = ""
+        val pack: MutableMap<String, Any> = HashMap()
     }
     protected var disposable: CompositeDisposable = CompositeDisposable()
 
@@ -41,6 +44,7 @@ abstract class AuthenticateFragment: Fragment(),
             getAppComponent().plus(PresentationModule(context))}
 
     var callback: Callback? = null
+    var flagRegister = false
 
     @Inject
     lateinit var userPresenter: UserPresenter
@@ -84,8 +88,16 @@ abstract class AuthenticateFragment: Fragment(),
         if (obj != null){
             context.toast((obj as UserModel).name)
             DeliveryOfResource.token = (obj as UserModel).token
-            activity.navigate<MainListActivity>()
-            activity.finish()
+            DeliveryOfResource.userId = (obj as UserModel).id
+            if (flagRegister && connectionNetwork.isOnline()){
+                pack[Constants.USER_ID] = DeliveryOfResource.userId
+                this.userRegisterNetworkPresenter.setUser(pack)
+                this.userRegisterNetworkPresenter.registerUser()
+            }else{
+                activity.navigate<MainListActivity>()
+                activity.finish()
+            }
+
         }
     }
 
@@ -106,7 +118,7 @@ abstract class AuthenticateFragment: Fragment(),
     }
 
     override fun showRetry() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        flagRegister = true
     }
 
     override fun context(): Context {

@@ -6,4 +6,5 @@ interface IEntity {
     var title: String
     var description: String
     var imageLink: Int
+    var id: String
 }

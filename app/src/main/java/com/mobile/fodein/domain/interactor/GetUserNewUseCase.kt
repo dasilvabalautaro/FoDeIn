@@ -9,6 +9,7 @@ import com.mobile.fodein.domain.repository.IUserRepository
 import com.mobile.fodein.models.exception.DatabaseOperationException
 import com.mobile.fodein.presentation.model.UserModel
 import com.mobile.fodein.tools.Constants
+import com.mobile.fodein.tools.HashUtils
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -22,10 +23,11 @@ class GetUserNewUseCase @Inject constructor(threadExecutor: IThreadExecutor,
 
     fun setUser(data: MutableMap<String, Any>){
         user.name = data[Constants.USER_NAME].toString()
+        val password = HashUtils.sha256(data[Constants.USER_PASSWORD].toString())
         user.user = data[Constants.USER_USER].toString()
         user.idCard = data[Constants.USER_IDCARD].toString()
         user.email = data[Constants.USER_EMAIL].toString()
-        user.password = data[Constants.USER_PASSWORD].toString()
+        user.password = password
         user.phone = data[Constants.USER_PHONE].toString()
         user.address = data[Constants.USER_ADDRESS].toString()
         user.description = data[Constants.USER_DESCRIPTION].toString()

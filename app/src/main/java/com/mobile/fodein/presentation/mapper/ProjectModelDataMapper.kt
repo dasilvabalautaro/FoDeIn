@@ -28,6 +28,15 @@ class ProjectModelDataMapper @Inject constructor (val context: Context,
         projectModel.other = project.other
         projectModel.sum = project.sum
         projectModel.type = project.type
+        projectModel.idNet = project.idNet
+        projectModel.title = context.resources
+                .getString(R.string.hint_text_name) + ": " + projectModel.name
+        projectModel.description = context.resources
+                .getString(R.string.lbl_latitude) + ": " +
+                projectModel.latitude.toString() + "\n" + context.resources
+                .getString(R.string.lbl_longitude) + ": " +
+                projectModel.longitude.toString()
+
         val formModelCollection: Collection<FormModel> = this
                 .formModelDataMapper
                 .transform(project.forms)

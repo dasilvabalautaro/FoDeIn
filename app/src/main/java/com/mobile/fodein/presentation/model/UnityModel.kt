@@ -9,7 +9,7 @@ class UnityModel: IEntity {
     var address: String = ""
     var name: String = ""
     var idNet: String = ""
-    var id: String = ""
+    override var id: String = ""
     var list: ArrayList<ProjectModel> = ArrayList()
     override var graph: Int = R.drawable.ic_group_work
     override var title: String = ""
