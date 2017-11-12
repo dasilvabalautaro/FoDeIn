@@ -32,11 +32,12 @@ abstract class RequestGetUseCase constructor(private val serviceRemoteGet:
             println(ie.message)
         }catch (ex: Exception){
             println(ex.message)
+        }catch (se: SocketTimeoutException){
+            println(se.message)
         }
         return false
     }
 
-    //.observeOn(AndroidSchedulers.mainThread())
     fun getDataServer(){
         if (setServiceGet()){
             try {

@@ -1,6 +1,8 @@
 package com.mobile.fodein.presentation.view.fragment
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.support.annotation.RequiresApi
@@ -9,12 +11,11 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.AdapterView
-import android.widget.Spinner
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import butterknife.BindView
+import butterknife.OnClick
 import com.mobile.fodein.R
+import com.mobile.fodein.presentation.view.activities.MainActivity
 import com.mobile.fodein.presentation.view.component.ItemAdapter
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
@@ -48,7 +49,13 @@ abstract class BaseFragment: Fragment() {
     @JvmField var rvData: RecyclerView? = null
     @BindView(R.id.tv_search)
     @JvmField var tvSearch: TextView? = null
-
+    @BindView(R.id.ib_new_form)
+    @JvmField var ibNewForm: ImageButton? = null
+    @OnClick(R.id.ib_new_form)
+    fun executeNewForm(){
+        activity.navigate<MainActivity>()
+        activity.finish()
+    }
     init {
         observableDown
                 .subscribe { serviceDown }
@@ -90,4 +97,8 @@ abstract class BaseFragment: Fragment() {
     fun Context.toast(message: CharSequence) =
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
+    private inline fun <reified T : Activity> Activity.navigate() {
+        val intent = Intent(activity, T::class.java)
+        startActivity(intent)
+    }
 }

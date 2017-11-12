@@ -85,6 +85,7 @@ class ProjectFragment: BaseFragment(), ILoadDataView {
         setupSwipeRefresh()
         tvSearch!!.text = resources.getString(com.mobile.fodein.R.string.lbl_list_projects)
         unityPresenter.view = this
+        ibNewForm!!.visibility = View.INVISIBLE
         projectNetworkPresenter.view = this
         if (!connectionNetwork.isOnline()){
             unityPresenter.getListUnity()

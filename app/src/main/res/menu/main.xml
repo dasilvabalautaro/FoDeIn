@@ -14,8 +14,8 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/action_item_form"
-        android:title="@string/lbl_new_form"
-        android:icon="@drawable/ic_note_add"
+        android:id="@+id/action_item_help"
+        android:title="@string/lbl_help"
+        android:icon="@drawable/ic_help"
         app:showAsAction="ifRoom" />
 </menu>

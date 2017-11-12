@@ -54,18 +54,15 @@ class MainListActivity: AppCompatActivity() {
             this.finish()
 
         }
-        if (id == R.id.action_item_form){
-            this.navigate<MainActivity>()
-            this.finish()
+        if (id == R.id.action_item_help){
+
         }
         if (id == R.id.action_item_list){
 
         }
 
         return super.onOptionsItemSelected(item)
-
     }
-
 
     override fun onBackPressed() {
         super.onBackPressed()

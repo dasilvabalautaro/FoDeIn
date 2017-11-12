@@ -79,6 +79,7 @@ class FormFragment: BaseFragment(), ILoadDataView {
         setupRecyclerView()
         setupSwipeRefresh()
         tvSearch!!.text = resources.getString(com.mobile.fodein.R.string.lbl_list_forms)
+        ibNewForm!!.visibility = View.VISIBLE
         projectPresenter.view = this
         if (!connectionNetwork.isOnline()){
             projectPresenter.getListProject()

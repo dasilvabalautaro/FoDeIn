@@ -38,6 +38,8 @@ abstract class RequestPostUseCase constructor(private val serviceRemotePost:
             return true
         }catch (ie: IllegalArgumentException){
             println(ie.message)
+        }catch (se: SocketTimeoutException){
+            println(se.message)
         }
         return false
     }

@@ -70,6 +70,7 @@ class UnityFragment : BaseFragment(), ILoadDataView {
         setupRecyclerView()
         setupSwipeRefresh()
         tvSearch!!.text = resources.getString(R.string.lbl_list_units)
+        ibNewForm!!.visibility = View.INVISIBLE
         districtPresenter.view = this
         districtNetworkPresenter.view = this
         unityNetworkPresenter.view = this

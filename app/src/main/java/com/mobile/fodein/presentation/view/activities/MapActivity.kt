@@ -48,9 +48,8 @@ class MapActivity: AppCompatActivity() {
         if (id == R.id.action_item_map){
             setCoordinates()
         }
-        if (id == R.id.action_item_form){
-            this.navigate<MainActivity>()
-            this.finish()
+        if (id == R.id.action_item_help){
+
         }
         if (id == R.id.action_item_list){
             this.navigate<MainListActivity>()

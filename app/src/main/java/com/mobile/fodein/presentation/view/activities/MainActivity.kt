@@ -176,7 +176,7 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
             this.navigate<MapActivity>()
             this.finish()
         }
-        if (id == R.id.action_item_form){
+        if (id == R.id.action_item_help){
 
         }
         if (id == R.id.action_item_list){

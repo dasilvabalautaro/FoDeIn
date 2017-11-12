@@ -35,6 +35,7 @@
     <string name="lbl_sign_up">Sign Up</string>
     <string name="lbl_list_units">List of Units</string>
     <string name="lbl_new_form">New Form</string>
+    <string name="lbl_help">Help</string>
     <string name="lbl_list_projects">List of Projects</string>
     <string name="lbl_list_forms">List of Forms</string>
     <string name="invalid_name">Please enter a valid Name</string>
