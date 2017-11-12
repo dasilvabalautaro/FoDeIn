@@ -79,6 +79,7 @@ class ManageMaps @Inject constructor(
                     LOCATION_PERMISSION_REQUEST_CODE,
                     Manifest.permission.ACCESS_FINE_LOCATION)
             googleMap != null -> googleMap!!.isMyLocationEnabled = true
+
         }
     }
 

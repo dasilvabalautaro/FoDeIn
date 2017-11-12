@@ -10,5 +10,6 @@ interface ModelsComponent {
     fun inject(formExecutor: FormExecutor)
     fun inject(projectExecutor: ProjectExecutor)
     fun inject(unityExecutor: UnityExecutor)
+    fun inject(imageExecutor: ImageExecutor)
 }
 

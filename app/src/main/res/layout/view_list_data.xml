@@ -59,7 +59,15 @@
         android:id="@+id/tv_search"
         android:paddingStart="20dp"
         android:paddingEnd="10dp"/>
-
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/lbl_logo_description"
+        android:background="@null"
+        android:id="@+id/ib_map"
+        android:src="@drawable/ic_map"
+        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/tv_search"/>
     <Spinner
         android:layout_height="30dp"
         android:layout_width="0dp"

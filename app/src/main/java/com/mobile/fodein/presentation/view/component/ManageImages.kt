@@ -109,8 +109,10 @@ class ManageImages @Inject constructor(private val activity: AppCompatActivity) 
     }
 
     fun base641EncodedImage(bitmap: Bitmap): String{
+        val imgResize = Bitmap.createScaledBitmap(bitmap, (bitmap.width*0.2).toInt(),
+                (bitmap.height*0.2).toInt(), true)
         val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, QUALITY, byteArrayOutputStream)
+        imgResize.compress(Bitmap.CompressFormat.JPEG, QUALITY, byteArrayOutputStream)
         val imageBytes = byteArrayOutputStream.toByteArray()
         return Base64.encodeToString(imageBytes, Base64.DEFAULT)
     }

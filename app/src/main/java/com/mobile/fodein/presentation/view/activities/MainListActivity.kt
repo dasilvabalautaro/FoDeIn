@@ -49,9 +49,9 @@ class MainListActivity: AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val id = item!!.itemId
 
-        if (id == R.id.action_item_map){
-            this.navigate<MapActivity>()
-            this.finish()
+        if (id == R.id.action_item_info){
+//            this.navigate<MapActivity>()
+//            this.finish()
 
         }
         if (id == R.id.action_item_help){

@@ -8,9 +8,9 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/action_item_map"
+        android:id="@+id/action_item_info"
         android:title="@string/lbl_map"
-        android:icon="@drawable/ic_map"
+        android:icon="@drawable/ic_info"
         app:showAsAction="always" />
 
     <item

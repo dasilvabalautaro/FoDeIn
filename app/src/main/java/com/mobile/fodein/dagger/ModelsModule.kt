@@ -15,6 +15,11 @@ class ModelsModule(val context: Context) {
     }
 
     @Provides
+    fun provideImageModelDataMapper(): ImageModelDataMapper{
+        return ImageModelDataMapper(context)
+    }
+
+    @Provides
     fun provideFormModelDataMapper(): FormModelDataMapper {
         return FormModelDataMapper(context)
     }

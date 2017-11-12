@@ -1,24 +1,19 @@
 package com.mobile.fodein.dagger
 
 import android.support.v7.app.AppCompatActivity
-import com.mobile.fodein.domain.interactor.AddFormProjectListUseCase
-import com.mobile.fodein.domain.interactor.GetFormNewUseCase
-import com.mobile.fodein.domain.interactor.GetProjectListUseCase
-import com.mobile.fodein.domain.interactor.RequestRegisterFormPostUseCase
+import com.mobile.fodein.domain.interactor.*
 import com.mobile.fodein.domain.interfaces.IPostExecutionThread
 import com.mobile.fodein.domain.interfaces.IThreadExecutor
 import com.mobile.fodein.domain.repository.IFormRepository
 import com.mobile.fodein.domain.repository.IProjectRepository
 import com.mobile.fodein.models.executor.FormExecutor
+import com.mobile.fodein.models.executor.ImageExecutor
 import com.mobile.fodein.models.executor.JobExecutor
 import com.mobile.fodein.models.executor.ProjectExecutor
 import com.mobile.fodein.models.persistent.network.ServiceRemotePost
 import com.mobile.fodein.presentation.UIThread
 import com.mobile.fodein.presentation.navigation.Navigator
-import com.mobile.fodein.presentation.presenter.AddFormProjectListPresenter
-import com.mobile.fodein.presentation.presenter.FormNewPresenter
-import com.mobile.fodein.presentation.presenter.FormRegisterNetworkPresenter
-import com.mobile.fodein.presentation.presenter.ProjectPresenter
+import com.mobile.fodein.presentation.presenter.*
 import com.mobile.fodein.presentation.view.component.ManageImages
 import com.mobile.fodein.presentation.view.component.ManageMaps
 import com.mobile.fodein.tools.LocationUser
@@ -150,6 +145,24 @@ class ActivityModule(private val activity: AppCompatActivity) {
                                             RequestRegisterFormPostUseCase):
             FormRegisterNetworkPresenter{
         return FormRegisterNetworkPresenter(requestRegisterFormPostUseCase)
+    }
+
+    @Provides
+    fun provideImageExecutor(): ImageExecutor{
+        return ImageExecutor()
+    }
+
+    @Provides
+    fun provideAddImageListUseCase(uiThread: UIThread,
+                                   jobExecutor: JobExecutor,
+                                   imageExecutor: ImageExecutor): AddImageListUseCase{
+        return AddImageListUseCase(jobExecutor, uiThread, imageExecutor)
+    }
+
+    @Provides
+    fun provideAddImageListPresenter(addImageListUseCase:
+                                     AddImageListUseCase): AddImageListPresenter{
+        return AddImageListPresenter(addImageListUseCase)
     }
 
     @Provides

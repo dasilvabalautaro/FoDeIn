@@ -6,6 +6,8 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
@@ -24,14 +26,12 @@ import com.mobile.fodein.App
 import com.mobile.fodein.R
 import com.mobile.fodein.dagger.ActivityModule
 import com.mobile.fodein.domain.DeliveryOfResource
+import com.mobile.fodein.domain.data.MapperImage
 import com.mobile.fodein.models.persistent.repository.CachingLruRepository
 import com.mobile.fodein.presentation.interfaces.ILoadDataView
 import com.mobile.fodein.presentation.model.FormModel
 import com.mobile.fodein.presentation.model.ProjectModel
-import com.mobile.fodein.presentation.presenter.AddFormProjectListPresenter
-import com.mobile.fodein.presentation.presenter.FormNewPresenter
-import com.mobile.fodein.presentation.presenter.FormRegisterNetworkPresenter
-import com.mobile.fodein.presentation.presenter.ProjectPresenter
+import com.mobile.fodein.presentation.presenter.*
 import com.mobile.fodein.presentation.view.component.ImageAdapter
 import com.mobile.fodein.presentation.view.component.ManageImages
 import com.mobile.fodein.tools.Constants
@@ -42,6 +42,8 @@ import io.reactivex.ObservableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Cancellable
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -71,12 +73,14 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
     lateinit var addFormProjectListPresenter: AddFormProjectListPresenter
     @Inject
     lateinit var formRegisterNetworkPresenter: FormRegisterNetworkPresenter
-
+    @Inject
+    lateinit var addImageListPresenter: AddImageListPresenter
 
     private var idProject: String = ""
-    var idNetProject: String = ""
+    private var idNetProject: String = ""
     var image: ImageView? = null
     private var listImages: ArrayList<ImageView> = ArrayList()
+    private var listMapperImage: ArrayList<MapperImage> = ArrayList()
     private var listModel: List<ProjectModel> = ArrayList()
     private var dateFormatter: SimpleDateFormat =
             SimpleDateFormat("dd-MM-yyyy", Locale.US)
@@ -146,8 +150,9 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
         formNewPresenter.view = this
         addFormProjectListPresenter.view = this
         formRegisterNetworkPresenter.view = this
+        addImageListPresenter.view = this
         projectPresenter.getListProject()
-
+        enableMyLocation()
         locationUser.updateLocation()
         disposable.add( actionOnItemSelectedListenerObservable()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -162,7 +167,7 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
                     }
                 }
                 .subscribe { result -> toast(result)})
-        enableMyLocation()
+
 
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -172,9 +177,8 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val id = item!!.itemId
-        if (id == R.id.action_item_map){
-            this.navigate<MapActivity>()
-            this.finish()
+        if (id == R.id.action_item_info){
+
         }
         if (id == R.id.action_item_help){
 
@@ -192,6 +196,7 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
         val intent = Intent(this, T::class.java)
         startActivity(intent)
     }
+
     private fun loadPack():MutableMap<String, Any>{
         pack[Constants.FORM_ID] = ""
         pack[Constants.FORM_DATE] = etDay!!.text.toString()
@@ -242,6 +247,21 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
             this.listImages.add(image!!)
             adapter!!.setObjectList(this.listImages)
             rvImages!!.scrollToPosition(0)
+            launchBuildMapperImage(image!!)
+
+        }
+    }
+
+    private fun launchBuildMapperImage(capture: ImageView){
+        launch(CommonPool){
+
+            val mapperImage = MapperImage()
+            val img: Bitmap = (capture.drawable as BitmapDrawable).bitmap
+            mapperImage.date = DeliveryOfResource.getDateTime()
+            mapperImage.image = manageImages.base641EncodedImage(img)
+            mapperImage.latitude = locationUser.latitude
+            mapperImage.longitude = locationUser.longitude
+            listMapperImage.add(mapperImage)
         }
     }
 
@@ -345,8 +365,24 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
             val idForm = (obj as FormModel).id
             pack[Constants.FORM_ID] = idForm
             toast((obj as FormModel).id)
+            completeSaveDataForm(idForm)
+        }
+    }
+
+    private fun addImagesOfForm(idForm: String){
+        if (listMapperImage.isNotEmpty()){
+            listMapperImage.indices.forEach { i ->
+                listMapperImage[i].idForm = idForm }
+            addImageListPresenter.setVariables(listMapperImage)
+            addImageListPresenter.addImages()
+        }
+
+    }
+    private fun completeSaveDataForm(idForm: String){
+        launch(CommonPool){
             addFormProjectListPresenter.setVariables(idForm, idProject)
             addFormProjectListPresenter.addFormListProject()
+            addImagesOfForm(idForm)
         }
     }
 

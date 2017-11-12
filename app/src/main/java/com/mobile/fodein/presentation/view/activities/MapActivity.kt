@@ -45,8 +45,8 @@ class MapActivity: AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val id = item!!.itemId
-        if (id == R.id.action_item_map){
-            setCoordinates()
+        if (id == R.id.action_item_info){
+            //setCoordinates()
         }
         if (id == R.id.action_item_help){
 

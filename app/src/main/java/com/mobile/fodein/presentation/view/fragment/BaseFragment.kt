@@ -16,6 +16,7 @@ import butterknife.BindView
 import butterknife.OnClick
 import com.mobile.fodein.R
 import com.mobile.fodein.presentation.view.activities.MainActivity
+import com.mobile.fodein.presentation.view.activities.MapActivity
 import com.mobile.fodein.presentation.view.component.ItemAdapter
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
@@ -54,6 +55,13 @@ abstract class BaseFragment: Fragment() {
     @OnClick(R.id.ib_new_form)
     fun executeNewForm(){
         activity.navigate<MainActivity>()
+        activity.finish()
+    }
+    @BindView(R.id.ib_map   )
+    @JvmField var ibMap: ImageButton? = null
+    @OnClick(R.id.ib_map)
+    fun executeMap(){
+        activity.navigate<MapActivity>()
         activity.finish()
     }
     init {
