@@ -71,6 +71,7 @@ abstract class BaseFragment: Fragment() {
     init {
         observableDown
                 .subscribe { serviceDown }
+        idFormSelect = ""
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)

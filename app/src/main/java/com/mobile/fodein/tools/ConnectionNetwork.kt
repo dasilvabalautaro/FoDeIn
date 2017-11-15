@@ -2,7 +2,7 @@ package com.mobile.fodein.tools
 
 import android.content.Context
 import android.net.ConnectivityManager
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.experimental.launch
 import java.net.ConnectException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -32,7 +32,7 @@ class ConnectionNetwork(val context: Context) {
     fun checkConnect(): Boolean{
         var result = true
 
-        runBlocking{
+        launch{
             result = if (isOnline()){
                 checkUrl()
             }else{
