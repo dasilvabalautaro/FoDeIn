@@ -32,6 +32,7 @@ abstract class BaseFragment: Fragment() {
         var serviceDown = 0
         var observableDown: Subject<Int> = PublishSubject.create()
         var idSelect: String = ""
+        var idFormSelect: String = ""
     }
 
     interface CallbackSelect{
@@ -41,6 +42,7 @@ abstract class BaseFragment: Fragment() {
     protected var disposable: CompositeDisposable = CompositeDisposable()
     var adapter: ItemAdapter? = null
     var callbackSelect: CallbackSelect? = null
+    val ID_FORM = "idForm"
 
     @BindView(R.id.sp_filter)
     @JvmField var spFilter: Spinner? = null
@@ -54,7 +56,9 @@ abstract class BaseFragment: Fragment() {
     @JvmField var ibNewForm: ImageButton? = null
     @OnClick(R.id.ib_new_form)
     fun executeNewForm(){
-        activity.navigate<MainActivity>()
+        val intent = Intent(activity, MainActivity::class.java)
+        intent.putExtra(ID_FORM, idFormSelect)
+        startActivity(intent)
         activity.finish()
     }
     @BindView(R.id.ib_map   )

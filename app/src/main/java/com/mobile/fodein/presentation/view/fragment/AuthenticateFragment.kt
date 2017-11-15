@@ -89,7 +89,7 @@ abstract class AuthenticateFragment: Fragment(),
             context.toast((obj as UserModel).name)
             DeliveryOfResource.token = (obj as UserModel).token
             DeliveryOfResource.userId = (obj as UserModel).id
-            if (flagRegister && connectionNetwork.isOnline()){
+            if (flagRegister && connectionNetwork.checkConnect()){
                 pack[Constants.USER_ID] = DeliveryOfResource.userId
                 this.userRegisterNetworkPresenter.setUser(pack)
                 this.userRegisterNetworkPresenter.registerUser()
@@ -121,9 +121,7 @@ abstract class AuthenticateFragment: Fragment(),
         flagRegister = true
     }
 
-    override fun context(): Context {
-        return activity.applicationContext
-    }
+    override fun context(): Context = activity.applicationContext
 
     private inline fun <reified T : Activity> Activity.navigate() {
         val intent = Intent(activity, T::class.java)

@@ -92,11 +92,7 @@ class AccessActivity: AppCompatActivity() {
         manageImages.startGalleryChooser()
     }
 
-    fun convertBase64(bitmap: Bitmap): String{
-        return manageImages.base641EncodedImage(bitmap)
-    }
+    fun convertBase64(bitmap: Bitmap): String = manageImages.base641EncodedImage(bitmap)
 
-    fun convertBitmap(baseString: String): Bitmap{
-        return manageImages.base64DecodeImage(baseString)
-    }
+    fun convertBitmap(baseString: String): Bitmap = manageImages.base64DecodeImage(baseString)
 }

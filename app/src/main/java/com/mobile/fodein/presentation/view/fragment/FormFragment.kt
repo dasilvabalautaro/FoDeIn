@@ -129,9 +129,7 @@ class FormFragment: BaseFragment(), ILoadDataView {
         context.toast(message)
     }
 
-    override fun context(): Context {
-        return activity.applicationContext
-    }
+    override fun context(): Context = activity.applicationContext
 
     override fun <T> renderList(objectList: List<T>) {
         if (!objectList.isEmpty()){
@@ -153,6 +151,8 @@ class FormFragment: BaseFragment(), ILoadDataView {
         }
         adapter = ItemAdapter{
             if (!srData!!.isRefreshing) {
+                idFormSelect = it.id
+                executeNewForm()
                 //presenter.clickWeighing(it)
             }
         }

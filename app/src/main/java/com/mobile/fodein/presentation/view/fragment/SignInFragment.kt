@@ -56,7 +56,7 @@ class SignInFragment: AuthenticateFragment() {
                 .map { validate ->
                     run{
                         if (validate){
-                            if (connectionNetwork.isOnline()){
+                            if (connectionNetwork.checkConnect()){
                                 this.userLoginNetworkPresenter.setUser(loadPack())
                                 this.userLoginNetworkPresenter.verifyLogin()
                             }else{

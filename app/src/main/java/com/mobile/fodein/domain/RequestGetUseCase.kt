@@ -30,10 +30,12 @@ abstract class RequestGetUseCase constructor(private val serviceRemoteGet:
             return true
         }catch (ie: IllegalArgumentException){
             println(ie.message)
-        }catch (ex: Exception){
+        }catch (ex: NullPointerException){
             println(ex.message)
         }catch (se: SocketTimeoutException){
             println(se.message)
+        }catch (ce: ConnectException){
+            println(ce.message)
         }
         return false
     }
@@ -53,6 +55,8 @@ abstract class RequestGetUseCase constructor(private val serviceRemoteGet:
                 println(se.message)
             }catch (ce: ConnectException){
                 println(ce.message)
+            }catch (ex: NullPointerException){
+                println(ex.message)
             }
 
         }

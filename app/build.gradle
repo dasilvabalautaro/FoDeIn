@@ -54,7 +54,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:11.4.0'
     compile 'com.android.support:percent:26.1.0'
     compile 'com.basgeekball:awesome-validation:2.0'
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.16'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.3'
 }
 
 repositories {

@@ -13,3 +13,5 @@ class ServiceRemoteGet: BaseServiceRemote(){
                 throw IllegalArgumentException(ERROR)
     }
 }
+
+    

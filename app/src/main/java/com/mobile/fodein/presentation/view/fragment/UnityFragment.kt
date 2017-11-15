@@ -76,7 +76,7 @@ class UnityFragment : BaseFragment(), ILoadDataView {
         districtNetworkPresenter.view = this
         unityNetworkPresenter.view = this
 
-        if (connectionNetwork.isOnline() &&
+        if (connectionNetwork.checkConnect() &&
                 !DeliveryOfResource.updateDistrict){
             districtNetworkPresenter.setVariables(DeliveryOfResource.token)
             districtNetworkPresenter.getList()
@@ -128,13 +128,11 @@ class UnityFragment : BaseFragment(), ILoadDataView {
         context.toast(message)
     }
 
-    override fun context(): Context {
-        return activity.applicationContext
-    }
+    override fun context(): Context = activity.applicationContext
 
     override fun <T> renderList(objectList: List<T>) {
         if (!objectList.isEmpty()){
-            if (connectionNetwork.isOnline() &&
+            if (connectionNetwork.checkConnect() &&
                     !DeliveryOfResource.updateDistrict){
                 unityNetworkPresenter.setVariables(DeliveryOfResource.token)
                 unityNetworkPresenter.getList()

@@ -51,7 +51,7 @@ class ProjectFragment: BaseFragment(), ILoadDataView {
                 .subscribe { d ->
                     kotlin.run {
                         if (d == 1){
-                            if (connectionNetwork.isOnline() &&
+                            if (connectionNetwork.checkConnect() &&
                                     !DeliveryOfResource.updateProjects){
                                 projectNetworkPresenter.setVariables(DeliveryOfResource.token)
                                 projectNetworkPresenter.getList()
@@ -88,7 +88,7 @@ class ProjectFragment: BaseFragment(), ILoadDataView {
         ibNewForm!!.visibility = View.INVISIBLE
         ibMap!!.visibility = View.INVISIBLE
         projectNetworkPresenter.view = this
-        if (!connectionNetwork.isOnline()){
+        if (!connectionNetwork.checkConnect()){
             unityPresenter.getListUnity()
         }
     }
@@ -135,9 +135,7 @@ class ProjectFragment: BaseFragment(), ILoadDataView {
         context.toast(message)
     }
 
-    override fun context(): Context {
-        return activity.applicationContext
-    }
+    override fun context(): Context = activity.applicationContext
 
     override fun <T> renderList(objectList: List<T>) {
         if (!objectList.isEmpty()){

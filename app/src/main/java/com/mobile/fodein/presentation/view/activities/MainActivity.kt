@@ -34,6 +34,7 @@ import com.mobile.fodein.presentation.model.ProjectModel
 import com.mobile.fodein.presentation.presenter.*
 import com.mobile.fodein.presentation.view.component.ImageAdapter
 import com.mobile.fodein.presentation.view.component.ManageImages
+import com.mobile.fodein.tools.ConnectionNetwork
 import com.mobile.fodein.tools.Constants
 import com.mobile.fodein.tools.LocationUser
 import com.mobile.fodein.tools.PermissionUtils
@@ -75,6 +76,10 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
     lateinit var formRegisterNetworkPresenter: FormRegisterNetworkPresenter
     @Inject
     lateinit var addImageListPresenter: AddImageListPresenter
+    @Inject
+    lateinit var formSelectPresenter: FormSelectPresenter
+    @Inject
+    lateinit var connectionNetwork: ConnectionNetwork
 
     private var idProject: String = ""
     private var idNetProject: String = ""
@@ -85,7 +90,9 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
     private var dateFormatter: SimpleDateFormat =
             SimpleDateFormat("dd-MM-yyyy", Locale.US)
     private val pack: MutableMap<String, Any> = HashMap()
-    val LOCATION_PERMISSION_REQUEST_CODE = 1
+    private val LOCATION_PERMISSION_REQUEST_CODE = 1
+    val ID_FORM = "idForm"
+    var idFormSelect = ""
     var adapter: ImageAdapter? = null
     @BindView(R.id.rv_images)
     @JvmField var rvImages: RecyclerView? = null
@@ -101,6 +108,10 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
     @JvmField var etAnnotationTwo: EditText? = null
     @BindView(R.id.sp_filter)
     @JvmField var spFilter: Spinner? = null
+    @BindView(R.id.ib_save_form)
+    @JvmField var ibSaveForm: ImageButton? = null
+    @BindView(R.id.ib_save_image)
+    @JvmField var ibSaveImage: ImageButton? = null
     @OnClick(R.id.ib_save_form)
     fun saveForm(){
         formNewPresenter.setForm(loadPack())
@@ -131,6 +142,8 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
         ButterKnife.bind(this)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         setupRecyclerView()
+        idFormSelect = intent.getStringExtra(ID_FORM)
+
     }
 
     private fun setupRecyclerView(){
@@ -151,9 +164,11 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
         addFormProjectListPresenter.view = this
         formRegisterNetworkPresenter.view = this
         addImageListPresenter.view = this
+        formSelectPresenter.view = this
         projectPresenter.getListProject()
         enableMyLocation()
         locationUser.updateLocation()
+        fillForm()
         disposable.add( actionOnItemSelectedListenerObservable()
                 .observeOn(AndroidSchedulers.mainThread())
                 .map { position ->
@@ -168,8 +183,17 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
                 }
                 .subscribe { result -> toast(result)})
 
-
     }
+
+    private fun fillForm(){
+        if (idFormSelect.isNotEmpty()){
+            ibSaveForm!!.isEnabled = false
+            ibSaveImage!!.isEnabled = false
+            formSelectPresenter.setForm(idFormSelect)
+            formSelectPresenter.getSelectForm()
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main, menu)
         return true
@@ -334,10 +358,13 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
     }
 
     override fun showRetry() {
-        pack[Constants.FORM_PROJECT] = idNetProject
-        pack.remove(Constants.FORM_PROJECT_NET)
-        formRegisterNetworkPresenter.setForm(pack, DeliveryOfResource.token)
-        formRegisterNetworkPresenter.registerForm()
+        if (connectionNetwork.checkConnect()){
+            pack[Constants.FORM_PROJECT] = idNetProject
+            pack.remove(Constants.FORM_PROJECT_NET)
+            formRegisterNetworkPresenter.setForm(pack, DeliveryOfResource.token)
+            formRegisterNetworkPresenter.registerForm()
+        }
+
         projectPresenter.getListProject(true)
     }
 
@@ -349,9 +376,7 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
         toast(message)
     }
 
-    override fun context(): Context {
-        return this.applicationContext
-    }
+    override fun context(): Context = this.applicationContext
 
     override fun <T> renderList(objectList: List<T>) {
         if (!objectList.isEmpty()){
@@ -362,11 +387,30 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
 
     override fun <T> renderObject(obj: T) {
         if (obj != null){
-            val idForm = (obj as FormModel).id
-            pack[Constants.FORM_ID] = idForm
-            toast((obj as FormModel).id)
-            completeSaveDataForm(idForm)
+            if (idFormSelect.isEmpty()){
+                val idForm = (obj as FormModel).id
+                pack[Constants.FORM_ID] = idForm
+                toast((obj as FormModel).id)
+                completeSaveDataForm(idForm)
+            }else{
+                setDataFormSelect((obj as FormModel))
+            }
         }
+    }
+
+    private fun setDataFormSelect(formModel: FormModel){
+        etDay!!.setText(formModel.date)
+        etAnnotation!!.setText(formModel.annotation)
+        etAnnotationOne!!.setText(formModel.annotationOne)
+        etAnnotationTwo!!.setText(formModel.annotationTwo)
+        searchProjectList(formModel.project_id)
+
+    }
+
+    private fun searchProjectList(id: String){
+        listModel.indices
+                .filter { listModel[it].idNet == id }
+                .forEach { spFilter!!.setSelection(it) }
     }
 
     private fun addImagesOfForm(idForm: String){

@@ -1,5 +1,6 @@
 package com.mobile.fodein.dagger
 
+import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import com.mobile.fodein.domain.interactor.*
 import com.mobile.fodein.domain.interfaces.IPostExecutionThread
@@ -16,6 +17,7 @@ import com.mobile.fodein.presentation.navigation.Navigator
 import com.mobile.fodein.presentation.presenter.*
 import com.mobile.fodein.presentation.view.component.ManageImages
 import com.mobile.fodein.presentation.view.component.ManageMaps
+import com.mobile.fodein.tools.ConnectionNetwork
 import com.mobile.fodein.tools.LocationUser
 import com.mobile.fodein.tools.PermissionUtils
 import dagger.Module
@@ -86,6 +88,19 @@ class ActivityModule(private val activity: AppCompatActivity) {
     fun provideFormNewPresenter(getFormNewUseCase:
                                 GetFormNewUseCase): FormNewPresenter{
         return FormNewPresenter(getFormNewUseCase)
+    }
+
+    @Provides
+    fun provideGetFormSelectUseCase(uiThread: UIThread,
+                                    jobExecutor: JobExecutor,
+                                    formExecutor: FormExecutor):GetFormSelectUseCase{
+        return GetFormSelectUseCase(jobExecutor, uiThread, formExecutor)
+    }
+
+    @Provides
+    fun provideFormSelectPresenter(getFormSelectUseCase:
+                                   GetFormSelectUseCase): FormSelectPresenter{
+        return FormSelectPresenter(getFormSelectUseCase)
     }
 
     @Provides
@@ -168,5 +183,10 @@ class ActivityModule(private val activity: AppCompatActivity) {
     @Provides
     fun provideLocationUser():LocationUser{
         return LocationUser(activity)
+    }
+
+    @Provides
+    fun provideConnectionNetwork(): ConnectionNetwork {
+        return ConnectionNetwork(activity as Context)
     }
 }
