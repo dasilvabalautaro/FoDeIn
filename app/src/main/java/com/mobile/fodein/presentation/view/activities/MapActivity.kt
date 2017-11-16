@@ -28,7 +28,7 @@ class MapActivity: AppCompatActivity() {
     lateinit var manageMaps: ManageMaps
 
     var isWarnedToClose = false
-
+    val ACTION_HOME = 16908332
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.view_form_map)
@@ -55,7 +55,7 @@ class MapActivity: AppCompatActivity() {
         if (id == R.id.action_item_help){
 
         }
-        if (id == 16908332){
+        if (id == ACTION_HOME){
             this.navigate<MainListActivity>()
             this.finish()
         }

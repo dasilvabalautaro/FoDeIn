@@ -99,6 +99,8 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
     var idFormSelect = ""
     var adapter: ImageAdapter? = null
     var isWarnedToClose = false
+    val ACTION_HOME = 16908332
+
     @BindView(R.id.rv_images)
     @JvmField var rvImages: RecyclerView? = null
     @BindView(R.id.tv_title)
@@ -213,7 +215,7 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
         if (id == R.id.action_item_help){
 
         }
-        if (id == 16908332){
+        if (id == ACTION_HOME){
             this.navigate<MainListActivity>()
             this.finish()
         }
