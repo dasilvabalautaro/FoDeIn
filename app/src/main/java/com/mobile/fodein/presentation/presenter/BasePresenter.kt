@@ -44,7 +44,8 @@ abstract class BasePresenter: IPresenter {
         this.view!!.showError(error)
     }
 
-    protected inline fun <reified E> existInCache(keyCache:String, render:Boolean = true): Boolean{
+    protected inline fun <reified E> existInCache(keyCache:String,
+                                                  render:Boolean = true): Boolean{
         try {
             val dataCache = CachingLruRepository.instance.getLru()
                     .get(keyCache)

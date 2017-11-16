@@ -30,6 +30,7 @@ import com.mobile.fodein.domain.data.MapperImage
 import com.mobile.fodein.models.persistent.repository.CachingLruRepository
 import com.mobile.fodein.presentation.interfaces.ILoadDataView
 import com.mobile.fodein.presentation.model.FormModel
+import com.mobile.fodein.presentation.model.ImageModel
 import com.mobile.fodein.presentation.model.ProjectModel
 import com.mobile.fodein.presentation.presenter.*
 import com.mobile.fodein.presentation.view.component.ImageAdapter
@@ -80,6 +81,8 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
     lateinit var formSelectPresenter: FormSelectPresenter
     @Inject
     lateinit var connectionNetwork: ConnectionNetwork
+    @Inject
+    lateinit var imageListPresenter: ImageListPresenter
 
     private var idProject: String = ""
     private var idNetProject: String = ""
@@ -165,6 +168,7 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
         formRegisterNetworkPresenter.view = this
         addImageListPresenter.view = this
         formSelectPresenter.view = this
+        imageListPresenter.view = this
         projectPresenter.getListProject()
         enableMyLocation()
         locationUser.updateLocation()
@@ -364,7 +368,6 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
             formRegisterNetworkPresenter.setForm(pack, DeliveryOfResource.token)
             formRegisterNetworkPresenter.registerForm()
         }
-
         projectPresenter.getListProject(true)
     }
 
@@ -380,20 +383,45 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
 
     override fun <T> renderList(objectList: List<T>) {
         if (!objectList.isEmpty()){
-            listModel = objectList.filterIsInstance<ProjectModel>()
-            setDataSpinner(listModel)
+            if (listModel.isEmpty()){
+                listModel = objectList.filterIsInstance<ProjectModel>()
+                if (listModel.isNotEmpty()){
+                    setDataSpinner(listModel)
+                }
+
+            }else{
+                val listImage = objectList.filterIsInstance<ImageModel>()
+                if (listImage.isNotEmpty()){
+                    setListImages(listImage)
+                }
+            }
         }
+
+    }
+
+    private fun setListImages(list: List<ImageModel>){
+        for (i in list.indices){
+            val image = list[i].image
+            val bitmap = manageImages.base64DecodeImage(image)
+            val imageView = ImageView(this)
+            imageView.setImageBitmap(bitmap)
+            this.listImages.add(imageView)
+        }
+        adapter!!.setObjectList(this.listImages)
+        rvImages!!.scrollToPosition(0)
     }
 
     override fun <T> renderObject(obj: T) {
         if (obj != null){
+            val idForm = (obj as FormModel).id
             if (idFormSelect.isEmpty()){
-                val idForm = (obj as FormModel).id
                 pack[Constants.FORM_ID] = idForm
                 toast((obj as FormModel).id)
                 completeSaveDataForm(idForm)
             }else{
                 setDataFormSelect((obj as FormModel))
+                imageListPresenter.setVariables(idForm)
+                imageListPresenter.getListImages(idForm)
             }
         }
     }

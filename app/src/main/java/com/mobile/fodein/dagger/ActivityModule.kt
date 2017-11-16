@@ -27,22 +27,22 @@ import dagger.Provides
 class ActivityModule(private val activity: AppCompatActivity) {
 
     @Provides
-    fun provideNavigator(): Navigator{
+    fun provideNavigator(): Navigator {
         return Navigator(activity)
     }
 
     @Provides
-    fun provideManageImages(): ManageImages{
+    fun provideManageImages(): ManageImages {
         return ManageImages(activity)
     }
 
     @Provides
-    fun providePermissionUtils(): PermissionUtils{
+    fun providePermissionUtils(): PermissionUtils {
         return PermissionUtils()
     }
 
     @Provides
-    fun provideManageMaps(): ManageMaps{
+    fun provideManageMaps(): ManageMaps {
         return ManageMaps(activity)
     }
 
@@ -52,7 +52,8 @@ class ActivityModule(private val activity: AppCompatActivity) {
     }
 
     @Provides
-    fun provideThreadExecutor(jobExecutor: JobExecutor): IThreadExecutor {
+    fun provideThreadExecutor(jobExecutor: JobExecutor):
+            IThreadExecutor {
         return jobExecutor
     }
 
@@ -61,7 +62,8 @@ class ActivityModule(private val activity: AppCompatActivity) {
         return UIThread()
     }
     @Provides
-    fun providePostExecutionThread(uiThread: UIThread): IPostExecutionThread {
+    fun providePostExecutionThread(uiThread: UIThread):
+            IPostExecutionThread {
         return uiThread
     }
 
@@ -80,20 +82,20 @@ class ActivityModule(private val activity: AppCompatActivity) {
     fun provideGetFormNewUseCase(uiThread: UIThread,
                                  jobExecutor: JobExecutor,
                                  formExecutor: FormExecutor):
-            GetFormNewUseCase{
+            GetFormNewUseCase {
         return GetFormNewUseCase(jobExecutor, uiThread, formExecutor)
     }
 
     @Provides
     fun provideFormNewPresenter(getFormNewUseCase:
-                                GetFormNewUseCase): FormNewPresenter{
+                                GetFormNewUseCase): FormNewPresenter {
         return FormNewPresenter(getFormNewUseCase)
     }
 
     @Provides
     fun provideGetFormSelectUseCase(uiThread: UIThread,
                                     jobExecutor: JobExecutor,
-                                    formExecutor: FormExecutor):GetFormSelectUseCase{
+                                    formExecutor: FormExecutor):GetFormSelectUseCase {
         return GetFormSelectUseCase(jobExecutor, uiThread, formExecutor)
     }
 
@@ -118,14 +120,14 @@ class ActivityModule(private val activity: AppCompatActivity) {
     fun provideAddFormProjectListUseCase(uiThread: UIThread,
                                          jobExecutor: JobExecutor,
                                          projectExecutor: ProjectExecutor):
-            AddFormProjectListUseCase{
+            AddFormProjectListUseCase {
         return AddFormProjectListUseCase(jobExecutor, uiThread, projectExecutor)
     }
 
     @Provides
     fun provideAddFormProjectListPresenter(addFormProjectListUseCase:
                                            AddFormProjectListUseCase):
-            AddFormProjectListPresenter{
+            AddFormProjectListPresenter {
         return AddFormProjectListPresenter(addFormProjectListUseCase)
     }
 
@@ -151,37 +153,50 @@ class ActivityModule(private val activity: AppCompatActivity) {
     @Provides
     fun provideRequestRegisterFormPostUseCase(serviceRemotePost:
                                               ServiceRemotePost):
-            RequestRegisterFormPostUseCase{
+            RequestRegisterFormPostUseCase {
         return RequestRegisterFormPostUseCase(serviceRemotePost)
     }
 
     @Provides
-    fun proviceFormRegisterNetworkPresenter(requestRegisterFormPostUseCase:
+    fun provideFormRegisterNetworkPresenter(requestRegisterFormPostUseCase:
                                             RequestRegisterFormPostUseCase):
-            FormRegisterNetworkPresenter{
+            FormRegisterNetworkPresenter {
         return FormRegisterNetworkPresenter(requestRegisterFormPostUseCase)
     }
 
     @Provides
-    fun provideImageExecutor(): ImageExecutor{
+    fun provideImageExecutor(): ImageExecutor {
         return ImageExecutor()
     }
 
     @Provides
     fun provideAddImageListUseCase(uiThread: UIThread,
                                    jobExecutor: JobExecutor,
-                                   imageExecutor: ImageExecutor): AddImageListUseCase{
+                                   imageExecutor: ImageExecutor): AddImageListUseCase {
         return AddImageListUseCase(jobExecutor, uiThread, imageExecutor)
     }
 
     @Provides
     fun provideAddImageListPresenter(addImageListUseCase:
-                                     AddImageListUseCase): AddImageListPresenter{
+                                     AddImageListUseCase): AddImageListPresenter {
         return AddImageListPresenter(addImageListUseCase)
     }
 
     @Provides
-    fun provideLocationUser():LocationUser{
+    fun provideGetImageListUseCase(uiThread: UIThread,
+                                   jobExecutor: JobExecutor,
+                                   imageExecutor: ImageExecutor): GetImageListUseCase {
+        return GetImageListUseCase(jobExecutor, uiThread, imageExecutor)
+    }
+
+    @Provides
+    fun provideImageListPresenter(getImageListUseCase:
+                                  GetImageListUseCase): ImageListPresenter {
+        return ImageListPresenter(getImageListUseCase)
+    }
+
+    @Provides
+    fun provideLocationUser():LocationUser {
         return LocationUser(activity)
     }
 

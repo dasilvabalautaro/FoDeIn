@@ -17,15 +17,12 @@ class GetDistrictListUseCase @Inject constructor(threadExecutor: IThreadExecutor
                                                  IDistrictRepository):
         UseCase<List<DistrictModel>>(threadExecutor, postExecutionThread),
         IHearMessage {
-    override fun buildUseCaseObservable(): Observable<List<DistrictModel>> {
-        return districtRepository.districtList()
-    }
+    override fun buildUseCaseObservable(): Observable<List<DistrictModel>> =
+            districtRepository.districtList()
 
-    override fun hearMessage(): Observable<String>{
-        return this.districtRepository.userGetMessage()
-    }
+    override fun hearMessage(): Observable<String> =
+            this.districtRepository.userGetMessage()
 
-    override fun hearError(): Observable<DatabaseOperationException>{
-        return this.districtRepository.userGetError()
-    }
+    override fun hearError(): Observable<DatabaseOperationException> =
+            this.districtRepository.userGetError()
 }
