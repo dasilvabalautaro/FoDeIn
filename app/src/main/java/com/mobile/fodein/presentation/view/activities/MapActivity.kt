@@ -13,6 +13,8 @@ import com.mobile.fodein.dagger.ActivityModule
 import com.mobile.fodein.domain.data.GeographicCoordinates
 import com.mobile.fodein.models.persistent.repository.CachingLruRepository
 import com.mobile.fodein.presentation.view.component.ManageMaps
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 
 class MapActivity: AppCompatActivity() {
@@ -24,6 +26,8 @@ class MapActivity: AppCompatActivity() {
             .plus(ActivityModule(this))}
     @Inject
     lateinit var manageMaps: ManageMaps
+
+    var isWarnedToClose = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,12 +50,12 @@ class MapActivity: AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val id = item!!.itemId
         if (id == R.id.action_item_info){
-            //setCoordinates()
+
         }
         if (id == R.id.action_item_help){
 
         }
-        if (id == R.id.action_item_list){
+        if (id == 16908332){
             this.navigate<MainListActivity>()
             this.finish()
         }
@@ -60,9 +64,22 @@ class MapActivity: AppCompatActivity() {
 
     }
 
+    private fun handleBackPressInThisActivity(){
+        if (isWarnedToClose){
+            CachingLruRepository.instance.getLru().evictAll()
+            finish()
+        }else{
+            isWarnedToClose = true
+            toast(getString(R.string.lbl_close_app))
+            launch{
+                delay(2000)
+                isWarnedToClose = false
+            }
+        }
+    }
+
     override fun onBackPressed() {
-        super.onBackPressed()
-        CachingLruRepository.instance.getLru().evictAll()
+        handleBackPressInThisActivity()
     }
 
     private inline fun <reified T : Activity> Activity.navigate() {

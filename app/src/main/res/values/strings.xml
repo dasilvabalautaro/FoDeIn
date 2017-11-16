@@ -56,4 +56,5 @@
     <string name="lbl_annotation_two">Annotation Two</string>
     <string name="lbl_map">Map</string>
     <string name="lbl_list">List</string>
+    <string name="lbl_close_app">Tap again to close the application.</string>
 </resources>

@@ -13,12 +13,15 @@ import butterknife.ButterKnife
 import com.mobile.fodein.R
 import com.mobile.fodein.models.persistent.repository.CachingLruRepository
 import com.mobile.fodein.presentation.view.component.MainListAdapter
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 
 
 class MainListActivity: AppCompatActivity() {
 
     var pager: ViewPager? = null
     var tab: TabLayout? = null
+    var isWarnedToClose = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,16 +60,26 @@ class MainListActivity: AppCompatActivity() {
         if (id == R.id.action_item_help){
 
         }
-        if (id == R.id.action_item_list){
-
-        }
 
         return super.onOptionsItemSelected(item)
     }
 
+    private fun handleBackPressInThisActivity(){
+        if (isWarnedToClose){
+            CachingLruRepository.instance.getLru().evictAll()
+            finish()
+        }else{
+            isWarnedToClose = true
+            toast(getString(R.string.lbl_close_app))
+            launch{
+                delay(2000)
+                isWarnedToClose = false
+            }
+        }
+    }
+
     override fun onBackPressed() {
-        super.onBackPressed()
-        CachingLruRepository.instance.getLru().evictAll()
+        handleBackPressInThisActivity()
     }
     private inline fun <reified T : Activity> Activity.navigate() {
         val intent = Intent(this@MainListActivity, T::class.java)

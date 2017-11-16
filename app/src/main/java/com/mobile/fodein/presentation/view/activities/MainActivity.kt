@@ -45,6 +45,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Cancellable
 import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -97,6 +98,7 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
     val ID_FORM = "idForm"
     var idFormSelect = ""
     var adapter: ImageAdapter? = null
+    var isWarnedToClose = false
     @BindView(R.id.rv_images)
     @JvmField var rvImages: RecyclerView? = null
     @BindView(R.id.tv_title)
@@ -211,7 +213,7 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
         if (id == R.id.action_item_help){
 
         }
-        if (id == R.id.action_item_list){
+        if (id == 16908332){
             this.navigate<MainListActivity>()
             this.finish()
         }
@@ -254,9 +256,22 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
     fun Activity.toast(message: CharSequence) =
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
+    private fun handleBackPressInThisActivity(){
+        if (isWarnedToClose){
+            CachingLruRepository.instance.getLru().evictAll()
+            finish()
+        }else{
+            isWarnedToClose = true
+            toast(getString(R.string.lbl_close_app))
+            launch{
+                delay(2000)
+                isWarnedToClose = false
+            }
+        }
+    }
+
     override fun onBackPressed() {
-        super.onBackPressed()
-        CachingLruRepository.instance.getLru().evictAll()
+        handleBackPressInThisActivity()
     }
 
     //navigator.addFragment(R.id.fragmentContainer, UserListFragment())
