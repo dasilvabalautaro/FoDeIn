@@ -4,6 +4,7 @@ import com.mobile.fodein.models.data.AgentCarrier
 import com.mobile.fodein.models.interfaces.IServiceGet
 import com.mobile.fodein.models.persistent.network.MessageOfService
 import com.mobile.fodein.models.persistent.network.ServiceRemoteGet
+import com.mobile.fodein.tools.ConnectionNetwork
 import com.mobile.fodein.tools.Constants
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -13,7 +14,9 @@ import java.net.ConnectException
 import java.net.SocketTimeoutException
 
 abstract class RequestGetUseCase constructor(private val serviceRemoteGet:
-                                             ServiceRemoteGet) {
+                                             ServiceRemoteGet,
+                                             private val connectionNetwork:
+                                             ConnectionNetwork) {
     private var serviceGet: IServiceGet? = null
     protected var disposable: CompositeDisposable = CompositeDisposable()
     var agentCarrier: AgentCarrier? = null
@@ -41,7 +44,7 @@ abstract class RequestGetUseCase constructor(private val serviceRemoteGet:
     }
 
     fun getDataServer(){
-        if (setServiceGet()){
+        if (setServiceGet() && connectionNetwork.checkConnect()){
             try {
                 disposable.add(serviceGet!!.sendGet(agentCarrier!!.license,
                         agentCarrier!!.address + agentCarrier!!.service)

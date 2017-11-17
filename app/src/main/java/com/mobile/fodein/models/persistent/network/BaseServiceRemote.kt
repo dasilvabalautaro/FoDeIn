@@ -22,9 +22,9 @@ abstract class BaseServiceRemote {
                 try {
 
                     response = chain.proceed(request)
-                   /* if (response.networkResponse() == null){
+                    if (response.networkResponse() == null){
                         throw IOException()
-                    }*/
+                    }
                 }catch (ie: IOException){
                     println(ie.message)
                 }

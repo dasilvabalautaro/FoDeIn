@@ -4,6 +4,7 @@ import com.mobile.fodein.models.data.AgentCarrier
 import com.mobile.fodein.models.interfaces.IServicePost
 import com.mobile.fodein.models.persistent.network.MessageOfService
 import com.mobile.fodein.models.persistent.network.ServiceRemotePost
+import com.mobile.fodein.tools.ConnectionNetwork
 import com.mobile.fodein.tools.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -18,7 +19,9 @@ import java.net.SocketTimeoutException
 
 
 abstract class RequestPostUseCase constructor(private val serviceRemotePost:
-                                     ServiceRemotePost){
+                                     ServiceRemotePost,
+                                              private val connectionNetwork:
+                                              ConnectionNetwork){
     private val TAG = RequestPostUseCase::class.java.name!!
     private var servicePost: IServicePost? = null
     protected var disposable: CompositeDisposable = CompositeDisposable()
@@ -66,7 +69,7 @@ abstract class RequestPostUseCase constructor(private val serviceRemotePost:
     }
 
     fun getDataServer(){
-        if (setServicePost()){
+        if (setServicePost() && connectionNetwork.checkConnect()){
             try {
                 disposable.add(servicePost!!.sendPost(agentCarrier!!.license,
                         agentCarrier!!.address + agentCarrier!!.service,

@@ -8,6 +8,7 @@ import com.mobile.fodein.domain.RequestGetUseCase
 import com.mobile.fodein.models.persistent.network.MessageOfService
 import com.mobile.fodein.models.persistent.network.ServiceRemoteGet
 import com.mobile.fodein.presentation.model.ProjectModel
+import com.mobile.fodein.tools.ConnectionNetwork
 import com.mobile.fodein.tools.Constants
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
@@ -17,8 +18,10 @@ import javax.inject.Inject
 
 
 class RequestProjectsGetUseCase @Inject constructor(serviceRemoteGet:
-                                                    ServiceRemoteGet):
-        RequestGetUseCase(serviceRemoteGet){
+                                                    ServiceRemoteGet,
+                                                    connectionNetwork:
+                                                    ConnectionNetwork):
+        RequestGetUseCase(serviceRemoteGet, connectionNetwork){
     //private var list: ArrayList<ProjectModel>? = null
 
     private var messageEnd: String = ""

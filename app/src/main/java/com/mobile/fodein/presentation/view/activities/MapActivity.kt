@@ -29,6 +29,7 @@ class MapActivity: AppCompatActivity() {
 
     var isWarnedToClose = false
     val ACTION_HOME = 16908332
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.view_form_map)

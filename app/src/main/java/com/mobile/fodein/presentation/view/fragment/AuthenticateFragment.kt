@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment
 import android.view.View
 import android.widget.Toast
 import com.mobile.fodein.App
+import com.mobile.fodein.R
 import com.mobile.fodein.dagger.PresentationModule
 import com.mobile.fodein.domain.DeliveryOfResource
 import com.mobile.fodein.presentation.interfaces.ILoadDataView
@@ -68,6 +69,8 @@ abstract class AuthenticateFragment: Fragment(),
         this.userLoginPresenter.view = this
         this.userLoginNetworkPresenter.view = this
         this.userRegisterNetworkPresenter.view = this
+        context.toast(getString(R.string.lbl_connect_network) +
+        connectionNetwork.checkConnect().toString())
     }
 
     fun Context.toast(message: CharSequence,

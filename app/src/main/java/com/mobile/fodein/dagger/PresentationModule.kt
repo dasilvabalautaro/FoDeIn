@@ -225,6 +225,11 @@ class PresentationModule(val context: Context) {
     }
 
     @Provides
+    fun provideConnectionNetwork(): ConnectionNetwork {
+        return ConnectionNetwork(context)
+    }
+
+    @Provides
     fun provideServiceRemotePost(): ServiceRemotePost {
         return ServiceRemotePost()
     }
@@ -235,9 +240,11 @@ class PresentationModule(val context: Context) {
     }
 
     @Provides
-    fun provideRequestLoginGetUseCase(serviceRemoteGet: ServiceRemoteGet):
+    fun provideRequestLoginGetUseCase(serviceRemoteGet: ServiceRemoteGet,
+                                      connectionNetwork:
+                                      ConnectionNetwork):
             RequestLoginGetUseCase {
-        return RequestLoginGetUseCase(serviceRemoteGet)
+        return RequestLoginGetUseCase(serviceRemoteGet, connectionNetwork)
     }
 
     @Provides
@@ -248,9 +255,11 @@ class PresentationModule(val context: Context) {
     }
 
     @Provides
-    fun provideRequestRegisterPostUseCase(serviceRemotePost: ServiceRemotePost):
+    fun provideRequestRegisterPostUseCase(serviceRemotePost: ServiceRemotePost,
+                                          connectionNetwork:
+                                          ConnectionNetwork):
             RequestRegisterPostUseCase{
-        return RequestRegisterPostUseCase(serviceRemotePost)
+        return RequestRegisterPostUseCase(serviceRemotePost, connectionNetwork)
     }
 
     @Provides
@@ -261,22 +270,28 @@ class PresentationModule(val context: Context) {
     }
 
     @Provides
-    fun provideRequestDistrictGetUseCase(serviceRemoteGet: ServiceRemoteGet):
+    fun provideRequestDistrictGetUseCase(serviceRemoteGet: ServiceRemoteGet,
+                                         connectionNetwork:
+                                         ConnectionNetwork):
             RequestDistrictGetUseCase{
-        return RequestDistrictGetUseCase(serviceRemoteGet)
+        return RequestDistrictGetUseCase(serviceRemoteGet, connectionNetwork)
     }
 
     @Provides
-    fun provideRequestUnitsGetUseCase(serviceRemoteGet: ServiceRemoteGet):
+    fun provideRequestUnitsGetUseCase(serviceRemoteGet: ServiceRemoteGet,
+                                      connectionNetwork:
+                                      ConnectionNetwork):
             RequestUnitsGetUseCase{
-        return RequestUnitsGetUseCase(serviceRemoteGet)
+        return RequestUnitsGetUseCase(serviceRemoteGet, connectionNetwork)
     }
 
     @Provides
     fun provideRequestProjectsGetUseCase(serviceRemoteGet:
-                                         ServiceRemoteGet):
+                                         ServiceRemoteGet,
+                                         connectionNetwork:
+                                         ConnectionNetwork):
             RequestProjectsGetUseCase{
-        return RequestProjectsGetUseCase(serviceRemoteGet)
+        return RequestProjectsGetUseCase(serviceRemoteGet, connectionNetwork)
     }
 
     @Provides
@@ -313,9 +328,4 @@ class PresentationModule(val context: Context) {
                 updateUnityListUseCase, addUnitsDistrictListUseCase)
     }
 
-
-    @Provides
-    fun provideConnectionNetwork(): ConnectionNetwork{
-        return ConnectionNetwork(context)
-    }
 }

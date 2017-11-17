@@ -76,6 +76,8 @@ class ProjectFragment: BaseFragment(), ILoadDataView {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ButterKnife.bind(this, view!!)
+        context.toast(getString(com.mobile.fodein.R.string.lbl_connect_network) +
+                connectionNetwork.checkConnect().toString())
 
     }
 

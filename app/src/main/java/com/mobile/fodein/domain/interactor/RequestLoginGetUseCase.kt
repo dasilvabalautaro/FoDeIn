@@ -5,6 +5,7 @@ import com.mobile.fodein.domain.RequestGetUseCase
 import com.mobile.fodein.models.persistent.network.MessageOfService
 import com.mobile.fodein.models.persistent.network.ServiceRemoteGet
 import com.mobile.fodein.presentation.model.UserModel
+import com.mobile.fodein.tools.ConnectionNetwork
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import org.json.JSONObject
@@ -12,8 +13,10 @@ import javax.inject.Inject
 
 
 class RequestLoginGetUseCase @Inject constructor(serviceRemoteGet:
-                                       ServiceRemoteGet):
-        RequestGetUseCase(serviceRemoteGet){
+                                       ServiceRemoteGet,
+                                                 connectionNetwork:
+                                                 ConnectionNetwork):
+        RequestGetUseCase(serviceRemoteGet, connectionNetwork){
     val user: UserModel = UserModel()
     var observableUser: Subject<UserModel> = PublishSubject.create()
 

@@ -150,6 +150,8 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         setupRecyclerView()
         idFormSelect = intent.getStringExtra(ID_FORM)
+        toast(getString(R.string.lbl_connect_network) +
+                connectionNetwork.checkConnect().toString())
 
     }
 

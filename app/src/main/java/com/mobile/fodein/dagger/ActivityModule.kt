@@ -151,10 +151,17 @@ class ActivityModule(private val activity: AppCompatActivity) {
     }
 
     @Provides
+    fun provideConnectionNetwork(): ConnectionNetwork {
+        return ConnectionNetwork(activity as Context)
+    }
+
+    @Provides
     fun provideRequestRegisterFormPostUseCase(serviceRemotePost:
-                                              ServiceRemotePost):
+                                              ServiceRemotePost,
+                                              connectionNetwork:
+                                              ConnectionNetwork):
             RequestRegisterFormPostUseCase {
-        return RequestRegisterFormPostUseCase(serviceRemotePost)
+        return RequestRegisterFormPostUseCase(serviceRemotePost, connectionNetwork)
     }
 
     @Provides
@@ -200,8 +207,4 @@ class ActivityModule(private val activity: AppCompatActivity) {
         return LocationUser(activity)
     }
 
-    @Provides
-    fun provideConnectionNetwork(): ConnectionNetwork {
-        return ConnectionNetwork(activity as Context)
-    }
 }

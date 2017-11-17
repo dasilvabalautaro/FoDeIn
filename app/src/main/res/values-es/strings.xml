@@ -58,4 +58,5 @@
     <string name="lbl_list">Lista</string>
     <string name="lbl_help">Ayuda</string>
     <string name="lbl_close_app">Tap otra vez para cerrar la aplicación.</string>
+    <string name="lbl_connect_network">Conexión a la red: </string>
 </resources>

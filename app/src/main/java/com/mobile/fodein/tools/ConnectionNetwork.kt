@@ -9,6 +9,12 @@ import java.net.URL
 
 
 class ConnectionNetwork(val context: Context) {
+    private var isConnect = false
+
+    init {
+        verifyConnect()
+    }
+
     fun isOnline(): Boolean {
         val connectivityManager = context.getSystemService(
                 Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -19,7 +25,8 @@ class ConnectionNetwork(val context: Context) {
     private fun checkUrl(): Boolean{
         return try {
             val url = URL(Constants.URL_SERVER)
-            val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
+            val connection: HttpURLConnection = url.openConnection()
+                    as HttpURLConnection
             val statusCode = connection.responseCode
             statusCode == 200
         }catch (ce: ConnectException){
@@ -29,18 +36,15 @@ class ConnectionNetwork(val context: Context) {
 
     }
 
-    fun checkConnect(): Boolean{
-        var result = true
-
+    private fun verifyConnect(){
         launch{
-            result = if (isOnline()){
+            isConnect = if (isOnline()){
                 checkUrl()
             }else{
                 false
             }
         }
-
-        return result
-
     }
+
+    fun checkConnect(): Boolean = this.isConnect
 }
