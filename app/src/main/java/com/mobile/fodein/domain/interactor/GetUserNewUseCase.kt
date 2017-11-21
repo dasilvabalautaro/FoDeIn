@@ -38,6 +38,22 @@ class GetUserNewUseCase @Inject constructor(threadExecutor: IThreadExecutor,
 
     }
 
+    fun setUser(data: UserModel){
+        user.name = data.name
+        user.user = data.user
+        user.idCard = data.idCard
+        user.email = data.email
+        user.password = data.password
+        user.phone = data.phone
+        user.address = data.address
+        user.description = data.description
+        user.roll = data.roll
+        user.unit = data.unit
+        user.token = data.token
+        user.image = data.image
+
+    }
+
     override fun buildUseCaseObservable(): Observable<UserModel> {
         return this.userRepository.userSave(user)
     }

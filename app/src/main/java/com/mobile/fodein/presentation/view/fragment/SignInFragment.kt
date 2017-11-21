@@ -57,6 +57,7 @@ class SignInFragment: AuthenticateFragment() {
                     run{
                         if (validate){
                             if (connectionNetwork.checkConnect()){
+                                flagLoginNetwork = true
                                 this.userLoginNetworkPresenter.setUser(loadPack())
                                 this.userLoginNetworkPresenter.verifyLogin()
                             }else{

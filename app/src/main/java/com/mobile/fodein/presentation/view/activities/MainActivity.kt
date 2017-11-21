@@ -84,6 +84,8 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
     lateinit var connectionNetwork: ConnectionNetwork
     @Inject
     lateinit var imageListPresenter: ImageListPresenter
+    @Inject
+    lateinit var addImagesNetworkPresenter: AddImagesNetworkPresenter
 
     private var idProject: String = ""
     private var idNetProject: String = ""
@@ -95,11 +97,12 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
             SimpleDateFormat("dd-MM-yyyy", Locale.US)
     private val pack: MutableMap<String, Any> = HashMap()
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
-    val ID_FORM = "idForm"
+    private val ID_FORM = "idForm"
     var idFormSelect = ""
     var adapter: ImageAdapter? = null
-    var isWarnedToClose = false
-    val ACTION_HOME = 16908332
+    private var isWarnedToClose = false
+    private val ACTION_HOME = 16908332
+    private var idFormSave = ""
 
     @BindView(R.id.rv_images)
     @JvmField var rvImages: RecyclerView? = null
@@ -175,6 +178,7 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
         addImageListPresenter.view = this
         formSelectPresenter.view = this
         imageListPresenter.view = this
+        addImagesNetworkPresenter.view = this
         projectPresenter.getListProject()
         enableMyLocation()
         locationUser.updateLocation()
@@ -391,7 +395,15 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
     }
 
     override fun hideRetry() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        launch(CommonPool){
+            if (connectionNetwork.checkConnect()){
+                addImagesNetworkPresenter.setVariables(idFormSave,
+                        DeliveryOfResource.token)
+                addImagesNetworkPresenter.getListImages()
+            }
+
+        }
+
     }
 
     override fun showError(message: String) {
@@ -412,6 +424,7 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
                 val listImage = objectList.filterIsInstance<ImageModel>()
                 if (listImage.isNotEmpty()){
                     setListImages(listImage)
+
                 }
             }
         }
@@ -433,6 +446,7 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
     override fun <T> renderObject(obj: T) {
         if (obj != null){
             val idForm = (obj as FormModel).id
+            this.idFormSave = idForm
             if (idFormSelect.isEmpty()){
                 pack[Constants.FORM_ID] = idForm
                 toast((obj as FormModel).id)

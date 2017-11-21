@@ -59,4 +59,5 @@
         <item name="android:layout_marginTop">@dimen/header_margin</item>
         <item name="android:textStyle">bold</item>
     </style>
+
 </resources>

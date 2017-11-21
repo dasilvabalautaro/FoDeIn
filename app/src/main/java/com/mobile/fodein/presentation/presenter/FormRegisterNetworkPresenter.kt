@@ -44,4 +44,5 @@ class FormRegisterNetworkPresenter @Inject constructor(private val requestRegist
         }
     }
 
+
 }

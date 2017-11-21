@@ -5,7 +5,6 @@ import com.mobile.fodein.domain.interactor.GetUserLoginUseCase
 import com.mobile.fodein.models.persistent.repository.CachingLruRepository
 import com.mobile.fodein.presentation.model.UserModel
 import com.mobile.fodein.tools.Constants
-import com.mobile.fodein.tools.HashUtils
 import io.reactivex.observers.DisposableObserver
 import javax.inject.Inject
 
@@ -25,7 +24,7 @@ class UserLoginPresenter @Inject constructor(private val getUserLoginUseCase:
     }
 
     fun setUser(data: MutableMap<String, Any>){
-        password = HashUtils.sha256(data[Constants.USER_PASSWORD].toString())
+        password = data[Constants.USER_PASSWORD].toString()
         getUserLoginUseCase.setUser(data)
     }
 

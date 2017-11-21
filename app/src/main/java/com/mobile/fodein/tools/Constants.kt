@@ -1,12 +1,13 @@
 package com.mobile.fodein.tools
 
 object Constants {
-    val URL_SERVER = "http://192.168.0.112:80/"
-    val HTTPBase = "http://192.168.0.112:80/fdi/index.php/services/"
+    val URL_SERVER = "http://192.168.1.113:80/"
+    val HTTPBase = "http://192.168.1.113:80/fdi/index.php/services/"
             //"http://192.168.0.112:80/fdi/index.php/services/" 192.168.1.113:80
 
     val SERVICE_LOGIN = "verifylogin"
     val SERVICE_REGISTER_USER = "registeruser"
+    val SERVICE_REGISTER_IMAGE = "registerimage"
     val SERVICE_GET_DISTRICT = "getdistricts"
     val SERVICE_GET_UNITS = "getunits"
     val SERVICE_GET_PROJECTS = "getprojects"
@@ -43,4 +44,10 @@ object Constants {
     val FORM_ANNOTATION_TWO = "annotationtwo"
     val FORM_PROJECT_NET = "idNet"
     val FORM_ID = "id"
+    val FIELD_IMAGE_ID = "id"
+    val FIELD_IMAGE_ID_FORM = "id_form"
+    val FIELD_IMAGE_IMAGE = "image"
+    val FIELD_IMAGE_LATITUDE = "latitude"
+    val FIELD_IMAGE_LONGITUDE = "longitude"
+    val FIELD_IMAGE_DATE = "date"
 }

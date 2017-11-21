@@ -14,10 +14,7 @@ import com.mobile.fodein.dagger.PresentationModule
 import com.mobile.fodein.domain.DeliveryOfResource
 import com.mobile.fodein.presentation.interfaces.ILoadDataView
 import com.mobile.fodein.presentation.model.UserModel
-import com.mobile.fodein.presentation.presenter.UserLoginNetworkPresenter
-import com.mobile.fodein.presentation.presenter.UserLoginPresenter
-import com.mobile.fodein.presentation.presenter.UserPresenter
-import com.mobile.fodein.presentation.presenter.UserRegisterNetworkPresenter
+import com.mobile.fodein.presentation.presenter.*
 import com.mobile.fodein.presentation.view.activities.MainListActivity
 import com.mobile.fodein.tools.ConnectionNetwork
 import com.mobile.fodein.tools.Constants
@@ -31,6 +28,7 @@ abstract class AuthenticateFragment: Fragment(),
         var userImage: Bitmap? = null
         var imageBase64: String = ""
         val pack: MutableMap<String, Any> = HashMap()
+        var flagLoginNetwork = false
     }
     protected var disposable: CompositeDisposable = CompositeDisposable()
 
@@ -57,7 +55,8 @@ abstract class AuthenticateFragment: Fragment(),
     lateinit var connectionNetwork: ConnectionNetwork
     @Inject
     lateinit var userRegisterNetworkPresenter: UserRegisterNetworkPresenter
-
+    @Inject
+    lateinit var userRegisterPresenter: UserRegisterPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +68,7 @@ abstract class AuthenticateFragment: Fragment(),
         this.userLoginPresenter.view = this
         this.userLoginNetworkPresenter.view = this
         this.userRegisterNetworkPresenter.view = this
+        this.userRegisterPresenter.view = this
         context.toast(getString(R.string.lbl_connect_network) +
         connectionNetwork.checkConnect().toString())
     }
@@ -97,6 +97,11 @@ abstract class AuthenticateFragment: Fragment(),
                 this.userRegisterNetworkPresenter.setUser(pack)
                 this.userRegisterNetworkPresenter.registerUser()
             }else{
+                if (flagLoginNetwork){
+                    flagLoginNetwork = false
+                    userRegisterPresenter.setUser((obj as UserModel))
+                    userRegisterPresenter.verifyRegister()
+                }
                 activity.navigate<MainListActivity>()
                 activity.finish()
             }

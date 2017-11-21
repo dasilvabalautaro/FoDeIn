@@ -27,6 +27,13 @@ class GetUserLoginUseCase @Inject constructor(threadExecutor: IThreadExecutor,
 
     }
 
+    fun setUser(data: UserModel){
+        value = data.user
+        field = Constants.USER_USER
+
+    }
+
+
     override fun buildUseCaseObservable(): Observable<List<UserModel>> {
         return this.userRepository.userGetByField(value, field)
     }

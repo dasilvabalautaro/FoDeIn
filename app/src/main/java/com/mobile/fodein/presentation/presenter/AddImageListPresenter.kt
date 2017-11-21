@@ -18,7 +18,7 @@ class AddImageListPresenter @Inject constructor(private val addImageListUseCase:
     }
 
     private fun addObjectDatabase(result: Boolean){
-        //view!!.showRetry()
+        view!!.hideRetry()
         showMessage(context.resources.getString(R.string.add_pattern) +
                 " " + result.toString())
     }

@@ -203,6 +203,16 @@ class ActivityModule(private val activity: AppCompatActivity) {
     }
 
     @Provides
+    fun provideAddImagesNetworkPresenter(getImageListUseCase:
+                                         GetImageListUseCase,
+                                         requestRegisterFormPostUseCase:
+                                         RequestRegisterFormPostUseCase):
+            AddImagesNetworkPresenter{
+        return AddImagesNetworkPresenter(getImageListUseCase,
+                requestRegisterFormPostUseCase)
+    }
+
+    @Provides
     fun provideLocationUser():LocationUser {
         return LocationUser(activity)
     }

@@ -80,6 +80,15 @@ class PresentationModule(val context: Context) {
     }
 
     @Provides
+    fun provideUserRegisterPresenter(getUserLoginUseCase:
+                                     GetUserLoginUseCase,
+                                     getUserNewUseCase:
+                                     GetUserNewUseCase):
+            UserRegisterPresenter{
+        return UserRegisterPresenter(getUserLoginUseCase, getUserNewUseCase)
+    }
+
+    @Provides
     fun provideUserListPresenter(getUserListUseCase:
                                  GetUserListUseCase):UserListPresenter{
         return UserListPresenter(getUserListUseCase)
