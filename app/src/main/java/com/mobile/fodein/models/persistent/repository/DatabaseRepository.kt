@@ -2,6 +2,7 @@ package com.mobile.fodein.models.persistent.repository
 
 import android.os.Parcel
 import com.mobile.fodein.models.data.Form
+import com.mobile.fodein.models.data.Image
 import com.mobile.fodein.models.data.Project
 import com.mobile.fodein.models.interfaces.IDataParcelable
 import com.mobile.fodein.models.interfaces.IRepository
@@ -114,6 +115,7 @@ abstract class DatabaseRepository : IRepository {
 
     }
 
+
     override fun saveFormInList(idProject:String,
                                idForm: String): Boolean{
         val realm: Realm = Realm.getDefaultInstance()
@@ -133,6 +135,35 @@ abstract class DatabaseRepository : IRepository {
         }
 
         return true
+    }
+
+    override fun <E : RealmObject> updateUpload(id: String, clazz: Class<E>,
+                                  listener: OnDatabaseCompleteListener): Boolean {
+
+        val realm: Realm = Realm.getDefaultInstance()
+        try {
+            realm.executeTransaction {
+                val e: E? = realm.where(clazz).equalTo(fieldId, id).findFirst()
+
+                if (e != null && e is Form){
+                    e.upload = true
+                }
+                if (e != null && e is Image){
+                    e.upload = true
+                }
+
+                listener.onSaveSucceeded()
+
+            }
+            return true
+
+        }catch (e: Throwable){
+            listener.onSaveFailed(e.message!!)
+            return false
+        }finally {
+            //realm.close()
+        }
+
     }
 }
 

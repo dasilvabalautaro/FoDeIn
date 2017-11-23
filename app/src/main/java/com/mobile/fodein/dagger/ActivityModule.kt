@@ -100,6 +100,14 @@ class ActivityModule(private val activity: AppCompatActivity) {
     }
 
     @Provides
+    fun provideUpdateFormUploadUseCase(uiThread: UIThread,
+                                       jobExecutor: JobExecutor,
+                                       formExecutor: FormExecutor):
+            UpdateFormUploadUseCase{
+        return UpdateFormUploadUseCase(jobExecutor, uiThread, formExecutor)
+    }
+
+    @Provides
     fun provideFormSelectPresenter(getFormSelectUseCase:
                                    GetFormSelectUseCase): FormSelectPresenter{
         return FormSelectPresenter(getFormSelectUseCase)
@@ -166,9 +174,12 @@ class ActivityModule(private val activity: AppCompatActivity) {
 
     @Provides
     fun provideFormRegisterNetworkPresenter(requestRegisterFormPostUseCase:
-                                            RequestRegisterFormPostUseCase):
+                                            RequestRegisterFormPostUseCase,
+                                            updateFormUploadUseCase:
+                                            UpdateFormUploadUseCase):
             FormRegisterNetworkPresenter {
-        return FormRegisterNetworkPresenter(requestRegisterFormPostUseCase)
+        return FormRegisterNetworkPresenter(requestRegisterFormPostUseCase,
+                updateFormUploadUseCase)
     }
 
     @Provides

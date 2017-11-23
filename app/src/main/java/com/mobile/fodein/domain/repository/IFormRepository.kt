@@ -11,5 +11,6 @@ interface IFormRepository: IMessagePersistent {
     fun formSave(form: MapperForm): Observable<FormModel>
     fun formGetById(id: String): Observable<FormModel>
     fun formGetByField(value: String, nameField: String): Observable<List<FormModel>>
+    fun formUpdateUpload(value: String): Observable<Boolean>
 
 }

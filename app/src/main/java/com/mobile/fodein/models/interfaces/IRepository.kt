@@ -20,4 +20,6 @@ interface IRepository {
                                         value: String, newObject: Any,
                                         listener: OnDatabaseCompleteListener)
     fun saveFormInList(idProject: String, idForm: String): Boolean
+    fun <E : RealmObject> updateUpload(id: String, clazz: Class<E>,
+                         listener: OnDatabaseCompleteListener): Boolean
 }

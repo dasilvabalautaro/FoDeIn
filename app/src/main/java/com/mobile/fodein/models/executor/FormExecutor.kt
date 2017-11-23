@@ -19,6 +19,7 @@ import javax.inject.Singleton
 class FormExecutor @Inject constructor():
         DatabaseRepository(), IFormRepository{
 
+
     private val context = App.appComponent.context()
 
     private val component by lazy {(context as App)
@@ -84,17 +85,6 @@ class FormExecutor @Inject constructor():
 
     }
 
-//    private fun addListProject(form: Form){
-//        val clazz: Class<Project> = Project::class.java
-//        val idProject = form.project!!.id
-//        this.addObjectList(clazz, idProject, form, interactDatabaseListener)
-//    }
-//
-//    private fun addListUser(form: Form){
-//        val clazz: Class<User> = User::class.java
-//        val idUser = form.user!!.id
-//        this.addObjectList(clazz, idUser, form, interactDatabaseListener)
-//    }
 
     override fun formGetById(id: String): Observable<FormModel> {
         return Observable.create { subscriber ->
@@ -130,6 +120,19 @@ class FormExecutor @Inject constructor():
             }
         }
 
+    }
+
+    override fun formUpdateUpload(value: String): Observable<Boolean>  {
+        return Observable.create { subscriber ->
+            val clazz: Class<Form> = Form::class.java
+             if (this.updateUpload(value,  clazz,
+                     interactDatabaseListener)){
+                 subscriber.onNext(true)
+                 subscriber.onComplete()
+             }else{
+                subscriber.onError(Throwable())
+            }
+        }
     }
 
 }

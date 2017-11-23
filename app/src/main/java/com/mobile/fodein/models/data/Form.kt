@@ -51,6 +51,7 @@ open class Form() : RealmObject(), IDataParcelable {
     var annotationTwo: String = ""
     var userid: String = ""
     var project_id: String = ""
+    var upload: Boolean = false
 
     constructor(parcel: Parcel) : this() {
         id = parcel.readString()

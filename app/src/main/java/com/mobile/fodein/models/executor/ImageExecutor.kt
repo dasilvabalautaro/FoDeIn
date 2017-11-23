@@ -19,6 +19,7 @@ import javax.inject.Singleton
 class ImageExecutor @Inject constructor():
         DatabaseRepository(), IImageRepository{
 
+
     private val context = App.appComponent.context()
 
     private val component by lazy {(context as App)
@@ -111,5 +112,18 @@ class ImageExecutor @Inject constructor():
             return true
         }
         return false
+    }
+
+    override fun imageUpdateUpload(value: String): Observable<Boolean> {
+        return Observable.create { subscriber ->
+            val clazz: Class<Image> = Image::class.java
+            if (this.updateUpload(value,  clazz,
+                    interactDatabaseListener)){
+                subscriber.onNext(true)
+                subscriber.onComplete()
+            }else{
+                subscriber.onError(Throwable())
+            }
+        }
     }
 }

@@ -26,6 +26,7 @@ open class Image(): RealmObject(), IDataParcelable {
     var latitude: Double = 0.0
     var longitude: Double = 0.0
     var image: String = ""
+    var upload: Boolean = false
 
     constructor(parcel: Parcel) : this() {
         id = parcel.readString()

@@ -58,4 +58,5 @@
     <string name="lbl_list">List</string>
     <string name="lbl_close_app">Tap again to close the application.</string>
     <string name="lbl_connect_network">Connect network: </string>
+    <string name="lbl_upload_form">Upload Form</string>
 </resources>
