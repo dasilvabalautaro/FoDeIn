@@ -18,7 +18,7 @@ class ImageModelDataMapper @Inject constructor(val context: Context) {
         imageModel.latitude = image.latitude
         imageModel.longitude = image.longitude
         imageModel.image = image.image
-
+        imageModel.idForm = image.idForm
         return imageModel
     }
 

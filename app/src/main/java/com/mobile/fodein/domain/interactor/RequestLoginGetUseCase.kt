@@ -8,6 +8,7 @@ import com.mobile.fodein.presentation.model.UserModel
 import com.mobile.fodein.tools.ConnectionNetwork
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
+import org.json.JSONException
 import org.json.JSONObject
 import javax.inject.Inject
 
@@ -34,19 +35,40 @@ class RequestLoginGetUseCase @Inject constructor(serviceRemoteGet:
 
             if (!gsonResult.isEmpty()){
                 val jsonObject = JSONObject(gsonResult)
-                user.id = jsonObject.getString("id")?: ""
-                user.name = jsonObject.getString("name")?: ""
-                user.user = jsonObject.getString("user")?: ""
-                user.idCard = jsonObject.getString("idCard")?: ""
-                user.email = jsonObject.getString("email")?: ""
-                user.password = jsonObject.getString("password")?: ""
-                user.phone = jsonObject.getString("phone")?: ""
-                user.address = jsonObject.getString("address")?: ""
-                user.description = jsonObject.getString("description")?: ""
-                user.roll = jsonObject.getString("roll")?: ""
-                user.token = jsonObject.getString("token")?: ""
-                user.unit = jsonObject.getString("unit_id")?: ""
-                user.image = jsonObject.getString("image")?: ""
+                try {
+
+                    user.id = jsonObject.getString("id")?: ""
+                    user.name = jsonObject.getString("name")?: ""
+                    user.user = jsonObject.getString("user")?: ""
+                    user.password = jsonObject.getString("password")?: ""
+                    user.unit = jsonObject.getString("unit_id")?: ""
+                    user.token = jsonObject.getString("token")?: ""
+                    if (jsonObject.has("idCard")){
+                        user.idCard = jsonObject.getString("idCard")?: ""
+                    }
+                    if (jsonObject.has("email")){
+                        user.email = jsonObject.getString("email")?: ""
+                    }
+
+                    if (jsonObject.has("phone")){
+                        user.phone = jsonObject.getString("phone")?: ""
+                    }
+                    if (jsonObject.has("address")){
+                        user.address = jsonObject.getString("address")?: ""
+                    }
+                    if (jsonObject.has("description")){
+                        user.description = jsonObject.getString("description")?: ""
+                    }
+                    if (jsonObject.has("roll")){
+                        user.roll = jsonObject.getString("roll")?: ""
+                    }
+                    if (jsonObject.has("image")){
+                        user.image = jsonObject.getString("image")?: ""
+                    }
+
+                }catch (ne: JSONException){
+                    println(ne.message)
+                }
                 this.observableUser.onNext(this.user)
             }
 

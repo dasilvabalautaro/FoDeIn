@@ -3,6 +3,7 @@ package com.mobile.fodein.presentation.presenter
 import com.mobile.fodein.R
 import com.mobile.fodein.domain.interactor.GetImageListUseCase
 import com.mobile.fodein.domain.interactor.RequestRegisterFormPostUseCase
+import com.mobile.fodein.domain.interactor.UpdateImageUploaduseCase
 import com.mobile.fodein.models.persistent.repository.CachingLruRepository
 import com.mobile.fodein.presentation.model.ImageModel
 import com.mobile.fodein.tools.Constants
@@ -16,10 +17,13 @@ import kotlin.collections.set
 class AddImagesNetworkPresenter @Inject constructor(private val getImageListUseCase:
                                                     GetImageListUseCase,
                                                     private val requestRegisterFormPostUseCase:
-                                                    RequestRegisterFormPostUseCase):
+                                                    RequestRegisterFormPostUseCase,
+                                                    private val updateImageUploaduseCase:
+                                                    UpdateImageUploaduseCase):
         BasePresenter(){
     private var list: List<ImageModel> = ArrayList()
     private var token: String = ""
+    private var idImage: String = ""
 
     init {
         this.iHearMessage = getImageListUseCase
@@ -34,6 +38,8 @@ class AddImagesNetworkPresenter @Inject constructor(private val getImageListUseC
         disposable.add(user.observeOn(AndroidSchedulers.mainThread())
                 .subscribe { u ->
                     kotlin.run {
+                        updateImageUploaduseCase.idImage = this.idImage
+                        updateImageUploaduseCase.execute(AddObserver())
                         showMessage(u)
                     }
                 })
@@ -71,6 +77,7 @@ class AddImagesNetworkPresenter @Inject constructor(private val getImageListUseC
     private fun registerImages(){
         for (i in this.list.indices){
             val pack: MutableMap<String, Any> = HashMap()
+            this.idImage = this.list[i].id
             pack[Constants.FIELD_IMAGE_ID] = this.list[i].id
             pack[Constants.FIELD_IMAGE_ID_FORM] = this.list[i].idForm
             pack[Constants.FIELD_IMAGE_IMAGE] = this.list[i].image
@@ -79,7 +86,7 @@ class AddImagesNetworkPresenter @Inject constructor(private val getImageListUseC
             pack[Constants.FIELD_IMAGE_DATE] = this.list[i].date
             requestRegisterFormPostUseCase.backPack = pack
             registerForm()
-            Thread.sleep(2000)
+            Thread.sleep(3000)
         }
 
     }
@@ -100,6 +107,27 @@ class AddImagesNetworkPresenter @Inject constructor(private val getImageListUseC
                         .put(idForm, t)
             }
             showCollectionInView(t)
+        }
+
+        override fun onComplete() {
+            showMessage(context.resources.getString(R.string.task_complete))
+        }
+
+        override fun onError(e: Throwable) {
+            if (e.message != null) {
+                showError(e.message!!)
+            }
+        }
+    }
+
+    private fun addObjectDatabase(result: Boolean){
+        showMessage(context.resources.getString(R.string.lbl_update_image) +
+                " " + result.toString())
+    }
+
+    inner class AddObserver: DisposableObserver<Boolean>(){
+        override fun onNext(r: Boolean) {
+            addObjectDatabase(r)
         }
 
         override fun onComplete() {

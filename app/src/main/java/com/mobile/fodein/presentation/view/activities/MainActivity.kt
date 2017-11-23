@@ -446,9 +446,10 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
     override fun <T> renderObject(obj: T) {
         if (obj != null){
             val idForm = (obj as FormModel).id
-            this.idFormSave = idForm
+
             if (idFormSelect.isEmpty()){
                 pack[Constants.FORM_ID] = idForm
+                this.idFormSave = idForm
                 toast((obj as FormModel).id)
                 completeSaveDataForm(idForm)
             }else{

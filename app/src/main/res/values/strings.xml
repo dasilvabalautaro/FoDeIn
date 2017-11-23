@@ -59,4 +59,5 @@
     <string name="lbl_close_app">Tap again to close the application.</string>
     <string name="lbl_connect_network">Connect network: </string>
     <string name="lbl_upload_form">Upload Form</string>
+    <string name="lbl_update_image">Update Image</string>
 </resources>

@@ -208,6 +208,14 @@ class ActivityModule(private val activity: AppCompatActivity) {
     }
 
     @Provides
+    fun provideUpdateImageUploaduseCase(uiThread: UIThread,
+                                        jobExecutor: JobExecutor,
+                                        imageExecutor: ImageExecutor):
+            UpdateImageUploaduseCase{
+        return UpdateImageUploaduseCase(jobExecutor, uiThread, imageExecutor)
+    }
+
+    @Provides
     fun provideImageListPresenter(getImageListUseCase:
                                   GetImageListUseCase): ImageListPresenter {
         return ImageListPresenter(getImageListUseCase)
@@ -217,10 +225,12 @@ class ActivityModule(private val activity: AppCompatActivity) {
     fun provideAddImagesNetworkPresenter(getImageListUseCase:
                                          GetImageListUseCase,
                                          requestRegisterFormPostUseCase:
-                                         RequestRegisterFormPostUseCase):
+                                         RequestRegisterFormPostUseCase,
+                                         updateImageUploaduseCase:
+                                         UpdateImageUploaduseCase):
             AddImagesNetworkPresenter{
         return AddImagesNetworkPresenter(getImageListUseCase,
-                requestRegisterFormPostUseCase)
+                requestRegisterFormPostUseCase, updateImageUploaduseCase)
     }
 
     @Provides
