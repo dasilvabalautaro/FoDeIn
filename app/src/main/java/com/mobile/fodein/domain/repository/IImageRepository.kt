@@ -12,4 +12,6 @@ interface IImageRepository: IMessagePersistent {
             Observable<List<ImageModel>>
     fun addListImage(list: List<MapperImage>): Observable<Boolean>
     fun imageUpdateUpload(value: String): Observable<Boolean>
+    fun imageGetByFieldBoolean(value: Boolean, nameField: String):
+            Observable<List<ImageModel>>
 }

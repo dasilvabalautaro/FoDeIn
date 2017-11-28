@@ -52,6 +52,14 @@ abstract class DatabaseRepository : IRepository {
         return realm.where(clazz).equalTo(fieldName, value).findAll()
     }
 
+    override fun <E : RealmObject> getDataByFieldBoolean(clazz: Class<E>,
+                                                  fieldName: String,
+                                                  value: Boolean): RealmResults<E>? {
+        val realm: Realm = Realm.getDefaultInstance()
+        return realm.where(clazz).equalTo(fieldName, value).findAll()
+    }
+
+
     override fun <E : RealmObject> getDataById(clazz: Class<E>, value: String): E? {
         val realm: Realm = Realm.getDefaultInstance()
         return realm.where(clazz).equalTo(fieldId, value).findFirst()

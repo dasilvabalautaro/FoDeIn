@@ -19,7 +19,6 @@ import javax.inject.Singleton
 class FormExecutor @Inject constructor():
         DatabaseRepository(), IFormRepository{
 
-
     private val context = App.appComponent.context()
 
     private val component by lazy {(context as App)
@@ -121,7 +120,23 @@ class FormExecutor @Inject constructor():
         }
 
     }
-
+    override fun formGetByFieldBoolean(value: Boolean, nameField: String):
+            Observable<List<FormModel>> {
+        return Observable.create { subscriber ->
+            val clazz: Class<Form> = Form::class.java
+            val listForm: List<Form>? = this.getDataByFieldBoolean(clazz,
+                    nameField, value)
+            if (listForm != null){
+                val formModelCollection: Collection<FormModel> = this
+                        .formModelDataMapper
+                        .transform(listForm)
+                subscriber.onNext(formModelCollection as List<FormModel>)
+                subscriber.onComplete()
+            }else{
+                subscriber.onError(Throwable())
+            }
+        }
+    }
     override fun formUpdateUpload(value: String): Observable<Boolean>  {
         return Observable.create { subscriber ->
             val clazz: Class<Form> = Form::class.java

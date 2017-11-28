@@ -20,6 +20,7 @@ class ImageExecutor @Inject constructor():
         DatabaseRepository(), IImageRepository{
 
 
+
     private val context = App.appComponent.context()
 
     private val component by lazy {(context as App)
@@ -82,6 +83,25 @@ class ImageExecutor @Inject constructor():
             }
         }
     }
+
+    override fun imageGetByFieldBoolean(value: Boolean, nameField: String):
+            Observable<List<ImageModel>> {
+        return Observable.create { subscriber ->
+            val clazz: Class<Image> = Image::class.java
+            val listImage: List<Image>? = this.getDataByFieldBoolean(clazz,
+                    nameField, value)
+            if (listImage != null){
+                val imageModelCollection: Collection<ImageModel> = this
+                        .imageModelDataMapper
+                        .transform(listImage)
+                subscriber.onNext(imageModelCollection as List<ImageModel>)
+                subscriber.onComplete()
+            }else{
+                subscriber.onError(Throwable())
+            }
+        }
+    }
+
     override fun addListImage(list: List<MapperImage>): Observable<Boolean> {
         return Observable.create { subscriber ->
             var result = true
@@ -126,4 +146,5 @@ class ImageExecutor @Inject constructor():
             }
         }
     }
+
 }

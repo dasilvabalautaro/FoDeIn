@@ -1,8 +1,8 @@
 package com.mobile.fodein.tools
 
 object Constants {
-    val URL_SERVER = "http://192.168.1.113:80/"
-    val HTTPBase = "http://192.168.1.113:80/fdi/index.php/services/"
+    val URL_SERVER = "http://192.168.0.112:80/"
+    val HTTPBase = "http://192.168.0.112:80/fdi/index.php/services/"
             //"http://192.168.0.112:80/fdi/index.php/services/" 192.168.1.113:80
 
     val SERVICE_LOGIN = "verifylogin"

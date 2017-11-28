@@ -36,13 +36,25 @@ class RequestLoginGetUseCase @Inject constructor(serviceRemoteGet:
             if (!gsonResult.isEmpty()){
                 val jsonObject = JSONObject(gsonResult)
                 try {
+                    if (jsonObject.has("id")){
+                        user.id = jsonObject.getString("id")?: ""
+                    }
+                    if (jsonObject.has("name")){
+                        user.name = jsonObject.getString("name")?: ""
+                    }
+                    if (jsonObject.has("user")){
+                        user.user = jsonObject.getString("user")?: ""
+                    }
+                    if (jsonObject.has("password")){
+                        user.password = jsonObject.getString("password")?: ""
+                    }
+                    if (jsonObject.has("unit_id")){
+                        user.unit = jsonObject.getString("unit_id")?: ""
+                    }
+                    if (jsonObject.has("token")){
+                        user.token = jsonObject.getString("token")?: ""
+                    }
 
-                    user.id = jsonObject.getString("id")?: ""
-                    user.name = jsonObject.getString("name")?: ""
-                    user.user = jsonObject.getString("user")?: ""
-                    user.password = jsonObject.getString("password")?: ""
-                    user.unit = jsonObject.getString("unit_id")?: ""
-                    user.token = jsonObject.getString("token")?: ""
                     if (jsonObject.has("idCard")){
                         user.idCard = jsonObject.getString("idCard")?: ""
                     }

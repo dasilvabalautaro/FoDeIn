@@ -16,6 +16,9 @@ interface IRepository {
     fun <E : RealmObject> getDataByField(clazz: Class<E>,
                                          fieldName: String,
                                          value: String): RealmResults<E>?
+    fun <E : RealmObject> getDataByFieldBoolean(clazz: Class<E>,
+                                         fieldName: String,
+                                         value: Boolean): RealmResults<E>?
     fun <E : RealmObject> addObjectList(clazz: Class<E>,
                                         value: String, newObject: Any,
                                         listener: OnDatabaseCompleteListener)

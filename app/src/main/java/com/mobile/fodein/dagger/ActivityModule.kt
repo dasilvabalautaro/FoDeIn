@@ -87,6 +87,14 @@ class ActivityModule(private val activity: AppCompatActivity) {
     }
 
     @Provides
+    fun provideGetFormListForUpdateUseCase(uiThread: UIThread,
+                                           jobExecutor: JobExecutor,
+                                           formExecutor: FormExecutor):
+            GetFormListForUpdateUseCase{
+        return GetFormListForUpdateUseCase(jobExecutor, uiThread, formExecutor)
+    }
+
+    @Provides
     fun provideFormNewPresenter(getFormNewUseCase:
                                 GetFormNewUseCase): FormNewPresenter {
         return FormNewPresenter(getFormNewUseCase)
@@ -192,6 +200,14 @@ class ActivityModule(private val activity: AppCompatActivity) {
                                    jobExecutor: JobExecutor,
                                    imageExecutor: ImageExecutor): AddImageListUseCase {
         return AddImageListUseCase(jobExecutor, uiThread, imageExecutor)
+    }
+
+    @Provides
+    fun provideGetImageListForUpdateUseCase(uiThread: UIThread,
+                                            jobExecutor: JobExecutor,
+                                            imageExecutor: ImageExecutor):
+            GetImageListForUpdateUseCase{
+        return GetImageListForUpdateUseCase(jobExecutor, uiThread, imageExecutor)
     }
 
     @Provides
