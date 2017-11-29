@@ -14,26 +14,25 @@ abstract class BaseServiceRemote {
     private var retrofit: Retrofit? = null
     private val BASE_URL = "http://host/"
 
-
-    private var client = OkHttpClient.Builder()
-            .addInterceptor(Interceptor{ chain ->
-                val request = chain.request()
-                var response: Response? = null
-                try {
-
+    @Throws(IOException::class)
+    private fun getOkHttpClient(): OkHttpClient{
+        return OkHttpClient.Builder()
+                .addInterceptor(Interceptor{ chain ->
+                    val request = chain.request()
+                    var response: Response? = null
                     response = chain.proceed(request)
-                    if (response.networkResponse() == null){
-                        throw IOException()
+                    if (response.code() == 400){
+                        println("Response client: " + response.toString())
                     }
-                }catch (ie: IOException){
-                    println(ie.message)
-                }
-                return@Interceptor response
-            })
-            .readTimeout(1, TimeUnit.MINUTES)
-            .writeTimeout(1, TimeUnit.MINUTES)
-            .connectTimeout(1, TimeUnit.MINUTES)
-            .build()
+                    return@Interceptor response
+                })
+                .readTimeout(1, TimeUnit.MINUTES)
+                .writeTimeout(1, TimeUnit.MINUTES)
+                .connectTimeout(1, TimeUnit.MINUTES)
+                .build()
+    }
+
+    private var client = getOkHttpClient()
 
     fun getClient(): Retrofit {
         if (retrofit == null){

@@ -61,17 +61,40 @@ class RequestProjectsGetUseCase @Inject constructor(serviceRemoteGet:
         (0 until jsonArray.length()).forEach { i ->
             val jsonObject: JSONObject = jsonArray.getJSONObject(i)
             val project = ProjectModel()
-            project.idNet = jsonObject.getString("id")?: ""
-            project.type = jsonObject.getInt("type")
-            project.code = jsonObject.getString("code")?: ""
-            project.name = jsonObject.getString("name")?: ""
-            project.latitude = jsonObject.getDouble("latitude")
-            project.longitude = jsonObject.getDouble("longitude")
-            project.finance = jsonObject.getDouble("finance")
-            project.counterpart = jsonObject.getDouble("counterpart")
-            project.notFinance = jsonObject.getDouble("notFinance")
-            project.other = jsonObject.getDouble("other")
-            project.sum = jsonObject.getDouble("sum")
+            if (jsonObject.has("id")){
+                project.idNet = jsonObject.getString("id")?: ""
+            }
+            if (jsonObject.has("type")){
+                project.type = jsonObject.getInt("type")
+            }
+            if (jsonObject.has("code")){
+                project.code = jsonObject.getString("code")?: ""
+            }
+            if (jsonObject.has("name")){
+                project.name = jsonObject.getString("name")?: ""
+            }
+            if (jsonObject.has("latitude")){
+                project.latitude = jsonObject.getDouble("latitude")
+            }
+            if (jsonObject.has("longitude")){
+                project.longitude = jsonObject.getDouble("longitude")
+            }
+            if (jsonObject.has("finance")){
+                project.finance = jsonObject.getDouble("finance")
+            }
+            if (jsonObject.has("counterpart")){
+                project.counterpart = jsonObject.getDouble("counterpart")
+            }
+            if (jsonObject.has("notFinance")){
+                project.notFinance = jsonObject.getDouble("notFinance")
+            }
+            if (jsonObject.has("other")){
+                project.other = jsonObject.getDouble("other")
+            }
+            if (jsonObject.has("sum")){
+                project.sum = jsonObject.getDouble("sum")
+            }
+
 
             project.title = context.resources
                     .getString(R.string.hint_text_name) + ": " + project.name
@@ -81,9 +104,12 @@ class RequestProjectsGetUseCase @Inject constructor(serviceRemoteGet:
                     .getString(R.string.lbl_longitude) + ": " +
                     project.longitude.toString()
             //list!!.add(project)
-            val idUnit = jsonObject.getString("unit_id")?: ""
+            if (jsonObject.has("unit_id")){
+                val idUnit = jsonObject.getString("unit_id")?: ""
 
-            DeliveryOfResource.setProjectToUnit(idUnit, project)
+                DeliveryOfResource.setProjectToUnit(idUnit, project)
+            }
+
         }
 
 //        CachingLruRepository.instance.getLru()

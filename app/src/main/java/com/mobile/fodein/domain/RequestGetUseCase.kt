@@ -10,6 +10,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
+import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 
@@ -60,6 +61,8 @@ abstract class RequestGetUseCase constructor(private val serviceRemoteGet:
                 println(ce.message)
             }catch (ex: NullPointerException){
                 println(ex.message)
+            }catch (ei: IOException){
+                println(ei.message)
             }
 
         }

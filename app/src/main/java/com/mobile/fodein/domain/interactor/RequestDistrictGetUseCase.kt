@@ -51,8 +51,13 @@ class RequestDistrictGetUseCase @Inject constructor(serviceRemoteGet:
         (0 until jsonArray.length()).forEach { i ->
             val jsonObject: JSONObject = jsonArray.getJSONObject(i)
             val district = DistrictModel()
-            district.idNet = jsonObject.getString("id")?: ""
-            district.name = jsonObject.getString("name")?: ""
+            if (jsonObject.has("id")){
+                district.idNet = jsonObject.getString("id")?: ""
+            }
+            if (jsonObject.has("name")){
+                district.name = jsonObject.getString("name")?: ""
+            }
+
             list!!.add(district)
         }
         this.observableList.onNext(this.list!!)

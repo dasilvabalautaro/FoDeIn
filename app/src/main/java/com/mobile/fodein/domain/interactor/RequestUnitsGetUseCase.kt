@@ -58,10 +58,19 @@ class RequestUnitsGetUseCase @Inject constructor(serviceRemoteGet:
         (0 until jsonArray.length()).forEach { i ->
             val jsonObject: JSONObject = jsonArray.getJSONObject(i)
             val unity = UnityModel()
-            unity.idNet = jsonObject.getString("id")?: ""
-            unity.name = jsonObject.getString("name")?: ""
-            unity.phone = jsonObject.getString("phone")?: ""
-            unity.address = jsonObject.getString("address")?: ""
+            if (jsonObject.has("id")){
+                unity.idNet = jsonObject.getString("id")?: ""
+            }
+            if (jsonObject.has("name")){
+                unity.name = jsonObject.getString("name")?: ""
+            }
+            if (jsonObject.has("phone")){
+                unity.phone = jsonObject.getString("phone")?: ""
+            }
+            if (jsonObject.has("address")){
+                unity.address = jsonObject.getString("address")?: ""
+            }
+
             unity.title = context.resources
                     .getString(R.string.hint_text_name) + ": " + unity.name
             unity.description = context.resources
@@ -69,9 +78,12 @@ class RequestUnitsGetUseCase @Inject constructor(serviceRemoteGet:
                     unity.address + "\n" + context.resources
                     .getString(R.string.hint_text_phone) + ": " + unity.phone
             list!!.add(unity)
-            val idDistrict = jsonObject.getString("district_id")?: ""
+            if (jsonObject.has("district_id")){
+                val idDistrict = jsonObject.getString("district_id")?: ""
 
-            DeliveryOfResource.setUnitToDistrict(idDistrict, unity)
+                DeliveryOfResource.setUnitToDistrict(idDistrict, unity)
+            }
+
         }
 
         CachingLruRepository.instance.getLru()
