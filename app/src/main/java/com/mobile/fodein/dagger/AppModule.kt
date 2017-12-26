@@ -3,6 +3,7 @@ package com.mobile.fodein.dagger
 import android.content.Context
 import com.mobile.fodein.App
 import com.mobile.fodein.models.persistent.PersistentDatabase
+import com.mobile.fodein.tools.ConnectionNetwork
 import com.mobile.fodein.tools.LocaleUtils
 import dagger.Module
 import dagger.Provides
@@ -25,6 +26,11 @@ class AppModule(private val app: App) {
     @Provides
     fun providePersistentDatabase(): PersistentDatabase {
         return PersistentDatabase(app)
+    }
+
+    @Provides
+    fun provideConnectionNetwork(): ConnectionNetwork {
+        return ConnectionNetwork(app as Context)
     }
 
 }

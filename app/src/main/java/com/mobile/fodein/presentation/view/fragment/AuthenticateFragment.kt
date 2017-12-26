@@ -9,14 +9,12 @@ import android.support.v4.app.Fragment
 import android.view.View
 import android.widget.Toast
 import com.mobile.fodein.App
-import com.mobile.fodein.R
 import com.mobile.fodein.dagger.PresentationModule
 import com.mobile.fodein.domain.DeliveryOfResource
 import com.mobile.fodein.presentation.interfaces.ILoadDataView
 import com.mobile.fodein.presentation.model.UserModel
 import com.mobile.fodein.presentation.presenter.*
 import com.mobile.fodein.presentation.view.activities.MainListActivity
-import com.mobile.fodein.tools.ConnectionNetwork
 import com.mobile.fodein.tools.Constants
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
@@ -42,6 +40,7 @@ abstract class AuthenticateFragment: Fragment(),
     private val component by lazy { app.
             getAppComponent().plus(PresentationModule(context))}
 
+
     var callback: Callback? = null
     var flagRegister = false
 
@@ -51,8 +50,8 @@ abstract class AuthenticateFragment: Fragment(),
     lateinit var userLoginPresenter: UserLoginPresenter
     @Inject
     lateinit var userLoginNetworkPresenter: UserLoginNetworkPresenter
-    @Inject
-    lateinit var connectionNetwork: ConnectionNetwork
+    /*@Inject
+    lateinit var connectionNetwork: ConnectionNetwork*/
     @Inject
     lateinit var userRegisterNetworkPresenter: UserRegisterNetworkPresenter
     @Inject
@@ -61,6 +60,7 @@ abstract class AuthenticateFragment: Fragment(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         component.inject(this)
+
     }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -69,8 +69,9 @@ abstract class AuthenticateFragment: Fragment(),
         this.userLoginNetworkPresenter.view = this
         this.userRegisterNetworkPresenter.view = this
         this.userRegisterPresenter.view = this
-        context.toast(getString(R.string.lbl_connect_network) +
-        connectionNetwork.checkConnect().toString())
+        /*context.toast(getString(R.string.lbl_connect_network) +
+                (activity.application as App)
+                        .connectionNetwork.checkConnect().toString())*/
     }
 
     fun Context.toast(message: CharSequence,
@@ -92,7 +93,8 @@ abstract class AuthenticateFragment: Fragment(),
             context.toast((obj as UserModel).name)
             DeliveryOfResource.token = (obj as UserModel).token
             DeliveryOfResource.userId = (obj as UserModel).id
-            if (flagRegister && connectionNetwork.checkConnect()){
+            if (flagRegister && (activity.application as App)
+                    .connectionNetwork.checkConnect()){
                 pack[Constants.USER_ID] = DeliveryOfResource.userId
                 this.userRegisterNetworkPresenter.setUser(pack)
                 this.userRegisterNetworkPresenter.registerUser()

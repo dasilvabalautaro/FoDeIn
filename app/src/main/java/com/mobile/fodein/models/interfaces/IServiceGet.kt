@@ -1,7 +1,7 @@
 package com.mobile.fodein.models.interfaces
 
 import com.mobile.fodein.models.persistent.network.MessageOfService
-import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
@@ -13,5 +13,5 @@ interface IServiceGet {
     @GET
     fun sendGet(@Header("Cookie") cookie: String,
                  @Url url: String):
-            Observable<MessageOfService>
+            Single<MessageOfService>
 }

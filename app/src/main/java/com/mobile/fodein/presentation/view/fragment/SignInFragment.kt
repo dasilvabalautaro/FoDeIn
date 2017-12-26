@@ -11,6 +11,7 @@ import butterknife.ButterKnife
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
+import com.mobile.fodein.App
 import com.mobile.fodein.R
 import com.mobile.fodein.tools.Constants
 import io.reactivex.Observable
@@ -56,11 +57,15 @@ class SignInFragment: AuthenticateFragment() {
                 .map { validate ->
                     run{
                         if (validate){
-                            if (connectionNetwork.checkConnect()){
+
+                            if ((activity.application as App)
+                                    .connectionNetwork
+                                    .checkConnect()){
                                 flagLoginNetwork = true
                                 this.userLoginNetworkPresenter.setUser(loadPack())
                                 this.userLoginNetworkPresenter.verifyLogin()
                             }else{
+
                                 this.userLoginPresenter.setUser(loadPack())
                                 this.userLoginPresenter.verifyLogin()
 

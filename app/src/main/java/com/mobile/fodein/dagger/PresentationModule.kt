@@ -10,7 +10,6 @@ import com.mobile.fodein.models.persistent.network.ServiceRemoteGet
 import com.mobile.fodein.models.persistent.network.ServiceRemotePost
 import com.mobile.fodein.presentation.UIThread
 import com.mobile.fodein.presentation.presenter.*
-import com.mobile.fodein.tools.ConnectionNetwork
 import dagger.Module
 import dagger.Provides
 
@@ -233,10 +232,10 @@ class PresentationModule(val context: Context) {
         return ProjectPresenter(getProjectListUseCase)
     }
 
-    @Provides
+    /*@Provides
     fun provideConnectionNetwork(): ConnectionNetwork {
         return ConnectionNetwork(context)
-    }
+    }*/
 
     @Provides
     fun provideServiceRemotePost(): ServiceRemotePost {
@@ -249,11 +248,9 @@ class PresentationModule(val context: Context) {
     }
 
     @Provides
-    fun provideRequestLoginGetUseCase(serviceRemoteGet: ServiceRemoteGet,
-                                      connectionNetwork:
-                                      ConnectionNetwork):
+    fun provideRequestLoginGetUseCase(serviceRemoteGet: ServiceRemoteGet):
             RequestLoginGetUseCase {
-        return RequestLoginGetUseCase(serviceRemoteGet, connectionNetwork)
+        return RequestLoginGetUseCase(serviceRemoteGet)
     }
 
     @Provides
@@ -264,11 +261,9 @@ class PresentationModule(val context: Context) {
     }
 
     @Provides
-    fun provideRequestRegisterPostUseCase(serviceRemotePost: ServiceRemotePost,
-                                          connectionNetwork:
-                                          ConnectionNetwork):
+    fun provideRequestRegisterPostUseCase(serviceRemotePost: ServiceRemotePost):
             RequestRegisterPostUseCase{
-        return RequestRegisterPostUseCase(serviceRemotePost, connectionNetwork)
+        return RequestRegisterPostUseCase(serviceRemotePost)
     }
 
     @Provides
@@ -279,28 +274,22 @@ class PresentationModule(val context: Context) {
     }
 
     @Provides
-    fun provideRequestDistrictGetUseCase(serviceRemoteGet: ServiceRemoteGet,
-                                         connectionNetwork:
-                                         ConnectionNetwork):
+    fun provideRequestDistrictGetUseCase(serviceRemoteGet: ServiceRemoteGet):
             RequestDistrictGetUseCase{
-        return RequestDistrictGetUseCase(serviceRemoteGet, connectionNetwork)
+        return RequestDistrictGetUseCase(serviceRemoteGet)
     }
 
     @Provides
-    fun provideRequestUnitsGetUseCase(serviceRemoteGet: ServiceRemoteGet,
-                                      connectionNetwork:
-                                      ConnectionNetwork):
+    fun provideRequestUnitsGetUseCase(serviceRemoteGet: ServiceRemoteGet):
             RequestUnitsGetUseCase{
-        return RequestUnitsGetUseCase(serviceRemoteGet, connectionNetwork)
+        return RequestUnitsGetUseCase(serviceRemoteGet)
     }
 
     @Provides
     fun provideRequestProjectsGetUseCase(serviceRemoteGet:
-                                         ServiceRemoteGet,
-                                         connectionNetwork:
-                                         ConnectionNetwork):
+                                         ServiceRemoteGet):
             RequestProjectsGetUseCase{
-        return RequestProjectsGetUseCase(serviceRemoteGet, connectionNetwork)
+        return RequestProjectsGetUseCase(serviceRemoteGet)
     }
 
     @Provides

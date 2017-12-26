@@ -5,7 +5,6 @@ import com.mobile.fodein.domain.RequestGetUseCase
 import com.mobile.fodein.models.persistent.network.MessageOfService
 import com.mobile.fodein.models.persistent.network.ServiceRemoteGet
 import com.mobile.fodein.presentation.model.DistrictModel
-import com.mobile.fodein.tools.ConnectionNetwork
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import org.json.JSONArray
@@ -14,10 +13,8 @@ import javax.inject.Inject
 
 
 class RequestDistrictGetUseCase @Inject constructor(serviceRemoteGet:
-                                                    ServiceRemoteGet,
-                                                    connectionNetwork:
-                                                    ConnectionNetwork):
-        RequestGetUseCase(serviceRemoteGet, connectionNetwork){
+                                                    ServiceRemoteGet):
+        RequestGetUseCase(serviceRemoteGet){
     private var list: ArrayList<DistrictModel>? = null
     var observableList: Subject<ArrayList<DistrictModel>> = PublishSubject.create()
 
@@ -61,5 +58,10 @@ class RequestDistrictGetUseCase @Inject constructor(serviceRemoteGet:
             list!!.add(district)
         }
         this.observableList.onNext(this.list!!)
+    }
+
+    override fun sendMessageError(message: String) {
+        this.messageError =  message
+        this.observableMessage.onNext(this.messageError)
     }
 }

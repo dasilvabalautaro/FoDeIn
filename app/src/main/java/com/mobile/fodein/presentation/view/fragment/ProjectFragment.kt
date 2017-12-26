@@ -22,7 +22,6 @@ import com.mobile.fodein.presentation.model.UnityModel
 import com.mobile.fodein.presentation.presenter.ProjectNetworkPresenter
 import com.mobile.fodein.presentation.presenter.UnityPresenter
 import com.mobile.fodein.presentation.view.component.ItemAdapter
-import com.mobile.fodein.tools.ConnectionNetwork
 import com.mobile.fodein.tools.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -40,9 +39,9 @@ class ProjectFragment: BaseFragment(), ILoadDataView {
     lateinit var unityPresenter: UnityPresenter
     @Inject
     lateinit var projectNetworkPresenter: ProjectNetworkPresenter
-    @Inject
+    /*@Inject
     lateinit var connectionNetwork: ConnectionNetwork
-
+*/
     var listModel: List<UnityModel> = ArrayList()
 
     init {
@@ -51,7 +50,8 @@ class ProjectFragment: BaseFragment(), ILoadDataView {
                 .subscribe { d ->
                     kotlin.run {
                         if (d == 1){
-                            if (connectionNetwork.checkConnect() &&
+                            if ((activity.application as App)
+                                    .connectionNetwork.checkConnect() &&
                                     !DeliveryOfResource.updateProjects){
                                 projectNetworkPresenter.setVariables(DeliveryOfResource.token)
                                 projectNetworkPresenter.getList()
@@ -77,7 +77,8 @@ class ProjectFragment: BaseFragment(), ILoadDataView {
         super.onViewCreated(view, savedInstanceState)
         ButterKnife.bind(this, view!!)
         context.toast(getString(com.mobile.fodein.R.string.lbl_connect_network) +
-                connectionNetwork.checkConnect().toString())
+                (activity.application as App)
+                        .connectionNetwork.checkConnect().toString())
 
     }
 
@@ -90,7 +91,8 @@ class ProjectFragment: BaseFragment(), ILoadDataView {
         ibNewForm!!.visibility = View.INVISIBLE
         ibMap!!.visibility = View.INVISIBLE
         projectNetworkPresenter.view = this
-        if (!connectionNetwork.checkConnect()){
+        if (!(activity.application as App)
+                .connectionNetwork.checkConnect()){
             unityPresenter.getListUnity()
         }
     }

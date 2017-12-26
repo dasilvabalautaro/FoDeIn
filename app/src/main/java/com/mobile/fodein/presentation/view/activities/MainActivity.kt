@@ -35,7 +35,6 @@ import com.mobile.fodein.presentation.model.ProjectModel
 import com.mobile.fodein.presentation.presenter.*
 import com.mobile.fodein.presentation.view.component.ImageAdapter
 import com.mobile.fodein.presentation.view.component.ManageImages
-import com.mobile.fodein.tools.ConnectionNetwork
 import com.mobile.fodein.tools.Constants
 import com.mobile.fodein.tools.LocationUser
 import com.mobile.fodein.tools.PermissionUtils
@@ -80,8 +79,8 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
     lateinit var addImageListPresenter: AddImageListPresenter
     @Inject
     lateinit var formSelectPresenter: FormSelectPresenter
-    @Inject
-    lateinit var connectionNetwork: ConnectionNetwork
+    /*@Inject
+    lateinit var connectionNetwork: ConnectionNetwork*/
     @Inject
     lateinit var imageListPresenter: ImageListPresenter
     @Inject
@@ -154,7 +153,8 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
         setupRecyclerView()
         idFormSelect = intent.getStringExtra(ID_FORM)
         toast(getString(R.string.lbl_connect_network) +
-                connectionNetwork.checkConnect().toString())
+                (application as App)
+                        .connectionNetwork.checkConnect().toString())
 
     }
 
@@ -385,7 +385,8 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
     }
 
     override fun showRetry() {
-        if (connectionNetwork.checkConnect()){
+        if ((application as App)
+                .connectionNetwork.checkConnect()){
             pack[Constants.FORM_PROJECT] = idNetProject
             pack.remove(Constants.FORM_PROJECT_NET)
             formRegisterNetworkPresenter.setForm(pack, DeliveryOfResource.token)
@@ -396,7 +397,8 @@ class MainActivity : AppCompatActivity(), ILoadDataView {
 
     override fun hideRetry() {
         launch(CommonPool){
-            if (connectionNetwork.checkConnect()){
+            if ((application as App)
+                    .connectionNetwork.checkConnect()){
                 addImagesNetworkPresenter.setVariables(idFormSave,
                         DeliveryOfResource.token)
                 addImagesNetworkPresenter.getListImages()

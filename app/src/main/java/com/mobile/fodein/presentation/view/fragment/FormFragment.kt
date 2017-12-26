@@ -21,7 +21,6 @@ import com.mobile.fodein.presentation.model.ProjectModel
 import com.mobile.fodein.presentation.presenter.FormPresenter
 import com.mobile.fodein.presentation.presenter.ProjectPresenter
 import com.mobile.fodein.presentation.view.component.ItemAdapter
-import com.mobile.fodein.tools.ConnectionNetwork
 import com.mobile.fodein.tools.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -39,8 +38,8 @@ class FormFragment: BaseFragment(), ILoadDataView {
     lateinit var projectPresenter: ProjectPresenter
     @Inject
     lateinit var formPresenter: FormPresenter
-    @Inject
-    lateinit var connectionNetwork: ConnectionNetwork
+    /*@Inject
+    lateinit var connectionNetwork: ConnectionNetwork*/
 
     private var listModel: List<ProjectModel> = ArrayList()
 
@@ -72,7 +71,8 @@ class FormFragment: BaseFragment(), ILoadDataView {
         super.onViewCreated(view, savedInstanceState)
         ButterKnife.bind(this, view!!)
         context.toast(getString(com.mobile.fodein.R.string.lbl_connect_network) +
-                connectionNetwork.checkConnect().toString())
+                (activity.application as App)
+                        .connectionNetwork.checkConnect().toString())
 
     }
 
@@ -84,7 +84,8 @@ class FormFragment: BaseFragment(), ILoadDataView {
         ibNewForm!!.visibility = View.VISIBLE
         ibMap!!.visibility = View.VISIBLE
         projectPresenter.view = this
-        if (!connectionNetwork.isOnline()){
+        if (!(activity.application as App)
+                .connectionNetwork.isOnline()){
             projectPresenter.getListProject()
         }
 

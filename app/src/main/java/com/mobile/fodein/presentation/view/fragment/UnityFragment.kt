@@ -23,7 +23,6 @@ import com.mobile.fodein.presentation.presenter.DistrictNetworkPresenter
 import com.mobile.fodein.presentation.presenter.DistrictPresenter
 import com.mobile.fodein.presentation.presenter.UnityNetworkPresenter
 import com.mobile.fodein.presentation.view.component.ItemAdapter
-import com.mobile.fodein.tools.ConnectionNetwork
 import com.mobile.fodein.tools.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
@@ -40,8 +39,8 @@ class UnityFragment : BaseFragment(), ILoadDataView {
     lateinit var districtPresenter: DistrictPresenter
     @Inject
     lateinit var districtNetworkPresenter: DistrictNetworkPresenter
-    @Inject
-    lateinit var connectionNetwork: ConnectionNetwork
+    /*@Inject
+    lateinit var connectionNetwork: ConnectionNetwork*/
     @Inject
     lateinit var unityNetworkPresenter: UnityNetworkPresenter
 
@@ -63,7 +62,8 @@ class UnityFragment : BaseFragment(), ILoadDataView {
         super.onViewCreated(view, savedInstanceState)
         ButterKnife.bind(this, view!!)
         context.toast(getString(R.string.lbl_connect_network) +
-                connectionNetwork.checkConnect().toString())
+                (activity.application as App)
+                        .connectionNetwork.checkConnect().toString())
 
     }
 
@@ -78,7 +78,8 @@ class UnityFragment : BaseFragment(), ILoadDataView {
         districtNetworkPresenter.view = this
         unityNetworkPresenter.view = this
 
-        if (connectionNetwork.checkConnect() &&
+        if ((activity.application as App)
+                .connectionNetwork.checkConnect() &&
                 !DeliveryOfResource.updateDistrict){
             districtNetworkPresenter.setVariables(DeliveryOfResource.token)
             districtNetworkPresenter.getList()
@@ -134,7 +135,8 @@ class UnityFragment : BaseFragment(), ILoadDataView {
 
     override fun <T> renderList(objectList: List<T>) {
         if (!objectList.isEmpty()){
-            if (connectionNetwork.checkConnect() &&
+            if ((activity.application as App)
+                    .connectionNetwork.checkConnect() &&
                     !DeliveryOfResource.updateDistrict){
                 unityNetworkPresenter.setVariables(DeliveryOfResource.token)
                 unityNetworkPresenter.getList()

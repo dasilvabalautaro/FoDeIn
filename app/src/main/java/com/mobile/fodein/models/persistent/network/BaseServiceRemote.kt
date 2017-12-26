@@ -34,6 +34,9 @@ abstract class BaseServiceRemote {
 
     private var client = getOkHttpClient()
 
+    //RxErrorHandlingCallAdapterFactory
+    //RxJava2CallAdapterFactory
+
     fun getClient(): Retrofit {
         if (retrofit == null){
             retrofit = Retrofit.Builder()

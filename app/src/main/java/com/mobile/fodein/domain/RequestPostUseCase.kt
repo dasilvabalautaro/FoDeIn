@@ -4,10 +4,10 @@ import com.mobile.fodein.models.data.AgentCarrier
 import com.mobile.fodein.models.interfaces.IServicePost
 import com.mobile.fodein.models.persistent.network.MessageOfService
 import com.mobile.fodein.models.persistent.network.ServiceRemotePost
-import com.mobile.fodein.tools.ConnectionNetwork
 import com.mobile.fodein.tools.Constants
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
@@ -19,9 +19,7 @@ import java.net.SocketTimeoutException
 
 
 abstract class RequestPostUseCase constructor(private val serviceRemotePost:
-                                     ServiceRemotePost,
-                                              private val connectionNetwork:
-                                              ConnectionNetwork){
+                                     ServiceRemotePost){
     private val TAG = RequestPostUseCase::class.java.name!!
     private var servicePost: IServicePost? = null
     protected var disposable: CompositeDisposable = CompositeDisposable()
@@ -69,22 +67,35 @@ abstract class RequestPostUseCase constructor(private val serviceRemotePost:
     }
 
     fun getDataServer(){
-        if (setServicePost() && connectionNetwork.checkConnect()){
+        if (setServicePost()){
             try {
                 disposable.add(servicePost!!.sendPost(agentCarrier!!.license,
                         agentCarrier!!.address + agentCarrier!!.service,
                         body!!)
-                        .subscribeOn(Schedulers.newThread())
+                        .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            response -> getJsonArray(response)
-                        })
+                        .subscribeWith(getMessageService())
                 )
 
             }catch (se: SocketTimeoutException){
                 println(se.message)
             }
 
+        }
+    }
+
+    private fun getMessageService(): DisposableSingleObserver<MessageOfService> {
+        return object : DisposableSingleObserver<MessageOfService>() {
+            override fun onSuccess(value: MessageOfService) {
+                getJsonArray(value)
+            }
+
+            override fun onError(e: Throwable) {
+                if (!e.message.isNullOrEmpty()){
+                    sendMessageError(e.message!!)
+                }
+                println(e.message)
+            }
         }
     }
 
@@ -102,4 +113,5 @@ abstract class RequestPostUseCase constructor(private val serviceRemotePost:
     }
 
     protected abstract  fun getJsonArray(messageOfService: MessageOfService)
+    protected abstract fun sendMessageError(message: String)
 }

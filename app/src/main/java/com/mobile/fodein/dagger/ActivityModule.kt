@@ -1,6 +1,5 @@
 package com.mobile.fodein.dagger
 
-import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import com.mobile.fodein.domain.interactor.*
 import com.mobile.fodein.domain.interfaces.IPostExecutionThread
@@ -17,7 +16,6 @@ import com.mobile.fodein.presentation.navigation.Navigator
 import com.mobile.fodein.presentation.presenter.*
 import com.mobile.fodein.presentation.view.component.ManageImages
 import com.mobile.fodein.presentation.view.component.ManageMaps
-import com.mobile.fodein.tools.ConnectionNetwork
 import com.mobile.fodein.tools.LocationUser
 import com.mobile.fodein.tools.PermissionUtils
 import dagger.Module
@@ -166,18 +164,16 @@ class ActivityModule(private val activity: AppCompatActivity) {
         return ServiceRemotePost()
     }
 
-    @Provides
+    /*@Provides
     fun provideConnectionNetwork(): ConnectionNetwork {
         return ConnectionNetwork(activity as Context)
-    }
+    }*/
 
     @Provides
     fun provideRequestRegisterFormPostUseCase(serviceRemotePost:
-                                              ServiceRemotePost,
-                                              connectionNetwork:
-                                              ConnectionNetwork):
+                                              ServiceRemotePost):
             RequestRegisterFormPostUseCase {
-        return RequestRegisterFormPostUseCase(serviceRemotePost, connectionNetwork)
+        return RequestRegisterFormPostUseCase(serviceRemotePost)
     }
 
     @Provides

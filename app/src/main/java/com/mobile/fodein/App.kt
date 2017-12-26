@@ -6,6 +6,7 @@ import com.mobile.fodein.dagger.AppComponent
 import com.mobile.fodein.dagger.AppModule
 import com.mobile.fodein.dagger.DaggerAppComponent
 import com.mobile.fodein.models.persistent.PersistentDatabase
+import com.mobile.fodein.tools.ConnectionNetwork
 import com.mobile.fodein.tools.LocaleUtils
 import java.util.*
 import javax.inject.Inject
@@ -16,6 +17,8 @@ class App: Application() {
     lateinit var localeUtils: LocaleUtils
     @Inject
     lateinit var persistentDatabase: PersistentDatabase
+    @Inject
+    lateinit var connectionNetwork: ConnectionNetwork
 
     companion object{
         lateinit var appComponent: AppComponent

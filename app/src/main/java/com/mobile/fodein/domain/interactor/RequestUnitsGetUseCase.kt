@@ -9,7 +9,6 @@ import com.mobile.fodein.models.persistent.network.MessageOfService
 import com.mobile.fodein.models.persistent.network.ServiceRemoteGet
 import com.mobile.fodein.models.persistent.repository.CachingLruRepository
 import com.mobile.fodein.presentation.model.UnityModel
-import com.mobile.fodein.tools.ConnectionNetwork
 import com.mobile.fodein.tools.Constants
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
@@ -19,10 +18,8 @@ import javax.inject.Inject
 
 
 class RequestUnitsGetUseCase @Inject constructor(serviceRemoteGet:
-                                                 ServiceRemoteGet,
-                                                 connectionNetwork:
-                                                 ConnectionNetwork):
-        RequestGetUseCase(serviceRemoteGet, connectionNetwork){
+                                                 ServiceRemoteGet):
+        RequestGetUseCase(serviceRemoteGet){
     private var list: ArrayList<UnityModel>? = null
 
     private var messageEnd: String = ""
@@ -91,5 +88,10 @@ class RequestUnitsGetUseCase @Inject constructor(serviceRemoteGet:
 
         this.messageEnd = Constants.END_TASK
         this.observableEndTask.onNext(this.messageEnd)
+    }
+
+    override fun sendMessageError(message: String) {
+        this.messageError =  message
+        this.observableMessage.onNext(this.messageError)
     }
 }
